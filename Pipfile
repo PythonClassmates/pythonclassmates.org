@@ -9,6 +9,7 @@ pelican = "*"
 markdown = "*"
 pygments = "*"
 typogrify = "*"
+webassets = "*"
 
 
 [dev-packages]
