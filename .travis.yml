@@ -7,9 +7,11 @@ install:
 script:
     - pipenv run pelican content
 deploy:
-    provider: pages
-    skip_cleanup: true
-    github_token: $GITHUB_TOKEN
-    on:
-        branch: master
-    local_dir: output
+  provider: pages
+  repo: openclassmates/openclassmates
+  target_branch: gh-pages
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN
+  local_dir: output
+  on:
+    branch: master
