@@ -2,7 +2,7 @@ langage: python
 python:
     - "3.6"
 install:
-    - pip install pipenv
+    - pip3 install pipenv
     - pipenv install
 script:
     - pipenv run pelican content
