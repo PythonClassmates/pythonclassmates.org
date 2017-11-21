@@ -6,7 +6,6 @@ install:
     - pipenv install
 script:
     - pipenv run pelican content
-    - echo $GITHUB_TOKEN
 deploy:
   provider: pages
   repo: openclassmates/openclassmates
