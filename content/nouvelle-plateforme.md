@@ -12,12 +12,15 @@ satisfaisante dans leurs formations respectives. Votre cours Java n'est plus à 
 PHP objet est inutilement compliqué et truffé d'erreurs ? Vous avez une idée de didacticiel
 qui profitera à vos pairs ainsi qu'à la communauté toute entière ? Alors n'hésitez pas, à vos plumes.
 
-Ce site propose d'offrir une plateforme de publication de cours simple et réactives à vos
-commentaires, questions et propositions d'améliorations. Quelque chose ne vous semble pas correct 
-les explications données ne sont pas claires ?
+Ce site propose d'offrir une plateforme de publication de cours simple et réactive à vos
+commentaires, questions et propositions d'améliorations. Quelque chose ne vous semble pas correct,
+les explications données ne sont pas claires, un exemple d'application manque à l'appel?
 Les [rapports de bug](https://github.com/openclassmates/openclassmates/issues) sont là pour
 faire entendre votre votre voix.
-Si vous désirez contribuer à la rédaction d'un cours, rien de plus facile. 
+Si vous désirez contribuer à la rédaction d'un cours, d'un didacticiel ou d'un exercice dirigé, rien de plus facile. 
 Il suffit de faire un fork du [dépôt de code suivant](https://github.com/openclassmates/openclassmates),
-de créer un nouvel article dans le répertoire content/ (rédigé en reStructuredText ou en Markdown), ou éventuellement
+de créer un nouvel article dans le répertoire content/ (rédigé en [reStructuredText](http://www.sphinx-doc.org/en/stable/rest.html) ou en [markdown](https://learn.getgrav.org/content/markdown)), ou éventuellement
 de modifier un article existant, et de soumettre une pull request. 
+
+En attendant vos contributions, je me réjouits de sortir les premiers cours prochainement
+Au programme: ptogrammation orientée objet en php et en javascript. 
