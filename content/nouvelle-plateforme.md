@@ -23,4 +23,4 @@ de créer un nouvel article dans le répertoire content/ (rédigé en [reStructu
 de modifier un article existant, et de soumettre une pull request. 
 
 En attendant vos contributions, je me réjouits de sortir les premiers cours prochainement
-Au programme: ptogrammation orientée objet en php et en javascript. 
+Au programme: programmation orientée objet en php et en javascript. 
