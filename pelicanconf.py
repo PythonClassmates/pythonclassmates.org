@@ -7,6 +7,8 @@ SITENAME = 'Openclassmates'
 SITEURL = ''
 
 PATH = 'content'
+STATIC_PATHS = ['images', 'extra/CNAME']
+EXTRA_PATH_METADATA = {'extra/CNAME': {'path': 'CNAME'}}
 
 TIMEZONE = 'Europe/Paris'
 
