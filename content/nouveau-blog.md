@@ -6,7 +6,7 @@ Author: Thierry Chappuis
 Summary: Un nouveau blog est né
 
 Bienvenue sur ce nouveau blog en construction. L'objectif de ce dernier
-est de fournir des compléments libres de cours rédigés par des étudiants en
+est de fournir des compléments de cours libres rédigés par des étudiants en
 développement web pour des étudiants en développement web sur des
 les technos qui font le web d'aujourd'hui.
 
