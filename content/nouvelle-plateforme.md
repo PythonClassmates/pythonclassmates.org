@@ -22,4 +22,4 @@ Il suffit de faire un fork du [dépôt de code suivant](https://github.com/openc
 de créer un nouvel article dans le répertoire content/ (rédigé en [reStructuredText](http://www.sphinx-doc.org/en/stable/rest.html) ou en [markdown](https://learn.getgrav.org/content/markdown)), ou éventuellement
 de modifier un article existant, et de soumettre une pull request. 
 
-En attendant vos contributions, je me réjouits de sortir les premiers cours prochainemen.
+En attendant vos contributions, je me réjouits de sortir les premiers cours prochainement.
