@@ -1,5 +1,5 @@
 Title: Une nouvelle plateforme de publication
-Date: 2017-11-17 10:20
+Date: 2018-01-11 19:00
 Category: Info
 Slug: une-nouvelle-plateforme
 Author: Thierry Chappuis
