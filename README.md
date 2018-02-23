@@ -1,3 +1,3 @@
-# Education @ Ink3us: I/O d'étudiants en développement web, graphisme web, maketing et SEO
-Ce site web a pour objectif de publier des didacticiels rédigés par des étudiants en web pour des étudiants en développement web.
+# Edu@Ink3us: I/O d'experts en gestion de projet, du design, du développement et du webmarketing
+Ce site web a l'objectif d'être une plateforme de publication destinée à partager des connaissances dans le domaine de la gestion de projet, du design, du développement et du marketing web. http://edu.ink3us.fr
  
