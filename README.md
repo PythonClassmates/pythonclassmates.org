@@ -1,3 +1,3 @@
-# Edu@Ink3us: I/O d'experts en gestion de projet, du design, du développement et du webmarketing
-Ce site web a l'objectif d'être une plateforme de publication destinée à partager des connaissances dans le domaine de la gestion de projet, du design, du développement et du marketing web. http://edu.ink3us.fr
+# Openclassmates: I/O d'étudiants en programmation python
+Ce site web a l'objectif d'être un blog collaboratif en français au sujet du langage de programmation python. Au programme: news, tutos, critiques de livres, etc.
  
