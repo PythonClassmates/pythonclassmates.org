@@ -1,3 +1,2 @@
 # Openclassmates: I/O d'étudiants en programmation python
-Ce site web a l'objectif d'être un blog collaboratif en français au sujet du langage de programmation python. Au programme: news, tutos, critiques de livres, etc.
- 
+Bienvenue sur cette nouvelle plateforme en construction à destination des étudiants en développement python. L'objectif de cette dernière est de fournir des news, des didacticiels, des critiques de livres, des astuces en relation avec le langage de programmation python. Ce site propose d'offrir une plateforme de publication collaborative maintenanue par les étudiants et mentors du discord des étudiants DA Python et Data Scientists de Openclassrooms.
