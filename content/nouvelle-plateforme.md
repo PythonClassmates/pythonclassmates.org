@@ -8,4 +8,4 @@ Ce site propose d'offrir une plateforme de publication collaborative maintenanue
 
 Ce blog est généré à l'aide de Pelican et construit automatiquement à chaque commit à l'aide du service d'intégration continue Travis-CI. La mise en place d'un workflow de rédaction centré autour de github est un des objectifs pédagogiques de ce projet qui vise à familiariser l'équipe de rédactif avec la gestion d'un projet collaboratif.
 
-Cette page est encore en construction. Au plaisir de vous y retrouver prochainement.
+Ce blog est encore en construction. Au plaisir de vous y retrouver prochainement.
