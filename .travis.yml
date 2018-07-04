@@ -8,7 +8,7 @@ script:
     - pipenv run pelican content
 deploy:
   provider: pages
-  repo: PythonClassmates/openclassmates.io
+  repo: PythonClassmates/pythonclassmates.org
   target_branch: gh-pages
   skip_cleanup: true
   github_token: $GITHUB_TOKEN
