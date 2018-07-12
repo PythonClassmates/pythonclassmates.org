@@ -2,7 +2,7 @@ import os
 
 from invoke import task
 
-PELICAN = 'pipenv run pelican'
+PELICAN = 'pelican'
 
 @task
 def build(c):
