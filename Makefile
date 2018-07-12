@@ -1,9 +1,10 @@
+THEME=-t theme/active
 
 publish:
-	pelican content --fatal=warnings -s publishconf.py
+	pelican content --fatal=warnings -s publishconf.py $(THEME)
 
 build:
-	pelican content --fatal=warnings -s pelicanconf.py
+	pelican content --fatal=warnings -s pelicanconf.py $(THEME)
 
 revert:
 ifeq ($(TRAVIS_PULL_REQUEST), false)
