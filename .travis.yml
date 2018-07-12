@@ -5,9 +5,9 @@ install:
     - pip3 install pipenv
     - pipenv install
 script:
-    - pipenv run fab publish
+    - pipenv run fab -e publish
 after_failure:
-    - pipenv run fab revert
+    - pipenv run fab -e revert
 deploy:
   provider: pages
   repo: PythonClassmates/pythonclassmates.org
