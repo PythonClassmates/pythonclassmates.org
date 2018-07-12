@@ -1,3 +1,5 @@
+import os
+
 from invoke import task
 
 PELICAN = 'pipenv run pelican'
@@ -19,9 +21,10 @@ def publish(c):
     )
 
 @task
-def revert_commit(c):
+def revert(c):
     """Reverts to previous commit."""
-    c.run('git revert HEAD -n')
-    c.run('git commit -m "Revert to last commit because errors were found."')
-    c.run('git checkout -b "errors"')
-    c.run('git push -f https://${GITHUB_TOKEN}@github.com/PythonClassmates/PythonClassmates.org.git errors:master')
+    if os.environ['TRAVIS_PULL_REQUEST'] == 'false':
+        c.run('git revert HEAD -n')
+        c.run('git commit -m "Revert to last commit because errors were found."')
+        c.run('git checkout -b "errors"')
+        c.run('git push -f https://${GITHUB_TOKEN}@github.com/PythonClassmates/PythonClassmates.org.git errors:master')

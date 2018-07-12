@@ -7,7 +7,7 @@ install:
 script:
     - pipenv run fab publish
 after_failure:
-    - 'if [ "$TRAVIS_PULL_REQUEST" = "false"  ]; then pipenv run fab revert; fi'
+    - pipenv run fab revert
 deploy:
   provider: pages
   repo: PythonClassmates/pythonclassmates.org
