@@ -1,12 +1,9 @@
-THEME=themes/flex
-THEME_REPO=https://github.com/alexandrevicenzi/Flex.git
+THEME=theme/pythonclassmates
 
 publish:
-	@git clone $(THEME_REPO) $(THEME)
 	pelican content --fatal=warnings -s publishconf.py -t $(THEME)
 
 build:
-	@git clone $(THEME_REPO) $(THEME)
 	pelican content --fatal=warnings -s pelicanconf.py -t $(THEME)
 
 revert:
