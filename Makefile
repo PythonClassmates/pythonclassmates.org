@@ -1,10 +1,10 @@
-THEME=theme/pythonclassmates
+THEMEOPTION=
 
 publish:
-	pelican content --fatal=warnings -s publishconf.py -t $(THEME)
+	pelican content --fatal=warnings -s publishconf.py $(THEMEOPTION)
 
 build:
-	pelican content --fatal=warnings -s pelicanconf.py -t $(THEME)
+	pelican content --fatal=warnings -s pelicanconf.py $(THEMEOPTION)
 
 revert:
 ifeq ($(TRAVIS_PULL_REQUEST), false)
