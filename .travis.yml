@@ -4,7 +4,7 @@ python:
 install:
     - pip3 install -r requirements.txt
 script:
-    - pelican content --fatal=warnings -s publishconf.py
+    - make publish
 deploy:
   provider: pages
   repo: PythonClassmates/pythonclassmates.org
