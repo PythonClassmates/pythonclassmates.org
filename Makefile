@@ -1,4 +1,4 @@
-THEME=theme/pythonclassmates
+THEME=
 
 publish:
 	pelican content --fatal=warnings -s publishconf.py -t $(THEME)
