@@ -1,4 +1,4 @@
-THEME=-t themes/active
+THEME=-t theme/active
 
 publish:
 	pelican content --fatal=warnings -s publishconf.py $(THEME)
