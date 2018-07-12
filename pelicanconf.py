@@ -10,7 +10,10 @@ SITEURL = ''
 
 PATH = 'content'
 STATIC_PATHS = ['images', 'extra/CNAME']
-EXTRA_PATH_METADATA = {'extra/CNAME': {'path': 'CNAME'}}
+EXTRA_PATH_METADATA = {
+    'extra/CNAME': {'path': 'CNAME'},
+    'extra/favicon-32x32.png'}
+FAVICON = 'favicon-32x32.png'
 MAIN_MENU = True
 DISPLAY_PAGES_ON_MENU = False
 MENUITEMS = [
