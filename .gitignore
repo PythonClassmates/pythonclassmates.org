@@ -1,4 +1,5 @@
 env/
+themes/
 *.swp
 __pycache__/
 output/

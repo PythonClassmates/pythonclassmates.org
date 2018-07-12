@@ -1,8 +1,13 @@
+THEME=themes/flex
+THEME_REPO=https://github.com/alexandrevicenzi/Flex.git
+
 publish:
-	pelican content --fatal=warnings -s publishconf.py
+	@git clone $(THEME_REPO) $(THEME)
+	pelican content --fatal=warnings -s publishconf.py -t $(THEME)
 
 build:
-	pelican content --fatal=warnings -s pelicanconf.py
+	@git clone $(THEME_REPO) $(THEME)
+	pelican content --fatal=warnings -s pelicanconf.py -t $(THEME)
 
 revert:
 ifeq ($(TRAVIS_PULL_REQUEST), false)

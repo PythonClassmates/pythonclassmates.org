@@ -3,17 +3,31 @@
 from __future__ import unicode_literals
 
 AUTHOR = 'Divers auteurs'
-SITENAME = "PythonClassmates I/O"
+SITENAME = "Pythons I/O"
+SITETITLE = "Python I/O"
+SITESUBTITLE = "Articles et news par des Pythonistas passionés"
 SITEURL = ''
 
 PATH = 'content'
 STATIC_PATHS = ['images', 'extra/CNAME']
 EXTRA_PATH_METADATA = {'extra/CNAME': {'path': 'CNAME'}}
+MAIN_MENU = True
+DISPLAY_PAGES_ON_MENU = False
+MENUITEMS = [
+    ('News', 'category/news.html'),
+    ('Articles', 'category/articles.html'),
+    ('Tutoriels', '/category/tutoriels.html'),
+    ('Livres', '/category/livres.html'),
+    ('Catégories', '/categories.html'),
+    ('Tags', '/tags.html'),
+]
 
 TIMEZONE = 'Europe/Paris'
 
 DEFAULT_LANG = 'fr'
 DEFAULT_DATE = 'fs'
+
+DEFAULT_CATEGORY = 'Autres'
 
 # Feed generation is usually not desired when developing
 FEED_ALL_ATOM = None
