@@ -2,12 +2,11 @@ language: python
 python:
     - "3.6"
 install:
-    - pip3 install pipenv
-    - pipenv install
+    - pip3 install -r requirements.txt
 script:
-    - pipenv run fab -e publish
+    - fab -e publish
 after_failure:
-    - pipenv run fab -e revert
+    - fab -e revert
 deploy:
   provider: pages
   repo: PythonClassmates/pythonclassmates.org
