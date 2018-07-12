@@ -24,7 +24,10 @@ def publish(c):
 def revert(c):
     """Reverts to previous commit."""
     if os.environ['TRAVIS_PULL_REQUEST'] == 'false':
+        print("Reverting to last commit.")
         c.run('git revert HEAD -n')
         c.run('git commit -m "Revert to last commit because errors were found."')
         c.run('git checkout -b "errors"')
         c.run('git push -f https://${GITHUB_TOKEN}@github.com/PythonClassmates/PythonClassmates.org.git errors:master')
+    else:
+        print("Not reverting anything.")
