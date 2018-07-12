@@ -4,7 +4,7 @@ python:
 install:
     - pip3 install -r requirements.txt
 script:
-    - git clone https://github.com/alexandrevicenzi/Flex.git theme/pythonclassmates
+    - git clone https://github.com/alexandrevicenzi/Flex.git theme/active
     - make publish
 after_failure:
     - make revert
