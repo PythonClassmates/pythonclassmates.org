@@ -1,10 +1,9 @@
-THEMEOPTION=
 
 publish:
-	pelican content --fatal=warnings -s publishconf.py $(THEMEOPTION)
+	pelican content --fatal=warnings -s publishconf.py
 
 build:
-	pelican content --fatal=warnings -s pelicanconf.py $(THEMEOPTION)
+	pelican content --fatal=warnings -s pelicanconf.py
 
 revert:
 ifeq ($(TRAVIS_PULL_REQUEST), false)
