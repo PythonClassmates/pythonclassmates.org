@@ -4,12 +4,11 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-
 pelican = "*"
 markdown = "*"
 pygments = "*"
 typogrify = "*"
 webassets = "*"
-
+fabric = "*"
 
 [dev-packages]
