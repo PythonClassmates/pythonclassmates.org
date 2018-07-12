@@ -5,6 +5,8 @@ install:
     - pip3 install -r requirements.txt
 script:
     - make publish
+after_failture:
+    - make revert
 deploy:
   provider: pages
   repo: PythonClassmates/pythonclassmates.org
