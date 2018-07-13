@@ -3,7 +3,7 @@
 from __future__ import unicode_literals
 
 AUTHOR = 'Divers auteurs'
-SITENAME = "Pythons I/O"
+SITENAME = "Python I/O"
 SITETITLE = "Python I/O"
 SITESUBTITLE = "Articles et news par des Pythonistas passionés"
 SITEURL = ''
