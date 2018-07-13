@@ -29,8 +29,6 @@ TIMEZONE = 'Europe/Paris'
 
 # Translate to German.
 DEFAULT_LANG = 'fr'
-OG_LOCALE = 'fr_FR'
-LOCALE = 'fr_FR'
 
 DEFAULT_CATEGORY = 'Autres'
 
