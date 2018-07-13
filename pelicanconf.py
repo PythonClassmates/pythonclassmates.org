@@ -27,8 +27,14 @@ MENUITEMS = [
 
 TIMEZONE = 'Europe/Paris'
 
+# Translate to German.
 DEFAULT_LANG = 'fr'
-DEFAULT_DATE = 'fs'
+DEFAULT_DATE = 'fr'
+OG_LOCALE = 'fr_FR'
+LOCALE = 'fr_FR'
+
+# Default theme language.
+I18N_TEMPLATES_LANG = 'fr'
 
 DEFAULT_CATEGORY = 'Autres'
 
