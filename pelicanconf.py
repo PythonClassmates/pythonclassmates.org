@@ -3,7 +3,7 @@
 from __future__ import unicode_literals
 
 AUTHOR = 'Divers auteurs'
-SITENAME = "Pythons I/O"
+SITENAME = "Python I/O"
 SITETITLE = "Python I/O"
 SITESUBTITLE = "Articles et news par des Pythonistas passionés"
 SITEURL = ''
@@ -27,8 +27,8 @@ MENUITEMS = [
 
 TIMEZONE = 'Europe/Paris'
 
+# Translate to German.
 DEFAULT_LANG = 'fr'
-DEFAULT_DATE = 'fs'
 
 DEFAULT_CATEGORY = 'Autres'
 
