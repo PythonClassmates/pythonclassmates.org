@@ -5,8 +5,6 @@ Tags: python, unittest
 Slug: les-mocks-avec-unittest
 Author: Julien Nuellas
 
-# Les Mocks avec Unittest
-
 Malgré les blagues et les débats que l'on peut lire concernant les tests unitaires (si vous ne les avez pas encore vu, voici quelques [exemples](https://twitter.com/thepracticaldev/status/687672086152753152) qui donne le [sourire](https://twitter.com/MonkeyTestIt/status/958661917375172609)), les test unitaires sont largement utilisés et s'intègrent directement dans l'approche [TDD](https://fr.wikipedia.org/wiki/Test_driven_development).
 
 Les test unitaires servent donc à tester un bout de son code de façon isolée et vérifier que ce dernier fasse bien le travail qui lui a été demandé.
