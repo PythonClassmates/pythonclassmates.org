@@ -1,10 +1,10 @@
 THEME=-t theme/active
 
 publish:
-	pipenv run pelican content --fatal=warnings -s publishconf.py $(THEME)
+	pelican content --fatal=warnings -s publishconf.py $(THEME)
 
 build:
-	pipenv run pelican content --fatal=warnings -s pelicanconf.py $(THEME)
+	pelican content --fatal=warnings -s pelicanconf.py $(THEME)
 
 revert:
 ifeq ($(TRAVIS_PULL_REQUEST), false)
