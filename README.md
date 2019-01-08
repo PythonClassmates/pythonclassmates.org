@@ -20,6 +20,8 @@ Le titre de mon article
 :summary: Version courte de l'article
 ```
 
+Voici un article d'aide pour vous accompagner dans la [rédaction d'un article au format ReStructuredText](http://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html) (le format de markup officiel pour les projets python).
+
 Pour un article au format Markdown, l'en-tête du fichier .md doit suivre le format suivant:
 ```
 Title: Le titre de mon article
@@ -31,7 +33,9 @@ Slug: le-titre-de-mon-article-sous-forme-de-slug
 Author: Jean Dupont
 ```
 
-Une fois que votre article est terminé, vous pouvez demander sont ajout (ou sa modification si vous avez retouché article existant) en soumettant une pull request depuis l'interface github de votre fork du projet. Un admin s'occupera de son intégration.
+Voici un [article pour vous aider](https://guides.github.com/features/mastering-markdown/) si vous n'avez encore jamais rédigé de fichiers au format Markdown.
+
+Une fois que votre article est terminé, vous pouvez demander sont ajout au blog collaboratif (ou sa modification si vous avez retouché article existant) en soumettant une **pull request** depuis l'interface github de votre fork du projet. Un admin s'occupera de son intégration. Voici un article pour vous aider à [créer une pull request](https://help.github.com/articles/creating-a-pull-request/).
 
 ## Rédiger un article en local
 
