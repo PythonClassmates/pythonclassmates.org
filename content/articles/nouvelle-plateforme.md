@@ -1,6 +1,6 @@
 Title: Une nouvelle plateforme de publication
 Date: 2018-07-02 9:00
-Category: Autres
+Category: News
 Slug: une-nouvelle-plateforme
 Author: Thierry Chappuis
 
