@@ -1,12 +1,14 @@
 language: python
 python:
-    - "3.7"
+    - "3.6"
 install:
     - pip3 install pipenv
     - pipenv install
 script:
     - git clone https://github.com/alexandrevicenzi/Flex.git theme/active
     - make publish
+after_failure:
+    - make revert
 deploy:
   provider: pages
   repo: PythonClassmates/pythonclassmates.org
