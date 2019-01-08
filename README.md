@@ -4,7 +4,7 @@ Ce blog propose d'offrir une plateforme de publication collaborative maintenue p
 
 ## Contribuer un nouvel article
 
-Pour contribuer à ce blog, il n'y a besoin d'aucun outils particuler. Il faut juste posséder un compte guthub et commencer par faire un fork de ce dépôt. Ensuite, il faut créer un fichier .rst ou .md dans content/articles pour accueillir votre nouvel article avec les en-têtes décrites ci-dessous. N'hésitez pas à consulter les autres articles en exemple. Vous pouvez ajouter votre nouvel article directement depuis github, ou consolter la section suivante pour apprendre à travailler en local sur son propre ordinateur.
+Pour contribuer à ce blog, il n'y a besoin d'aucun outils particuler. Il faut juste posséder un compte Github et commencer par faire un fork de ce dépôt. Ensuite, il faut créer un fichier .rst ou .md dans content/articles pour accueillir votre nouvel article avec les en-têtes décrites ci-dessous. N'hésitez pas à consulter les autres articles en exemple. Vous pouvez ajouter votre nouvel article directement depuis github, ou consolter la section suivante pour apprendre à travailler en local sur son propre ordinateur.
 
 Pour un article au format ReStructuredText, l'en-tête du fichier .rst doit suivre le format suivant:
 ```
