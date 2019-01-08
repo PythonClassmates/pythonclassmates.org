@@ -1,6 +1,7 @@
 Title: Les mocks avec unittest
 Date: 2018-07-14 14:00
 Category: Articles
+Tags: python, unittest
 Slug: les-mocks-avec-unittest
 Author: Julien Nuellas
 
