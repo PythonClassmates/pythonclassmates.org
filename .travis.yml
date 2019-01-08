@@ -7,8 +7,6 @@ install:
 script:
     - git clone https://github.com/alexandrevicenzi/Flex.git theme/active
     - make publish
-after_failure:
-    - make revert
 deploy:
   provider: pages
   repo: PythonClassmates/pythonclassmates.org
