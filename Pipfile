@@ -4,20 +4,8 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-blinker = "*"
-docutils = "*"
-feedgenerator = "*"
 pelican = "*"
-python-dateutil = "*"
-pytz = "*"
-six = "*"
-"Jinja2" = "*"
 Markdown = "*"
-MarkupSafe = "*"
-Pygments = "*"
-Unidecode = "*"
 
 [dev-packages]
 
-[requires]
-python_version = "3"
