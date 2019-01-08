@@ -8,7 +8,7 @@ script:
     - git clone https://github.com/alexandrevicenzi/Flex.git theme/active
     - pipenv run invoke publish
 after_failure:
-    - make revert
+    - pipenv run invoke revert
 deploy:
   provider: pages
   repo: PythonClassmates/pythonclassmates.org
