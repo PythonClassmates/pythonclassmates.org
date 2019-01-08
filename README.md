@@ -2,9 +2,9 @@
 
 Ce blog propose d'offrir une plateforme de publication collaborative maintenue par les étudiants et mentors du *discord* des étudiants **Python** d'*Openclassrooms*. L'objectif de ce dernier est de fournir des news, des didacticiels, des critiques de livres, des astuces en relation avec le langage de programmation python.
 
-## Contribuer
+## Contribuer un nouvel article
 
-Pour contribuer à ce blog, il n'y a besoin d'aucun outils particuler. Il suffit de rédiger un article en commençant par créer un fichier .rst ou .md dans content/articles. 
+Pour contribuer à ce blog, il n'y a besoin d'aucun outils particuler. Il faut juste posséder un compte guthub et commencer par faire un fork de ce dépôt. Ensuite, il fsut créer un fichier .rst ou .md dans content/articles pour accueillir votre nouvel article avec les en-têtes décrites ci-dessous. N'hésitez pas à consulter les autres articles en exemple. Vous pouvez ajouter votre nouvel article directement depuis github, ou consolter la section suivante pour apprendre à travailler en local sur son propre ordinateur.
 
 Pour un article au format ReStructuredText, l'en-tête du fichier .rst doit suivre le format suivant:
 ```
@@ -30,6 +30,12 @@ Tags: tag1, tag2
 Slug: le-titre-de-mon-article-sous-forme-de-slug
 Author: Jean Dupont
 ```
+
+Une fois que votre article est terminé, vous pouvez demander sont ajout (ou sa modification si vous avez retouché article existant) en soumettant une pull request depuis l'interface github de votre fork du projet. Un admin s'occupera de son intégration.
+
+## Rédiger un article en local
+
+
 
 ## Outils pour visualiser son article
 
