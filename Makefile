@@ -5,6 +5,12 @@ publish:
 
 build:
 	pipenv run pelican content -s pelicanconf.py $(THEME)
+	
+autoreload:
+	pipenv run pelican -r content -s pelicanconf.py $(THEME)
+	
+runserver:
+	pipenv run python -m http.server -d output
 
 revert:
 ifeq ($(TRAVIS_PULL_REQUEST), false)
