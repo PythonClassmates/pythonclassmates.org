@@ -6,6 +6,6 @@ name = "pypi"
 [packages]
 pelican = "*"
 Markdown = "*"
+fabric = "*"
 
 [dev-packages]
-
