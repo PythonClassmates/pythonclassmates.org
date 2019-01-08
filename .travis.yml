@@ -6,6 +6,7 @@ install:
     - pip3 install
 script:
     - git clone https://github.com/alexandrevicenzi/Flex.git theme/active
+    - pipenv shell
     - make publish
 deploy:
   provider: pages
