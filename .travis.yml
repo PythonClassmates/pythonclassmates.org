@@ -3,7 +3,7 @@ python:
     - "3.6"
 install:
     - pip3 install pipenv
-    - pip3 install
+    - pipenv install
 script:
     - git clone https://github.com/alexandrevicenzi/Flex.git theme/active
     - make publish
