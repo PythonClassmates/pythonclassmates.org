@@ -39,7 +39,11 @@ Une fois que votre article est terminé, vous pouvez demander sont ajout au blog
 
 ## Rédiger un article en local
 
+Pour pouvoir rédiger un article en local, il faut installer sur votre ordinateur une version de git. Pour MacOS et Linuxoides, vous avez certainement déjà une version de git à portée de doigts. Essayez d'exécuter la commande `$ git --version` pour vous en assurer. Pour les utilisateurs de Windows, vous pouvez installer [Git For Windows](https://gitforwindows.org/) et [suivre ce cours](https://openclassrooms.com/fr/courses/2342361-gerez-votre-code-avec-git-et-github) si vous avez besoin de découvrir l'outils.
 
+Une fois que vous êtes certain que git est sur votre ordinateur, vous pouvez cloner votre fork personnel de ce dépôt à l'aide de la commande `git clone <votre-version-du-dépôt>`.
+
+Il suffit ensuite d'ajouter votre contribution en ajoutant un nouveau fichier à content/articles (voir section précédente) à l'aide de votre éditeur préféré. Vous pouvez gérer les versions comme vous en avez l'habitude avec git et pousser vos modifications en ligne avec `git push origin master` lorsque vous êtes satisfaits du résultat. La soumission de l'article se fera ensuite via une pull request sur l'interface de github.
 
 ## Outils pour visualiser son article
 
