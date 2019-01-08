@@ -4,7 +4,7 @@ Ce blog propose d'offrir une plateforme de publication collaborative maintenue p
 
 ## Contribuer un nouvel article
 
-Pour contribuer à ce blog, il n'y a besoin d'aucun outils particuler. Il faut juste posséder un compte Github et commencer par faire un fork de ce dépôt. Ensuite, il faut créer un fichier .rst ou .md dans content/articles pour accueillir votre nouvel article avec les en-têtes décrites ci-dessous. N'hésitez pas à consulter les autres articles en exemple. Vous pouvez ajouter votre nouvel article directement depuis github, ou consolter la section suivante pour apprendre à travailler en local sur son propre ordinateur.
+Pour contribuer à ce blog, il n'y a besoin d'aucun outils particulier. Il faut juste posséder un compte Github et commencer par faire un fork de ce dépôt. Ensuite, il faut créer un fichier .rst ou .md dans content/articles pour accueillir votre nouvel article avec les en-têtes décrites ci-dessous. N'hésitez pas à consulter les autres articles en exemple. Vous pouvez ajouter votre nouvel article directement depuis Github, ou consulter la section suivante pour apprendre à travailler en local sur son propre ordinateur.
 
 Pour un article au format ReStructuredText, l'en-tête du fichier .rst doit suivre le format suivant:
 ```
@@ -35,19 +35,19 @@ Author: Jean Dupont
 
 Voici un [article pour vous aider](https://guides.github.com/features/mastering-markdown/) si vous n'avez encore jamais rédigé de fichiers au format Markdown.
 
-Une fois que votre article est terminé, vous pouvez demander son ajout au blog collaboratif (ou sa modification si vous avez retouché un article existant) en soumettant une **pull request** depuis l'interface github de votre fork du projet. Un admin s'occupera de son intégration. Voici un article pour vous aider à [créer une pull request](https://help.github.com/articles/creating-a-pull-request/).
+Une fois que votre article est terminé, vous pouvez demander son ajout au blog collaboratif (ou sa modification si vous avez retouché un article existant) en soumettant une **pull request** depuis l'interface Github de votre fork du projet. Un admin s'occupera de son intégration. Voici un article pour vous aider à [créer une pull request](https://help.github.com/articles/creating-a-pull-request/).
 
 ## Rédiger un article en local
 
-Pour pouvoir rédiger un article en local, il faut installer sur votre ordinateur une version de git. Pour MacOS et Linuxoides, vous avez certainement déjà une version de git à portée de doigts. Essayez d'exécuter la commande `$ git --version` pour vous en assurer. Pour les utilisateurs de Windows, vous pouvez installer [Git For Windows](https://gitforwindows.org/) et [suivre ce cours](https://openclassrooms.com/fr/courses/2342361-gerez-votre-code-avec-git-et-github) si vous avez besoin de découvrir l'outil.
+Pour pouvoir rédiger un article en local, il faut installer sur votre ordinateur une version de git. Pour MacOS et autres Unixoïdes, vous avez certainement déjà une version de git à portée de doigts. Essayez d'exécuter la commande `$ git --version` pour vous en assurer. Pour les utilisateurs de Windows, vous pouvez installer [Git For Windows](https://gitforwindows.org/) et [suivre ce cours](https://openclassrooms.com/fr/courses/2342361-gerez-votre-code-avec-git-et-github) si vous avez besoin de découvrir l'outil.
 
 Une fois que vous êtes certain que git est sur votre ordinateur, vous pouvez cloner votre fork personnel de ce dépôt à l'aide de la commande `git clone <votre-version-du-dépôt>`.
 
-Il suffit ensuite d'ajouter votre contribution en ajoutant un nouveau fichier à content/articles (voir section précédente) à l'aide de votre éditeur préféré. Vous pouvez gérer les versions comme vous en avez l'habitude avec git et pousser vos modifications en ligne avec `git push origin master` lorsque vous êtes satisfaits du résultat. La soumission de l'article se fera ensuite via une pull request sur l'interface de github.
+Il suffit ensuite d'ajouter votre contribution en ajoutant un nouveau fichier à content/articles (voir section précédente) à l'aide de votre éditeur de texte préféré. Vous pouvez gérer les versions comme vous en avez l'habitude avec git et pousser vos modifications en ligne avec `git push origin master` lorsque vous êtes satisfaits du résultat. La soumission de l'article se fera ensuite via une pull request sur l'interface de Github.
 
 ## Outils pour visualiser son article
 
-Pour pouvoir visualiser son article, les dépendances à installer sont:
+Pour pouvoir visualiser son article lors du développement local, les dépendances à installer sont:
 
 - Python 3.6+
 - `$ pip3 install pipenv` ou `$ pip install pipenv` (sous windows)
