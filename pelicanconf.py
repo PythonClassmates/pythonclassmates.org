@@ -17,11 +17,11 @@ FAVICON = 'favicon-32x32.png'
 MAIN_MENU = True
 DISPLAY_PAGES_ON_MENU = False
 MENUITEMS = [
-    ('News', 'category/news.html'),
-    ('Articles', 'category/articles.html'),
-    ('Tutoriels', 'category/tutoriels.html'),
-    ('Catégories', 'categories.html'),
-    ('Tags', 'tags.html'),
+    ('News', '/category/news.html'),
+    ('Articles', '/category/articles.html'),
+    ('Tutoriels', '/category/tutoriels.html'),
+    ('Catégories', '/categories.html'),
+    ('Tags', '/tags.html'),
 ]
 
 PLUGIN_PATHS = ['plugins']
