@@ -1,6 +1,9 @@
 env/
 theme*/
-*.swp
 __pycache__/
 output/
 plugins/
+
+*.swp
+.vscode/
+.idea/
