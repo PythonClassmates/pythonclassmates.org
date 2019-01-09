@@ -19,11 +19,13 @@ DISPLAY_PAGES_ON_MENU = False
 MENUITEMS = [
     ('News', 'category/news.html'),
     ('Articles', 'category/articles.html'),
-    ('Tutoriels', '/category/tutoriels.html'),
-    ('Livres', '/category/livres.html'),
-    ('Catégories', '/categories.html'),
-    ('Tags', '/tags.html'),
+    ('Tutoriels', 'category/tutoriels.html'),
+    ('Catégories', 'categories.html'),
+    ('Tags', 'tags.html'),
 ]
+
+PLUGIN_PATHS = ['plugins']
+PLUGINS = ['summary']
 
 TIMEZONE = 'Europe/Paris'
 

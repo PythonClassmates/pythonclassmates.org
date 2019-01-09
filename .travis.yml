@@ -5,7 +5,6 @@ install:
     - pip3 install pipenv
     - pipenv install
 script:
-    - git clone https://github.com/alexandrevicenzi/Flex.git theme/active
     - pipenv run invoke publish
 after_failure:
     - pipenv run invoke revert

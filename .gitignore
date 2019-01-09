@@ -3,3 +3,4 @@ theme*/
 *.swp
 __pycache__/
 output/
+plugins/

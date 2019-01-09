@@ -1,17 +1,33 @@
 import os
+from pathlib import Path
 
 from invoke import task
 
 
-THEME = 'theme/active'
+THEME = './theme/active'
+THEME_CMD = f'git clone https://github.com/alexandrevicenzi/Flex.git {THEME}'
+
+PLUGINS = './plugins'
+PLUGINS_CMD = (
+    'git clone --recursive '
+    f'https://github.com/getpelican/pelican-plugins {PLUGINS}'
+)
+
+def check_theme_and_plugins(c):
+    if not Path('./theme').exists():
+        c.run(THEME_CMD)
+    if not Path('./plugins').exists():
+        c.run(PLUGINS_CMD)
 
 @task
 def build(c):
+    check_theme_and_plugins(c)
     c.run('echo "Publishing your Pelican website"')
     c.run(f'pipenv run pelican content -s pelicanconf.py -t {THEME}')
 
 @task
 def publish(c):
+    check_theme_and_plugins(c)
     c.run('echo "Building your Pelican website"')
     c.run(f'pipenv run pelican content -s publishconf.py -t {THEME}')
 
