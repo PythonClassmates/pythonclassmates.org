@@ -4,6 +4,7 @@ __pycache__/
 output/
 plugins/
 
+.DS_Store
 *.swp
 .vscode/
 .idea/
