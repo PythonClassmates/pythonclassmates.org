@@ -9,3 +9,7 @@ Markdown = "*"
 fabric = "*"
 
 [dev-packages]
+doc8 = "*"
+pylint = "*"
+flake8 = "*"
+autopep8 = "*"
