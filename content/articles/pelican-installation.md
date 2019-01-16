@@ -53,7 +53,7 @@ Category: Review
 Following is a review of my favorite mechanical keyboard.
 ```
 
-Considerant que cet article est au format Markdown, enregistrez le en temps que `~/projects/yoursite/content/keyboard-review.md.`
+Considerant que cet article est au format Markdown, enregistrez le en tant que `~/projects/yoursite/content/keyboard-review.md.`
 
 ## Générez le site
 
