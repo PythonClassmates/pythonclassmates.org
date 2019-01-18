@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 AUTHOR = 'Divers auteurs'
 SITENAME = "Python I/O"
 SITETITLE = "Python I/O"
-SITESUBTITLE = "Articles et news par des Pythonistas passionés"
+SITESUBTITLE = "Articles et news par des Pythonistas passionnés"
 SITEURL = ''
 
 PATH = 'content'
