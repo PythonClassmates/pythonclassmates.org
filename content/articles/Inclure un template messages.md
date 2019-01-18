@@ -3,7 +3,7 @@ Date: 2019-01-18 15:25
 Modified: 2019-01-17 08:00
 Category: Articles
 Tags: Django, Forms, CBV
-Slug: Reutiliser-les-messages-d-erreur
+Slug: 
 Author: Aurélia Gourbère
 
 

@@ -3,7 +3,7 @@ Date: 2019-01-18 09:50
 Modified: 2019-01-08 08:00
 Category: Articles
 Tags: Django, Pillow
-Slug: Changer-une-image-avatar-dans-un-profil
+Slug: 
 Author: Aurélia Gourbère
 
 

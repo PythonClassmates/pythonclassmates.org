@@ -3,7 +3,7 @@ Date: 2019-01-18 10:18
 Modified: 2019-01-17 08:00
 Category: Articles
 Tags: Django, Forms, CBV
-Slug: Plusieurs-formulaires-dans-un-gabarit
+Slug:
 Author: Aurélia Gourbère
 
 
