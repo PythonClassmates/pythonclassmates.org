@@ -15,7 +15,7 @@ Pour éviter la redondance de l'affichage dans un gabarit des messages d'erreur 
 
 ## Template form_errors.html
 
-Dans le cas où notre projet a plusieurs apps, nous faisons le choix de le mettre dans le répertoire core/template/form_erros.html
+Dans le cas où notre projet a plusieurs apps, nous faisons le choix de le mettre dans le répertoire core/template/form_errors.html
 
 ```
 {% block content %}
