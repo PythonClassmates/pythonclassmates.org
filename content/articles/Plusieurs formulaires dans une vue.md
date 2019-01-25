@@ -1,4 +1,4 @@
-Title: Afficher plusieurs formulaires de manière indépendantes dans le même gabarit
+Title: Afficher plusieurs formulaires de manière indépendante dans le même gabarit
 Date: 2019-01-18 10:11
 Modified: 2019-01-17 08:00
 Category: Articles
@@ -8,7 +8,7 @@ Author: Aurélia Gourbère
 
 
 
-# Afficher plusieurs formulaires de manière indépendantes dans le même gabarit
+# Afficher plusieurs formulaires de manière indépendante dans le même gabarit
 
 ## Problématique 
 
