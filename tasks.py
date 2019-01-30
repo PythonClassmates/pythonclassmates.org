@@ -7,13 +7,13 @@ from invoke import task
 def build(c):
     """Builds the local Pelican blog."""
     c.run('echo "Publishing your Pelican website"')
-    c.run(f'pelican content -s pelicanconf.py')
+    c.run(f'pelican content -s pelicanconf.py --fatal=warnings')
 
 @task
 def publish(c):
     """Builds the Pelican blog with deployment settings."""
     c.run('echo "Building your Pelican website"')
-    c.run(f'pelican content -s publishconf.py')
+    c.run(f'pelican content -s publishconf.py --fatal=warnings')
 
 @task
 def autoreload(c):
