@@ -3,54 +3,62 @@
 import os
 import shutil
 import sys
-import datetime
 from pathlib import Path
 
 from invoke import task
-from invoke.util import cd
 from pelican.server import ComplexHTTPRequestHandler, RootedHTTPServer
 
-BASEDIR = (Path(__file__) / '..').resolve()
-INPUTDIR = BASEDIR / 'content'
-OUTPUTDIR = BASEDIR / 'output'
-CONFFILE = BASEDIR / 'pelicanconf.py'
-PUBLISHCONF = BASEDIR / 'publishconf.py'
-
-PORT = 8000
-
-PELICANOPTS = '--fatal=warnings'
-
+CONFIG = {}
+CONFIG['basedir'] = (Path(__file__) / '..').resolve()
+CONFIG['inputdir'] = CONFIG['basedir'] / 'content'
+CONFIG['outputdir'] = CONFIG['basedir'] / 'output'
+CONFIG['conffile'] = CONFIG['basedir'] / 'pelicanconf.py'
+CONFIG['publishconf'] = CONFIG['basedir'] / 'publishconf.py'
+CONFIG['opts'] = '--fatal=warnings'
+CONFIG['github'] = os.getenv('GITHUB_TOKEN')
+CONFIG['port'] = 8000
 
 @task
 def clean(c):
     """Remove generated files"""
-    if OUTPUTDIR.is_dir():
-        shutil.rmtree(OUTPUTDIR)
-        OUTPUTDIR.mkdir(parents=True, exist_ok=True)
+    if CONFIG['outputdir'].is_dir():
+        shutil.rmtree(CONFIG['outputdir'])
+        CONFIG['outputdir'].mkdir(parents=True, exist_ok=True)
 
 @task
 def build(c):
     """Builds the local Pelican blog"""
     c.run('echo "Building your Pelican website"')
-    c.run(f'pelican {INPUTDIR} -o {OUTPUTDIR} -s {CONFFILE} {PELICANOPTS}')
+    c.run('pelican {inputdir} -o {outputdir} -s {conffile} {opts}'
+        .format(**CONFIG)
+    )
+
+@task
+def html(c):
+    """Builds the local Pelican blog"""
+    build(c)
 
 @task
 def rebuild(c):
-    """`build` with the delete switch"""
+    """Builds with the delete switch"""
     c.run('echo "Re-building your Pelican website"')
-    c.run(f'pelican -d -s {CONFFILE} {PELICANOPTS}')
+    c.run('pelican -d -s {conffile} {opts}'.format(**CONFIG))
 
 @task
 def publish(c):
     """Builds the Pelican blog with deployment settings"""
     c.run('echo "Publishing your Pelican website"')
-    c.run(f'pelican {INPUTDIR} -o {OUTPUTDIR} -s {PUBLISHCONF} {PELICANOPTS}')
+    c.run('pelican {inputdir} -o {outputdir} -s {publishconf} {opts}'
+        .format(**CONFIG)
+    )
 
 @task
 def autoreload(c):
     """Starts the autoreload server to help during writing of blog articles"""
     c.run('echo "Running autoreload server. Press CTRL+C to stop"')
-    c.run(f'pelican -r {INPUTDIR} -o {OUTPUTDIR} -s {CONFFILE} {PELICANOPTS}')
+    c.run('pelican -r {inputdir} -o {outputdir} -s {conffile} {opts}'
+        .format(**CONFIG)
+    )
 
 @task
 def regenerate(c):
@@ -65,11 +73,11 @@ def serve(c):
         allow_reuse_address = True
 
     server = AddressReuseTCPServer(
-        OUTPUTDIR,
-        ('', PORT),
+        CONFIG['outputdir'],
+        ('', CONFIG['port']),
         ComplexHTTPRequestHandler)
 
-    sys.stderr.write('Serving on port {port} ...\n'.format(port=PORT))
+    sys.stderr.write('Serving on port {port} ...\n'.format(**CONFIG))
     server.serve_forever()
 
 @task
@@ -81,17 +89,20 @@ def runserver(c):
 def devserver(c):
     """Starts the devserver"""
     c.run('echo "Running Pelican DevServer. Press CTRL+C to stop"')
-    c.run(f'pelican -lr {INPUTDIR} -o {OUTPUTDIR} -s {CONFFILE} {PELICANOPTS} -p {PORT}')
+    c.run(
+        'pelican -lr {inputdir} -o {outputdir} -s {conffile} {opts} -p {port}'
+        .format(**CONFIG)
+    )
 
 @task
 def reserve(c):
-    """`build`, then `serve`"""
+    """Builds, then serves"""
     build(c)
     serve(c)
 
 @task
 def preview(c):
-    """Build production version of site"""
+    """Builds the production version of site"""
     c.run('pelican -s publishconf.py')
 
 @task
@@ -102,9 +113,15 @@ def revert(c):
     if not os.getenv('TRAVIS_PULL_REQUEST'):
         c.run('echo "Build errors were encountered. Reverting last commit..."')
         c.run('git revert HEAD -n') 
-        c.run('git commit -m "Revert to last commit because errors were found."')
+        c.run(
+            'git commit -m "Revert to last commit because errors were found."'
+        )
         c.run('git checkout -b errors')
-        c.run(f'git push -f https://{GITHUB_TOKEN}@github.com/PythonClassmates/PythonClassmates.org.git errors:master') 
+        c.run(
+            'git push -f https://{github}@github.com/'
+            'PythonClassmates/PythonClassmates.org.git errors:master'
+            .format(**CONFIG)
+        ) 
         c.run('echo "Last commit reverted"')
     else:
 	    c.run('echo "In a pull request. Nothing to revert."') 
