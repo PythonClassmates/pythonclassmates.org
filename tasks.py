@@ -3,44 +3,23 @@ from pathlib import Path
 
 from invoke import task
 
-
-THEME = './theme/active'
-THEME_CMD = f'git clone https://github.com/alexandrevicenzi/Flex.git {THEME}'
-
-PLUGINS = './plugins'
-PLUGINS_CMD = (
-    'git clone --recursive '
-    f'https://github.com/getpelican/pelican-plugins {PLUGINS}'
-)
-
-def check_theme_and_plugins(c):
-    """Checks if the theme and plugins directories are present and clones them
-    from Github if necessary.
-    """
-    if not Path('./theme').exists():
-        c.run(THEME_CMD)
-    if not Path('./plugins').exists():
-        c.run(PLUGINS_CMD)
-
 @task
 def build(c):
     """Builds the local Pelican blog."""
-    check_theme_and_plugins(c)
     c.run('echo "Publishing your Pelican website"')
-    c.run(f'pelican content -s pelicanconf.py -t {THEME}')
+    c.run(f'pelican content -s pelicanconf.py')
 
 @task
 def publish(c):
     """Builds the Pelican blog with deployment settings."""
-    check_theme_and_plugins(c)
     c.run('echo "Building your Pelican website"')
-    c.run(f'pelican content -s publishconf.py -t {THEME}')
+    c.run(f'pelican content -s publishconf.py')
 
 @task
 def autoreload(c):
     """Starts the autoreload server to help during writing of blog articles."""
     c.run('echo "Running autoreload server. Press CTRL+C to stop"')
-    c.run(f'pelican -r content -s pelicanconf.py -t {THEME}')
+    c.run(f'pelican -r content -s pelicanconf.py')
 
 @task
 def runserver(c):

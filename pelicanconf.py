@@ -24,9 +24,6 @@ MENUITEMS = [
     ('Tags', '/tags.html'),
 ]
 
-PLUGIN_PATHS = ['plugins']
-PLUGINS = ['summary']
-
 TIMEZONE = 'Europe/Paris'
 
 # Translate to German.
