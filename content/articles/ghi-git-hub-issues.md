@@ -7,7 +7,7 @@ Author: Freezed
 
 `ghi` : _GitHub Issues on the command line. Use your `$EDITOR`, not your browser._
 
-CLI vs GUI, pour moi le choix est souvent vite fait. Du coup ça fait quelques temps que je gère dès que possible mes` issues `github en CLI à l'aide de [ghi](https://github.com/stephencelis/ghi), un client dédié aux `issues` GitHub éccrit en Ruby.
+CLI vs GUI, pour moi le choix est souvent vite fait. Du coup ça fait quelques temps que je gère dès que possible mes `issues` github en CLI à l'aide de [ghi](https://github.com/stephencelis/ghi), un client dédié aux `issues` GitHub éccrit en Ruby.
 
 La vrai feature qui me manque est l'affectation d'un `project`, dommage… Mais sinon on fait des trucs directement en console qui font _vraiment_ gagner du temps :
 
@@ -24,7 +24,7 @@ Liste les `issues` & `pulls` open :
   13: Error 404 on category/tutoriels.html
   12: Error 404 on category/news.html
 ```
-Seulement les` issues `:
+Seulement les `issues` :
 
 ```shell
 ~/git/pythonclassmates.org $ ghi list --no-pulls
@@ -72,7 +72,7 @@ Les check-box du GHFMD sont aussi possible :
 
 Et quand on a fini de raconter sa vie on ferme la double quote. Hoplà!"
 ```
-Aller pour finir un petit one-liner en shell pour créer les` issues `à partir d'un fichier texte (`issues.txt`) que l'on aura rempli avec un titre d'issue par ligne. Idéal en début de projet quand on à toute la roadmap à renseigner…
+Aller pour finir un petit one-liner en shell pour créer les `issues` à partir d'un fichier texte (`issues.txt`) que l'on aura rempli avec un titre d'issue par ligne. Idéal en début de projet quand on à toute la roadmap à renseigner…
 
 ```shell
 $ cat issues.txt

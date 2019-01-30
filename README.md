@@ -1,13 +1,20 @@
-# PythonClassmates: Opinions d'étudiants en programmation python
+# PythonClassmates
+
+### Opinions d'étudiants en programmation python
+
+---
 
 Ce blog propose d'offrir une plateforme de publication collaborative maintenue par les étudiants et mentors du *discord* des étudiants **Python** d'*Openclassrooms*. L'objectif de ce dernier est de fournir des news, des didacticiels, des critiques de livres, des astuces en relation avec le langage de programmation python.
 
-## Contribuer un nouvel article
+## Contribuer via l'interface _Github_
 
-Pour contribuer à ce blog, il n'y a besoin d'aucun outils particulier. Il faut juste posséder un compte Github et commencer par faire un fork de ce dépôt. Ensuite, il faut créer un fichier .rst ou .md dans content/articles pour accueillir votre nouvel article avec les en-têtes décrites ci-dessous. N'hésitez pas à consulter les autres articles en exemple. Vous pouvez ajouter votre nouvel article directement depuis Github, ou consulter la section suivante pour apprendre à travailler en local sur son propre ordinateur.
+1. [Connectez-vous](https://github.com/login) à votre _Github_
+2. Faites un fork du dépôt
+3. Créez votre nouvel article (ou modifiez un existant) au format `rst` ou `md` dans `content/articles/`, l'en-têtes doit respecter le modèle correspondant au format choisi. (N'hésitez pas à consulter les autres articles en exemple) :
 
-Pour un article au format ReStructuredText, l'en-tête du fichier .rst doit suivre le format suivant:
-```
+_Pour un article au format _ReStructuredText_, l'en-tête du fichier `.rst` doit suivre le format suivant :_
+
+```restructuredtext
 Le titre de mon article
 #######################
 
@@ -15,35 +22,38 @@ Le titre de mon article
 :modified: 2019-01-08 08:00
 :category: Articles
 :tags: tag1, tag2
-:lug: le-titre-de-mon-article-sous-forme-de-slug
+:slug: le-titre-de-mon-article-sous-forme-de-slug
 :author: Jean Dupont
 :summary: Version courte de l'article
-```
 
 Voici un article d'aide pour vous accompagner dans la [rédaction d'un article au format ReStructuredText](http://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html) (le format de markup officiel pour les projets python).
-
-Pour un article au format Markdown, l'en-tête du fichier .md doit suivre le format suivant:
 ```
+_Pour un article au format _Markdown_, l'en-tête du fichier `.md` doit suivre le format suivant :_
+
+```markdown
 Title: Le titre de mon article
 Date: 2018-07-14 14:00
 Modified: 2019-01-08 08:00
-Category: Articles
 Tags: tag1, tag2
 Slug: le-titre-de-mon-article-sous-forme-de-slug
 Author: Jean Dupont
+Summary: Version courte de l'article
+
+Voici un [article pour vous aider](https://guides.github.com/features/mastering-markdown/) si vous n'avez encore jamais rédigé de fichiers au format _Markdown_.
 ```
 
-Voici un [article pour vous aider](https://guides.github.com/features/mastering-markdown/) si vous n'avez encore jamais rédigé de fichiers au format Markdown.
+Une fois votre article terminé, demandez d'ajouter cette modification en soumettant une **pull request** (PR) depuis l'interface _Github_ (dans votre fork). Cette _PR_ sera traitée par un mainteneur du projet. Voici un article pour vous aider : [créer une pull request](https://help.github.com/articles/creating-a-pull-request/).
 
-Une fois que votre article est terminé, vous pouvez demander son ajout au blog collaboratif (ou sa modification si vous avez retouché un article existant) en soumettant une **pull request** depuis l'interface Github de votre fork du projet. Un admin s'occupera de son intégration. Voici un article pour vous aider à [créer une pull request](https://help.github.com/articles/creating-a-pull-request/).
+### Contribuer depuis votre ordinateur
 
-## Rédiger un article en local
+1. Installez `git`
+    * Pour _Mac OS_ et _Linux_, vous avez peut-être une version déjà installée, essayez  la commande `$ git --version` dans un terminal pour vous en assurer
+    * Pour _Windows_, installez [Git For Windows](https://gitforwindows.org/) et [suivre ce cours](https://openclassrooms.com/fr/courses/2342361-gerez-votre-code-avec-git-et-github) si vous avez besoin de découvrir l'outil
 
-Pour pouvoir rédiger un article en local, il faut installer sur votre ordinateur une version de git. Pour MacOS et autres Unixoïdes, vous avez certainement déjà une version de git à portée de doigts. Essayez d'exécuter la commande `$ git --version` pour vous en assurer. Pour les utilisateurs de Windows, vous pouvez installer [Git For Windows](https://gitforwindows.org/) et [suivre ce cours](https://openclassrooms.com/fr/courses/2342361-gerez-votre-code-avec-git-et-github) si vous avez besoin de découvrir l'outil.
-
-Une fois que vous êtes certain que git est sur votre ordinateur, vous pouvez cloner votre fork personnel de ce dépôt à l'aide de la commande `git clone <votre-version-du-dépôt>`.
-
-Il suffit ensuite d'ajouter votre contribution en ajoutant un nouveau fichier à content/articles (voir section précédente) à l'aide de votre éditeur de texte préféré. Vous pouvez gérer les versions comme vous en avez l'habitude avec git et pousser vos modifications en ligne avec `git push origin master` lorsque vous êtes satisfaits du résultat. La soumission de l'article se fera ensuite via une pull request sur l'interface de Github.
+2. Clonez votre _fork_ du projet avec de la commande `git clone <adresse-de-votre-fork>.git`
+3. Ajoutez/modifiez un article comme indiqué ci dessus.
+4. Poussez la modification sur github avec la commande `git push origin master`
+5. Retournez sur la page d'accueil de votre _fork_ sur _Github_ un message vous invitera à créer une _PR_
 
 ## Outils pour visualiser son article
 
@@ -53,7 +63,7 @@ Pour pouvoir visualiser son article lors du développement local, les dépendanc
 - `$ pip3 install pipenv` ou `$ pip install pipenv` (sous windows)
 - `$ pipenv install`
 
-Pour générer le html statique à partir de l'article en ReStructuredText ou en Markdown:
+Pour générer le html statique à partir de l'article en _ReStructuredText_ ou en _Markdown_:
 
 - `$ pipenv run invoke build`
 
