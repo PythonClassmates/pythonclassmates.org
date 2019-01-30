@@ -1,6 +1,6 @@
 Title: Installer Pelican
 Date: 2019-01-09 15:29
-Category: tuto
+Category: Tutoriels
 Lang: fr
 Slug: installer-pelican
 Tags: web, python, pelican
