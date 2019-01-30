@@ -9,7 +9,7 @@ from invoke import task
 from pelican.server import ComplexHTTPRequestHandler, RootedHTTPServer
 
 CONFIG = {}
-CONFIG['basedir'] = (Path(__file__) / '..').resolve()
+CONFIG['basedir'] = Path('.')
 CONFIG['inputdir'] = CONFIG['basedir'] / 'content'
 CONFIG['outputdir'] = CONFIG['basedir'] / 'output'
 CONFIG['conffile'] = CONFIG['basedir'] / 'pelicanconf.py'
@@ -84,15 +84,6 @@ def serve(c):
 def runserver(c):
     """Serve site at http://localhost:8000/"""
     serve(c)
-
-@task
-def devserver(c):
-    """Starts the devserver"""
-    c.run('echo "Running Pelican DevServer. Press CTRL+C to stop"')
-    c.run(
-        'pelican -lr {inputdir} -o {outputdir} -s {conffile} {opts} -p {port}'
-        .format(**CONFIG)
-    )
 
 @task
 def reserve(c):
