@@ -14,8 +14,8 @@ CONFIG['inputdir'] = CONFIG['basedir'] / 'content'
 CONFIG['outputdir'] = CONFIG['basedir'] / 'output'
 CONFIG['conffile'] = CONFIG['basedir'] / 'pelicanconf.py'
 CONFIG['publishconf'] = CONFIG['basedir'] / 'publishconf.py'
+
 CONFIG['opts'] = '--fatal=warnings'
-CONFIG['github'] = os.getenv('GITHUB_TOKEN')
 CONFIG['port'] = 8000
 
 @task
@@ -75,7 +75,8 @@ def serve(c):
     server = AddressReuseTCPServer(
         CONFIG['outputdir'],
         ('', CONFIG['port']),
-        ComplexHTTPRequestHandler)
+        ComplexHTTPRequestHandler
+    )
 
     sys.stderr.write('Serving on port {port} ...\n'.format(**CONFIG))
     server.serve_forever()
@@ -109,9 +110,9 @@ def revert(c):
         )
         c.run('git checkout -b errors')
         c.run(
-            'git push -f https://{github}@github.com/'
+            'git push -f https://{GITHUB_TOKEN}@github.com/'
             'PythonClassmates/PythonClassmates.org.git errors:master'
-            .format(**CONFIG)
+            .format(**os.environ)
         ) 
         c.run('echo "Last commit reverted"')
     else:
