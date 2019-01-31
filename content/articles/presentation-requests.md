@@ -1,10 +1,18 @@
 Title: Présentation de la librairie requests
 Date: 2019-01-31 16:00
+<<<<<<< HEAD
+=======
+Modified: 2019-01-31 16:00
+>>>>>>> requests-presentation  added
 Category: Tutoriels
 Tags: requests
 Slug: presentation-requests
 Author: Cédric Migazzi
 
+<<<<<<< HEAD
+=======
+# Présentation de la librairie requests.
+>>>>>>> requests-presentation  added
 
 ### Présentation
 
@@ -25,7 +33,11 @@ Pour réaliser une requête:
 
 avec `urllib3`...
 ```
+<<<<<<< HEAD
 from urllib3 import PoolManager
+=======
+import urllib3
+>>>>>>> requests-presentation  added
 
 http = PoolManager()
 res = http.request("GET", "https://fr.openfoodfacts.org/")
@@ -34,6 +46,7 @@ res = http.request("GET", "https://fr.openfoodfacts.org/")
 ```
 import requests
 
+<<<<<<< HEAD
 res = requests.get("https://fr.openfoodfacts.org/")
 ```
 C'est effectivement beaucoup plus simple, mais que se passe-t-il ?
@@ -41,6 +54,15 @@ C'est effectivement beaucoup plus simple, mais que se passe-t-il ?
 Dans les deux cas, `res` contient la réponse du serveur HTTP.
 
 Avec `requests`, l’import de `http` et l’instanciation de `PoolManager()` est transparent pour l’utilisateur, ce qui économise du code. Les méthodes HTTP sont des fonctions de `requests` au lieu d'être des paramètres dans `urllib3`. 
+=======
+res = requests.get("https://fr.openfoodfacts.org/ ")
+```
+C'est effectivement beaucoup plus simple, mais que se passe-t-il ?
+
+Dans les 2 cas, `res` contient la réponse du serveur HTTP.
+
+Avec `requests`, l’import de `http` et l’instanciation de `PoolManager()` est transparent pour l’utilisateur, ce qui économise du code. Les méthodes HTTP sont des méthodes de `requests` au lieu d'être des paramètres dans `urllib3`. 
+>>>>>>> requests-presentation  added
 
 On peut aussi faire de même avec les autres méthodes HTTP :
 ```
@@ -53,7 +75,11 @@ res = request.head("https://mon-url.de/get")
 
 **Et qu'est-ce qu'on en fait ?**
 
+<<<<<<< HEAD
 `requests` renvoie un objet de type `Response` qui possède les attributs suivants:
+=======
+`requests` renvoie un objet `Response` qui possède les attributs suivants:
+>>>>>>> requests-presentation  added
 ```
 # le code HTTP de la réponse
 >>> res.status_code
@@ -86,7 +112,11 @@ Petit exemple avec du Nutella que l’on peut retrouver grâce à son code barre
 ```
 >>>res = requests.get("https://world.openfoodfacts.org/api/v0/product/3017620425400.json")
 ```
+<<<<<<< HEAD
 Comme la réponse est au format json, on peut la transformer en dictionnaire:
+=======
+Comme la réponse est au format json, on peut le transformer en dictionnaire:
+>>>>>>> requests-presentation  added
 ```
 >>>results = res.json()
 
@@ -94,7 +124,11 @@ Comme la réponse est au format json, on peut la transformer en dictionnaire:
 >>>results.keys()
 dict_keys(['code', 'status_verbose', 'product', 'status'])
 
+<<<<<<< HEAD
 # faire un dictionnaire contenant les attributs du produit
+=======
+# faire un dictionnaire du produit
+>>>>>>> requests-presentation  added
 >>> product = results["product"]
 
 # voir le nombre d'attributs du produit
