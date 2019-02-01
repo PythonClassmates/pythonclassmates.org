@@ -27,7 +27,7 @@ Pour réaliser une requête:
 
 avec `urllib3`...
 ```
-import urllib3
+from urllib3 import PoolManager
 
 http = PoolManager()
 res = http.request("GET", "https://fr.openfoodfacts.org/")
@@ -36,13 +36,13 @@ res = http.request("GET", "https://fr.openfoodfacts.org/")
 ```
 import requests
 
-res = requests.get("https://fr.openfoodfacts.org/ ")
+res = requests.get("https://fr.openfoodfacts.org/")
 ```
 C'est effectivement beaucoup plus simple, mais que se passe-t-il ?
 
-Dans les 2 cas, `res` contient la réponse du serveur HTTP.
+Dans les deux cas, `res` contient la réponse du serveur HTTP.
 
-Avec `requests`, l’import de `http` et l’instanciation de `PoolManager()` est transparent pour l’utilisateur, ce qui économise du code. Les méthodes HTTP sont des méthodes de `requests` au lieu d'être des paramètres dans `urllib3`. 
+Avec `requests`, l’import de `http` et l’instanciation de `PoolManager()` est transparent pour l’utilisateur, ce qui économise du code. Les méthodes HTTP sont des fonctions de `requests` au lieu d'être des paramètres dans `urllib3`. 
 
 On peut aussi faire de même avec les autres méthodes HTTP :
 ```
@@ -55,7 +55,7 @@ res = request.head("https://mon-url.de/get")
 
 **Et qu'est-ce qu'on en fait ?**
 
-`requests` renvoie un objet `Response` qui possède les attributs suivants:
+`requests` renvoie un objet de type `Response` qui possède les attributs suivants:
 ```
 # le code HTTP de la réponse
 >>> res.status_code
@@ -88,7 +88,7 @@ Petit exemple avec du Nutella que l’on peut retrouver grâce à son code barre
 ```
 >>>res = requests.get("https://world.openfoodfacts.org/api/v0/product/3017620425400.json")
 ```
-Comme la réponse est au format json, on peut le transformer en dictionnaire:
+Comme la réponse est au format json, on peut la transformer en dictionnaire:
 ```
 >>>results = res.json()
 
@@ -96,7 +96,7 @@ Comme la réponse est au format json, on peut le transformer en dictionnaire:
 >>>results.keys()
 dict_keys(['code', 'status_verbose', 'product', 'status'])
 
-# faire un dictionnaire du produit
+# faire un dictionnaire contenant les attributs du produit
 >>> product = results["product"]
 
 # voir le nombre d'attributs du produit
