@@ -1,12 +1,10 @@
 Title: Présentation de la librairie requests
 Date: 2019-01-31 16:00
-Modified: 2019-01-31 16:00
 Category: Tutoriels
 Tags: requests
 Slug: presentation-requests
 Author: Cédric Migazzi
 
-# Présentation de la librairie requests.
 
 ### Présentation
 
