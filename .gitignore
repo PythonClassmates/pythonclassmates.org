@@ -1,5 +1,9 @@
 env/
+
+# -- Themes --
 # theme*/
+**/*.css.map
+
 __pycache__/
 output/
 plugins/
