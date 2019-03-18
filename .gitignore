@@ -1,5 +1,5 @@
 env/
-theme*/
+# theme*/
 __pycache__/
 output/
 plugins/
