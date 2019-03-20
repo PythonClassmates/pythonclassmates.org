@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat');
+
+$gray: rgb(68, 68, 68);
+$banner: rgb(49, 80, 255);
+$ahover: rgb(26, 153, 226);
+
+
+body {
+    padding: 0% 10% 0% 10%;
+    font-family: 'Montserrat', sans-serif;
+    background-color: rgb(228, 228, 228);
+    color: $gray;
+}
+
+#banner {
+    padding: 2%;
+    text-align: center;
+}
+
+#menu {
+    ul {
+        display: flex;
+        flex-direction: row;
+        list-style-type: none;
+        justify-content: space-around;
+    }
+}
+
+#content {
+    padding: 3% 2% 3% 2%;
+    background-color: white;
+}
+
+a {
+    text-decoration: none;
+    color: $gray;
+
+    &:hover {
+        color: $ahover
+    }
+}
+
+article {
+    padding: 1.5%;
+}
+
+.hentry {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.post-info {
+    font-size: 0.8em;
+}

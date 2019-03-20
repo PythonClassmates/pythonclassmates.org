@@ -6,7 +6,7 @@ Bienvenue dans la section des thèmes personnels. Ce guide a pour but de vous re
 
 La documentation officielle est disponible [ici](http://docs.getpelican.com/en/3.6.3/themes.html).  
   
-Nous reprenons la structure des thèmes visible dans la documentation. Nous vous conseillons d'importer les pages html du thème `White_cloud` pour avoir une base sur quoi travailler (Ce sont les pages du thème Pelican par défaut).
+Nous reprenons la structure des thèmes visible dans la documentation. Nous vous conseillons d'importer les pages html du dossier [Simple theme](https://github.com/getpelican/pelican/tree/master/pelican/themes/simple/templates) pour avoir une base sur quoi travailler (Ce sont les pages du thème Pelican par défaut).
 
 Si vous souaitez créer votre thème, créez un nouveau dossier dans le dossier `themes` avec la structure suivante :
 
@@ -34,6 +34,6 @@ Ensuite, ouvrez le fichier `tasks.py` de ce projet. En tête de ce fichier se tr
 Vous pouvez ajouter votre thème dans la partie `theme list`. Suivez l'exemple en commentaire.  
 `CONFIG['theme:active']` permet de selectionner son thème. Modifiez sa valeur pour cibler le chemin du thème voulu.  
   
-Une fois votre thème crée et/ou sélectionné, il vous suffira de lancer la commande `invoke scss` à la racine du projet pour générer vos fichiers scss en css.
+Une fois votre thème crée et/ou sélectionné, il vous suffira de lancer la commande `invoke scss` à la racine du projet pour générer vos fichiers scss en css.  
 
-Title: $YOUR_POST_TITLE
+>Note : la commande `invoke upstyle` permet de convertir les fichiers scss, build le site et lancer le serveur en une seule commande.

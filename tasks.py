@@ -166,3 +166,11 @@ def scss(c):
 
     c.run("sass {scss_to}:{css_folder}".format(**paths))
     c.run("echo 'Sass to css done.'")
+
+
+@task
+def upstyle(c):
+    """Converts scss files, builds then serves."""
+    scss(c)
+    build(c)
+    serve(c)
