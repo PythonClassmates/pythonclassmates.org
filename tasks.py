@@ -14,11 +14,30 @@ from invoke import task
 from pelican.server import ComplexHTTPRequestHandler, RootedHTTPServer
 
 CONFIG = {}
+
+# -- Main paths config --
+
 CONFIG['basedir'] = Path('.')
 CONFIG['inputdir'] = CONFIG['basedir'] / 'content'
 CONFIG['outputdir'] = CONFIG['basedir'] / 'output'
 CONFIG['conffile'] = CONFIG['basedir'] / 'pelicanconf.py'
 CONFIG['publishconf'] = CONFIG['basedir'] / 'publishconf.py'
+
+
+# -- Theme Config --
+
+# Themes list.
+CONFIG['theme:white_cloud'] = CONFIG['inputdir'] / 'themes' / 'white_cloud'
+# CONFIG['theme:other_theme'] = CONFIG['inputdir'] / 'themes' / 'other_theme'
+# ...
+
+CONFIG['theme:active'] = CONFIG['theme:white_cloud']  # choose your theme.
+CONFIG['static'] = CONFIG['theme:active'] / 'static'
+CONFIG['scss'] = CONFIG['static'] / 'scss'
+CONFIG['css'] = CONFIG['static'] / 'css'
+
+
+# -- Others --
 
 CONFIG['opts'] = '--fatal=warnings'
 CONFIG['port'] = 8000
@@ -140,8 +159,10 @@ def revert(c):
 def scss(c):
     """Convert the scss files to css.
 
-    The 'sass' command must be available on your shell.
+    The 'sass' command must be available in your shell.
     https://sass-lang.com/guide
     """
-    c.run("sass content/theme/static/scss/:content/theme/static/css/")
+    paths = {'scss_to': CONFIG['scss'], 'css_folder': CONFIG['css']}
+
+    c.run("sass {scss_to}:{css_folder}".format(**paths))
     c.run("echo 'Sass to css done.'")
