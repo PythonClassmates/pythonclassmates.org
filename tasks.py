@@ -27,8 +27,8 @@ CONFIG['publishconf'] = CONFIG['basedir'] / 'publishconf.py'
 # -- Theme Config --
 
 # Themes list.
-CONFIG['theme:white_cloud'] = CONFIG['inputdir'] / 'themes' / 'white_cloud'
-# CONFIG['theme:other_theme'] = CONFIG['inputdir'] / 'themes' / 'other_theme'
+CONFIG['theme:white_cloud'] = CONFIG['basedir'] / 'themes' / 'white_cloud'
+# CONFIG['theme:other_theme'] = CONFIG['basedir'] / 'themes' / 'other_theme'
 # ...
 
 CONFIG['theme:active'] = CONFIG['theme:white_cloud']  # choose your theme.
