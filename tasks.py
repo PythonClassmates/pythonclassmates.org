@@ -28,7 +28,7 @@ CONFIG['publishconf'] = CONFIG['basedir'] / 'publishconf.py'
 
 # Themes list.
 CONFIG['theme:white_cloud'] = CONFIG['basedir'] / 'themes' / 'white_cloud'
-# CONFIG['theme:other_theme'] = CONFIG['basedir'] / 'themes' / 'other_theme'
+# CONFIG['theme:your_theme'] = CONFIG['basedir'] / 'themes' / 'your_theme'
 # ...
 
 CONFIG['theme:active'] = CONFIG['theme:white_cloud']  # choose your theme.
@@ -165,7 +165,7 @@ def scss(c):
     paths = {'scss_to': CONFIG['scss'], 'css_folder': CONFIG['css']}
 
     c.run("sass {scss_to}:{css_folder}".format(**paths))
-    c.run("echo 'Sass to css done.'")
+    c.run("echo 'Scss to css done.'")
 
 
 @task
