@@ -1,17 +1,36 @@
-@import url("https://fonts.googleapis.com/css?family=Montserrat");
+@font-face {
+  font-family: "PT Serif";
+  src: url("../../fonts/PT_Serif-Web-Regular") format("ttf");
+}
+@font-face {
+  font-family: "Raleway";
+  src: url("../../fonts/Raleway/Raleway-Light") format("ttf");
+}
 body {
   padding: 0% 10% 0% 10%;
-  font-family: "Montserrat", sans-serif;
+  font-family: "Raleway", sans-serif;
   background-color: #e4e4e4;
   color: #444444;
 }
 
 #banner {
+  font-family: "PT Serif", serif;
   padding: 2%;
   text-align: center;
+  background-color: #0087b1;
+}
+#banner a {
+  color: white;
+}
+#banner a strong {
+  font-size: 0.6em;
 }
 
+#menu {
+  margin-top: 4%;
+}
 #menu ul {
+  padding-left: 0%;
   display: flex;
   flex-direction: row;
   list-style-type: none;
@@ -20,7 +39,6 @@ body {
 
 #content {
   padding: 3% 2% 3% 2%;
-  background-color: white;
 }
 
 a {
@@ -31,6 +49,11 @@ a:hover {
   color: #1a99e2;
 }
 
+ol#post-list {
+  padding-left: 0%;
+  list-style-type: none;
+}
+
 article {
   padding: 1.5%;
 }
@@ -39,10 +62,19 @@ article {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  background-color: white;
+  color: grey;
+  margin-bottom: 3%;
+  box-shadow: 0px 2px 3px rgba(77, 77, 77, 0.2);
 }
 
 .post-info {
   font-size: 0.8em;
+}
+
+.highlight {
+  padding: 3px 10px 3px 10px;
+  border-radius: 3px;
 }
 
 /*# sourceMappingURL=main.css.map */

@@ -7,6 +7,7 @@ name = "pypi"
 pelican = "*"
 Markdown = "*"
 fabric = "*"
+pygments = "*"
 
 [dev-packages]
 doc8 = "*"

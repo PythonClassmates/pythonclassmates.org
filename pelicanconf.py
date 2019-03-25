@@ -46,3 +46,4 @@ DEFAULT_PAGINATION = 10
 PYGMENTS_RST_OPTIONS = {'linenos': 'inline'}
 
 THEME = './themes/white_cloud'
+PYGMENTS_RST_OPTIONS = {'classprefix': 'pgcss', 'linenos': 'table'}

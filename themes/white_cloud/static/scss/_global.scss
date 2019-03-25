@@ -1,5 +1,16 @@
-@import url('https://fonts.googleapis.com/css?family=Montserrat');
+// @import url('https://fonts.googleapis.com/css?family=Raleway');
 
+@font-face {
+    font-family: "PT Serif";
+    src: url('../../fonts/PT_Serif-Web-Regular') format("ttf");
+}
+
+@font-face {
+    font-family: "Raleway";
+    src: url('../../fonts/Raleway/Raleway-Light') format("ttf");
+}
+
+$grey: grey;
 $gray: rgb(68, 68, 68);
 $banner: rgb(49, 80, 255);
 $ahover: rgb(26, 153, 226);
@@ -7,18 +18,32 @@ $ahover: rgb(26, 153, 226);
 
 body {
     padding: 0% 10% 0% 10%;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Raleway', sans-serif;
     background-color: rgb(228, 228, 228);
     color: $gray;
 }
 
 #banner {
+    font-family: 'PT Serif',
+        serif;
     padding: 2%;
     text-align: center;
+    background-color: rgb(0, 135, 177);
+
+    a {
+        color: white;
+
+        strong {
+            font-size: 0.6em;
+        }
+    }
 }
 
 #menu {
+    margin-top: 4%;
+
     ul {
+        padding-left: 0%;
         display: flex;
         flex-direction: row;
         list-style-type: none;
@@ -28,7 +53,7 @@ body {
 
 #content {
     padding: 3% 2% 3% 2%;
-    background-color: white;
+    // background-color: white;
 }
 
 a {
@@ -40,6 +65,11 @@ a {
     }
 }
 
+ol#post-list {
+    padding-left: 0%;
+    list-style-type: none;
+}
+
 article {
     padding: 1.5%;
 }
@@ -48,8 +78,20 @@ article {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    background-color: white;
+    color: $grey;
+    margin-bottom: 3%;
+    box-shadow: 0px 2px 3px rgba(77, 77, 77, 0.2);
 }
 
 .post-info {
+
     font-size: 0.8em;
+}
+
+
+// PYGMENT
+.highlight {
+    padding: 3px 10px 3px 10px;
+    border-radius: 3px;
 }
