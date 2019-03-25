@@ -31,7 +31,7 @@ Author: Aurélia Gourbère
 
 Dépendances et bibliothèques
 
-```
+```python
 from model_utils import FieldTracker
 from PIL import Image
 from datetime import date

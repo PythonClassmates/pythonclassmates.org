@@ -12,3 +12,5 @@ plugins/
 *.swp
 .vscode/
 .idea/
+
+doc/
