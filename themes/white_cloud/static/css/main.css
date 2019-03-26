@@ -58,6 +58,10 @@ article {
   padding: 1.5%;
 }
 
+.entry-title {
+  font-weight: bold;
+}
+
 .hentry {
   display: flex;
   flex-direction: row;
