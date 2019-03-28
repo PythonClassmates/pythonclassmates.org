@@ -8,3 +8,7 @@ plugins/
 *.swp
 .vscode/
 .idea/
+
+# Poetry support
+pyproject.toml
+poetry.lock
