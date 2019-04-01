@@ -9,7 +9,7 @@ SITESUBTITLE = "Articles et news par des Pythonistas passionnés"
 SITEURL = ''
 
 PATH = 'content'
-STATIC_PATHS = ['images', 'extra/CNAME']
+STATIC_PATHS = ['extra/images', 'extra/CNAME']
 EXTRA_PATH_METADATA = {
     'extra/CNAME': {'path': 'CNAME'},
     'extra/favicon-32x32.png': {'path': 'favicon-32x32.png'}}
