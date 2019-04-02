@@ -7,30 +7,30 @@ Author: Mikael Briolet
 
 ![webpakc logo](https://i0.wp.com/blog.js-republic.com/wp-content/uploads/2018/02/logo-webpack.png?fit=491%2C497)
 
-Le front-end ne se limite pas à une utilisation basique de HTML, CSS et Javascript. Il existe une infinité de bibliothèques Javascript qui nous facilitent la vie ouvrent le champ des possibles.  
+Le front-end ne se limite pas à une utilisation basique de HTML, CSS et Javascript. Il existe une infinité de bibliothèques Javascript qui nous facilite la vie, ouvre le champ des possibles.  
 Ces bibliothèques Javascript sont aujourd'hui rendues accessibles via le gestionnaire de package [`npm`, ou "Node Package Manager"](https://www.npmjs.com/).  
-Webpack vient ensuite en renfort, pour automatiser l'environnement front-end en transformant et assemblant les dépendances JS et les différents modules en un fichier unique. Ses possibilités sont d'ailleurs bien plus grandes, et il permet aussi d'intégrer le css, les images, les fonts...
+Webpack vient ensuite en renfort, pour automatiser l'environnement front-end en transformant et en assemblant les dépendances JS et les différents modules en un fichier unique. Ses possibilités sont d'ailleurs bien plus grandes, et il permet aussi d'intégrer le CSS, les images, les fonts...
 
 # NPM, le pip du Javascript
 
-NPM est le gestionnaire de packages Javascript le plus utilisé aujourd'hui. A la base concu pour gérer les modules Node.js, [une intégration backend du Javascript](https://nodejs.org/en/), des paquets comme Webpack ou Browserify ont permis de gérer les l'environnement front-end de manière élégante.
+NPM est le gestionnaire de packages Javascript le plus utilisé aujourd'hui. Au départ conçu pour gérer les modules Node.js, [une intégration backend du Javascript](https://nodejs.org/en/), des paquets comme Webpack ou Browserify ont permis de gérer l'environnement front-end de manière élégante.
 [Webpack est cependant plus populaire que browserify](https://stackshare.io/stackups/browserify-vs-webpack).
 
 # Mise en place du projet
 
 Dans le cadre de ce guide, nous allons créer un nouveau projet Django que nous appellerons "setupwebpack".
 
-> Notez que si nous allons nous concentrer sur le framework Django, webpack s'intègre tout aussi bien dans d'autres configurations, comme Flask ou Pelican.
+> Notez que si nous allons nous concentrer sur le framework Django, Webpack s'intègre tout aussi bien dans d'autres configurations, comme Flask ou Pelican.
 
 ## Installation des dépendances
 
-Nous utiliserons Python 3.6, ainsi que le gestionnaire d'environnement poetry.
+Nous utiliserons Python 3.6, ainsi que le gestionnaire d'environnement Poetry.
 
-> Note : poetry s'utilise comme pipenv, aussi si vous êtes plus à l'aise avec pipenv (ou un autre gestionnaire d'environnement virtuel), libre à vous d'utiliser le votre.
+> Note : Poetry s'utilise comme Pipenv. Aussi, si vous êtes plus à l'aise avec Pipenv (ou un autre gestionnaire d'environnement virtuel), libre à vous d'utiliser le vôtre.
 
-Nous auront aussi besoin de NodeJs et son gestionnaire de paquets npm, [à installer depuis cette adresse](https://nodejs.org/en/).
+Nous aurons aussi besoin de NodeJs et son gestionnaire de paquets npm, [à installer depuis cette adresse](https://nodejs.org/en/).
 
-Créez enfin un nouveau dossier "setupwebpack" et ouvrez votre shell à sa racine. Lancez ensuite ce commandes :
+Créez enfin un nouveau dossier "setupwebpack" et ouvrez votre shell à sa racine. Lancez ensuite ces commandes :
 
 ```bash
 poetry init # génère un nouvel environnement virtuel.
@@ -41,7 +41,7 @@ npm init -y # génère une fichier package.json ('-y' pour une configuration par
 
 # La mise en place de Django
 
-Nous allons initialiser django et créer une vue simple, pour tester notre environnement front-end.
+Nous allons initialiser Django et créer une vue simple, pour tester notre environnement front-end.
 
 Commencons par initialiser le projet Django :
 
@@ -49,12 +49,12 @@ Commencons par initialiser le projet Django :
 poetry shell # On lance le shell dans l'environnement virtuel.
 django-admin.py startproject project .
 # N'oubliez pas le '.' pour éviter de créer un nouveau dossier.
-mkdir apps # On crée un dossier apps pour ranger nos applications django.
+mkdir apps # On créé un dossier apps pour ranger nos applications Django.
 ```
 
 > Note : Je nomme _project_ le répertoire de base Django. Ce n'est pas une convention.
 
-Comme nous rangeront nos applications dans le dossier `apps`, nous intégrons le chemin du dossier dans le fichier `project/settings.py` :
+Comme nous rangerons nos applications dans le dossier `apps`, nous intégrons le chemin du dossier dans le fichier `project/settings.py` :
 
 ```python
 import os
@@ -208,22 +208,22 @@ Allons voir sur [http://127.0.0.1:8000/](http://127.0.0.1:8000/) :
 <a href="{static}../extra/images/django_webpack/base.png" target="_blank">
 <img src="{static}../extra/images/django_webpack/base.png" style="height: 100%; width: 100%; display: block;"></a>
 
-Un beau hello webpack, suivit de [plusieurs paragraphes en latin](https://docs.djangoproject.com/fr/2.1/ref/templates/builtins/#lorem) s'affichent. Attention ceci dit, ce tuto ne portera pas sur ces deux langages. Je vous laisse vous documenter pour en apprendre plus sur eux. ;)
+Un beau "hello Webpack", suivi de [plusieurs paragraphes en latin](https://docs.djangoproject.com/fr/2.1/ref/templates/builtins/#lorem) s'affichent. Attention ceci-dit, ce tuto ne portera pas sur ces deux langages. Je vous laisse vous documenter pour en apprendre plus sur eux. ;)
 
-# La mise en place de webpack
+# La mise en place de Webpack
 
-On passe maintenant à webpack ! Dans le cadre de ce guide, nous allons utiliser le langage [Typescript](https://www.typescriptlang.org/) et [SCSS](https://sass-lang.com/). Nous allons aussi installer [chart.js](https://www.chartjs.org/docs/latest/), que j'ai choisi de tester pour l'occasion.
+On passe maintenant à Webpack ! Dans le cadre de ce guide, nous allons utiliser le langage [Typescript](https://www.typescriptlang.org/) et [SCSS](https://sass-lang.com/). Nous allons aussi installer [chart.js](https://www.chartjs.org/docs/latest/), que j'ai choisi de tester pour l'occasion.
 
-> Note : l'intérêt de webpack est, entre autre, de profiter des langages dit de "surcouche" comme le SCSS ou le typescript. En effet, Webpack se chargera de transpiler ces surcouches en CSS et JS avant de les intégrer dans un seul fichier Js.
+> Note : l'intérêt de Webpack est, entre autres, de profiter des langages dits de "surcouche" comme le SCSS ou le typescript. En effet, Webpack se chargera de transpiler ces surcouches en CSS et JS avant de les intégrer dans un seul fichier Js.
 
-> Note sur l'utilisation de Typescript : On aurait aussi pu utiliser javascript ES6.
+> Note sur l'utilisation de Typescript : On aurait aussi pu utiliser Javascript ES6.
 
-On commence donc par l'installation de webpack :
+On commence donc par l'installation de Webpack :
 
 ```bash
 npm install webpack webpack-cli --save-dev
-# Le module webpack gère les fonctionnalités de webpack,
-# et le module webpack-cli gère l'affichage dans le shell.
+# Le module "webpack" gère les fonctionnalités de Webpack,
+# et le module "webpack-cli" gère l'affichage dans le shell.
 touch webpack.config.js
 ```
 
@@ -247,13 +247,13 @@ Dans ce début de configuration :
 
 - on importe le module `path` pour gérer les chemins de fichiers.
 - on exporte un object contenant plusieurs attributs dont :
-  - `entry` : le chemin du fichier javascript qu'on fait lire à webpack.
-  - `ouptut` : un objet qui renvoit le nom du fichier de sortie et son emplacement dans le projet.
+  - `entry` : le chemin du fichier Javascript qu'on fait lire à Webpack.
+  - `ouptut` : un objet qui renvoie le nom du fichier de sortie et son emplacement dans le projet.
 
-On a ici la base de la structure de webpack.  
+On a ici la base de la structure de Webpack.  
 **En fait Webpack, c'est juste un script qui prend un fichier en entrée et qui en génère un autre en sortie.**
 
-Appelons le module webpack :
+Appelons le module "webpack" :
 
 ```bash
 npx webpack
@@ -278,8 +278,8 @@ You can also set it to 'none' to disable any default behavior. Learn more: https
 ERROR in Entry module not found: Error: Can't resolve './assets/dev/index.js' in 'your\path\setupwebpack'
 ```
 
-Webpack s'est bien lancé. Un message de vigilance nous informe qu'on a pas spécifié de "mode" pour le lancement, et Webpack utilise donc le mode "production". Les modes permettent de créer des comportement différents entre le developpement et la production. Par défaut, le code en mode production est "minifié", pour gagner de la mémoire.  
-Enfin, un message d'erreur nous informe que le fichier d'entrée spécifié n'a pas été trouvé. Et en effet, on a spécifié dans la configuration un fichier qu'on a pas encore crée, réglons ça tout de suite :
+Webpack s'est bien lancé. Un message de vigilance nous informe qu'on n'a pas spécifié de "mode" pour le lancement, et Webpack utilise donc le mode "production". Les modes permettent de créer des comportement différents entre le developpement et la production. Par défaut, le code en mode production est "minifié", pour gagner de la mémoire.  
+Enfin, un message d'erreur nous informe que le fichier d'entrée spécifié n'a pas été trouvé. Et en effet, on a spécifié dans la configuration un fichier qu'on n'a pas encore créé, réglons cela tout de suite :
 
 ```bash
 mkdir assets
@@ -288,15 +288,15 @@ touch assets/dev/index.js
 mkdir assets/dist
 ```
 
-On a crée un dossier `assets` à la racine du projet qui va contenir les fichiers d'entrée et de sortie pour webpack, rangés dans les dossiers `dev` (pour développement) et `dist` (pour distribution).
+On a crée un dossier `assets` à la racine du projet qui va contenir les fichiers d'entrée et de sortie pour Webpack, rangés dans les dossiers `dev` (pour développement) et `dist` (pour distribution).
 
-Maintenant quand on lance
+Maintenant quand on lance :
 
 ```bash
 npx webpack
 ```
 
-On observe que la compilation se passe sans soucis, et un fichier `bundle.js` est visible dans le dossier `assets/dist`. Quand on ouvre ce fichier, on y voit du code javascript minifié :
+On observe que la compilation se passe sans souci, et un fichier `bundle.js` est visible dans le dossier `assets/dist`. Quand on ouvre ce fichier, on y voit du code Javascript minifié :
 
 ```javascript
 !(function(e) {
@@ -374,7 +374,7 @@ C'est le code généré de base par Webpack. Attachons maintenant ce fichier `bu
 ...
 ```
 
-Et d'intégrer la récupération du fichier `bundle.js` avec la commande `collecstatic` de django
+Et d'intégrer la récupération du fichier `bundle.js` avec la commande `collecstatic` de Django
 
 ```python
 # project/settings.py
@@ -386,7 +386,7 @@ STATICFILES_DIRS = [os.path.join('assets', 'dist'),]
 
 ## L'automatisation des tâches
 
-Quand on utilise webpack, on a tendance à automatiser les commandes de lancement en passant par les scripts npm. Modifions notre fichier`package.json` :
+Quand on utilise Webpack, on a tendance à automatiser les commandes de lancement en passant par les scripts npm. Modifions notre fichier`package.json` :
 
 ```json
 // package.json
@@ -410,7 +410,7 @@ Quand on utilise webpack, on a tendance à automatiser les commandes de lancemen
 }
 ```
 
-Ainsi quand on voudra lancer les commandes webpack, il nous suffira d'écrire :
+Ainsi quand on voudra lancer les commandes Webpack, il nous suffira d'écrire :
 
 - `npm run dev` pour une génération en mode développement.
 - `npm run build` pour une génération en mode production.
@@ -418,7 +418,7 @@ Ainsi quand on voudra lancer les commandes webpack, il nous suffira d'écrire :
 > Astuce : la commande `npm run dev` va générer du code pour le développement, qui ne sera pas minifié. Aussi, vous pourrez visionner vos modules JS séparemment depuis le navigateur (onglet "source" dans l'outil de développement de Chrome) avec l'apparition d'un dossier "webpack", ce qui reste très pratique pour débugguer :
 > <a href="{static}../extra/images/django_webpack/webpack_debug.png" target="_blank"> <img src="{static}../extra/images/django_webpack/webpack_debug.png" style="height: 100%; width: 100%; display: block;"></a>
 
-Bon, vous allez me dire que taper à chaque fois `npm run dev`, pour visualiser les changements apportés, c'est lourd... Et pour ça, j'ai aussi une solution, la commande `watch` de webpack :
+Bon, vous allez me dire que taper à chaque fois `npm run dev`, pour visualiser les changements apportés, c'est lourd... Et pour ça, j'ai aussi une solution, la commande `watch` de Webpack :
 
 ```json
 // package.json
@@ -434,7 +434,7 @@ Bon, vous allez me dire que taper à chaque fois `npm run dev`, pour visualiser 
 }
 ```
 
-En tapant `npm run watch`, webpack sera constament en alerte sur les changements apportés au fichier statiques utilisés, et recompilera automatiquement à chaque fois qu'un nouveau changement sera enregistré.
+En tapant `npm run watch`, Webpack sera constament en alerte sur les changements apportés au fichier statiques utilisés, et recompilera automatiquement à chaque fois qu'un nouveau changement sera enregistré.
 
 Faisons un rapide test en lancant `npm run watch` :
 
@@ -444,7 +444,7 @@ Faisons un rapide test en lancant `npm run watch` :
 let test = "Un rapide test.";
 ```
 
-On voit dans le shell que webpack compile automatiquement lors de la sauvegarde :
+On voit dans le shell que Webpack compile automatiquement lors de la sauvegarde :
 
 ```bash
 Hash: 56c73a6c491e47da8193
@@ -459,11 +459,11 @@ Entrypoint main = bundle.js
 
 ## Transpiler le SCSS en CSS
 
-Nous allons maintenant utiliser une fonctionnalité indispensable de webpack : sa faculté à transpiler les langages lors de son éxecution. Pour compiler le SCSS en CSS, nous allons faire appel à plusieurs [loaders](https://webpack.js.org/concepts/loaders/) pour webpacks :
+Nous allons maintenant utiliser une fonctionnalité indispensable de Webpack : sa faculté à transpiler les langages lors de son éxecution. Pour compiler le SCSS en CSS, nous allons faire appel à plusieurs [loaders](https://webpack.js.org/concepts/loaders/) pour Webpack :
 
 1. [sass-loader](https://github.com/webpack-contrib/sass-loader) pour la conversion du SCSS en CSS
-1. [css-loader](https://github.com/webpack-contrib/css-loader) pour gérer l'importation des fichiers css depuis javascript
-1. [mini-css-extract-plugin](https://github.com/webpack-contrib/mini-css-extract-plugin) pour recréer les fichiers css.
+1. [css-loader](https://github.com/webpack-contrib/css-loader) pour gérer l'importation des fichiers CSS depuis Javascript
+1. [mini-css-extract-plugin](https://github.com/webpack-contrib/mini-css-extract-plugin) pour recréer les fichiers CSS.
 
 Installons les dès maintenant :
 
@@ -513,13 +513,13 @@ On observe plusieurs ajouts :
 1. On ajoute un tableau `plugins` dans notre objet principal, qui contient la configuration (très basique) de notre plugin `mini-css-extract-plugin`
 1. On ajoute un objet `module` dans notre objet principal, qui s'occupe des transformations des codes sources lors d'une importation depuis notre fichier `index.js`.
 
-Dans notre objet `module`, on spécifie un tableau `rules` qui va contenir des "règles" pour appliquer nos loaders. Chaque règle est définie dans un nouvel objet (nous avons donc crée un objet spécifique pour les règles de nos fichier .scss), et possède trois variables :
+Dans notre objet `module`, on spécifie un tableau `rules` qui va contenir des "règles" pour appliquer nos loaders. Chaque règle est définie dans un nouvel objet (nous avons donc créé un objet spécifique pour les règles de nos fichier .scss), et possède trois variables :
 
-- `test` qui est une chaîne de type [Regex](https://developer.mozilla.org/fr/docs/Web/JavaScript/Guide/Expressions_r%C3%A9guli%C3%A8res) qui va définir quels sont les fichiers pris en compte par cette règles
+- `test` qui est une chaîne de type [Regex](https://developer.mozilla.org/fr/docs/Web/JavaScript/Guide/Expressions_r%C3%A9guli%C3%A8res) qui va définir quels sont les fichiers pris en compte par cette règle
 - `use` qui est un tableau qui définit les loaders à utiliser (Ils se résolvent du dernier au premier dans le tableau)
 - `exclude`, qui est aussi une chaîne Regex, qui définit les fichiers/dossiers à ne pas tester (`node_modules` dans notre exemple).
 
-Vous connaissez maintenant la structure classique d'un fichier `webpack.config.js`. A chaque fois que nous voudrons prendre en charge un nouveau type de fichier, nous ajouterons une nouvelle règle, et de nouveaux loaders. Le tableau `plugins` permet de configurer nos loaders, ou d'ajouter un nouveau comportement à webpack via d'autres types de plugins.  
+Vous connaissez maintenant la structure classique d'un fichier `webpack.config.js`. A chaque fois que nous voudrons prendre en charge un nouveau type de fichier, nous ajouterons une nouvelle règle, et de nouveaux loaders. Le tableau `plugins` permet de configurer nos loaders, ou d'ajouter un nouveau comportement à Webpack via d'autres types de plugins.  
 Les possibités sont immenses, mais la base restera toujours la même. ;)
 
 C'est maintenant l'heure de tester notre configuration :
@@ -598,7 +598,7 @@ import "./main.scss";
 </html>
 ```
 
-Si vous avez laissé la commande `npm run watch` en éxecution depuis tout à l'heure, alors les changements sont déjà sauvegardés. Sinon, c'est l'heure de la relancer. Si tout se passe bien, vous pouvez déjà constater l'équivalent `.css` de notre fichier `main.scss` dans le répertoire `assets/dist` !  
+Si vous avez laissé la commande `npm run watch` en éxecution depuis tout à l'heure, alors les changements sont déjà sauvegardés. Sinon, c'est l'heure de la relancer. Si tout se passe bien, vous pouvez déjà constaté l'équivalent `.css` de notre fichier `main.scss` dans le répertoire `assets/dist` !  
 Executez enfin `poetry run python manage.py runserver` pour visionner le port [http://127.0.0.1:8000/](http://127.0.0.1:8000/) :  
 <a href="{static}../extra/images/django_webpack/avec_css.png" target="_blank">
 <img src="{static}../extra/images/django_webpack/avec_css.png" style="height: 100%; width: 100%; display: block;"></a>
@@ -607,7 +607,7 @@ Tout fonctionne bien. :)
 
 ## Transpiler le Typescript en Javascript
 
-La gestion du SCSS étant bien implémenté, nous allons maintenant passer au Typescript !  
+La gestion du SCSS étant bien implémentée, nous allons maintenant passer au Typescript !  
 Nous aurons besoin du module `typescript`, du loader [ts-loader](https://github.com/TypeStrong/ts-loader) et du linter `tslint` :
 
 ```bash
@@ -617,7 +617,7 @@ tsc --init  # Génère le fichier de configuration de Typescript.
 
 Spécifiez `"module": "es6"` dans le fichier `tsconfig.json`.
 
-On passe maintenant une nouvelle règles à notre fichier `webpack.config.js` :
+On passe maintenant une nouvelle règle à notre fichier `webpack.config.js` :
 
 ```javascript
 
@@ -649,9 +649,9 @@ On passe maintenant une nouvelle règles à notre fichier `webpack.config.js` :
 
 ```
 
-Nous modifions aussi l'extension de notre fichier d'entrée en `index.ts`, qui est l'extension de Typescript, et nous ajoutons un nouvel objet `resolve`, qui va s'occuper de résoudre les extensions avant l'import (ce qui évite des bugs d'importation avec typescript).
+Nous modifions aussi l'extension de notre fichier d'entrée en `index.ts`, qui est l'extension de Typescript, et nous ajoutons un nouvel objet `resolve`, qui va s'occuper de résoudre les extensions avant l'import (ce qui évite des bugs d'importation avec Typescript).
 
-Assurez vous de bien renommer `index.js` en `index.ts`. Ajoutons ensuite une fonction en typescript. Cette fonction sera propre à l'application `home`, nous l'ajouterons donc dans le dossier `assets` de cette application.
+Assurez-vous de bien renommer `index.js` en `index.ts`. Ajoutons ensuite une fonction en typescript. Cette fonction sera propre à l'application `home`, nous l'ajouterons donc dans le dossier `assets` de cette application.
 
 ```bash
 mkdir apps/home/assets
@@ -735,15 +735,15 @@ $flashy_background: rgb(60, 255, 0);
 }
 ```
 
-Notre fonction indispensable est prête à être testé. Lancez `npm run watch` ainsi que votre serveur django pour juger du (magnifique) résultat :
+Notre fonction indispensable est prête à être testée. Lancez `npm run watch` ainsi que votre serveur Django pour juger du (magnifique) résultat :
 <a href="{static}../extra/images/django_webpack/avec_typescript.png" target="_blank">
 <img src="{static}../extra/images/django_webpack/avec_typescript.png" style="height: 100%; width: 100%; display: block;"></a>
 
-Quand nous cliquons sur le texte, nous avons bien ce changement de classe introduit par notre code typescript. :)
+Quand nous cliquons sur le texte, nous avons bien ce changement de classe introduit par notre code Typescript. :)
 
 ## Ajoutons la bibliothèque Chart.js
 
-Webpack possède un bel avantage, c'est qu'il incorpore les bibliothèques importés dans le fichier final. Du coup, tout est centralisé et condensé.
+Webpack possède un bel avantage, c'est qu'il incorpore les bibliothèques importées dans le fichier final. Du coup, tout est centralisé et condensé.
 
 Pour commencer, installons la bibliothèque [chart.js](https://www.chartjs.org/docs/latest/) :
 
@@ -809,7 +809,7 @@ function initGraph() {
 {% endblock %}
 ```
 
-Et voila le travail ! Lorsque webpack génère le fichier de sortie, on peut voir que la bibliothèque chart.js a bien été incorporé :
+Et voila le travail ! Lorsque Webpack génère le fichier de sortie, on peut voir que la bibliothèque chart.js a bien été incorporée :
 <a href="{static}../extra/images/django_webpack/lib_code.png" target="_blank">
 <img src="{static}../extra/images/django_webpack/lib_code.png" style="height: 100%; width: 100%; display: block;"></a>
 
@@ -818,6 +818,6 @@ Quand à notre site, un beau graph est maintenant visible :
 <a href="{static}../extra/images/django_webpack/avec_chartjs.png" target="_blank">
 <img src="{static}../extra/images/django_webpack/avec_chartjs.png" style="height: 100%; width: 100%; display: block;"></a>
 
-Nous arrivons à la fin de ce tuto ! J'espère qu'il vous aura été utile, et si vous avez une question ou un problème, n'hésitez pas à me contacter sur le discord ! Pareil si vous voyez une coquille ou une erreur, on est jamais à l'abris d'un oubli. :)
+Nous arrivons à la fin de ce tuto ! J'espère qu'il vous aura été utile, et si vous avez une question ou un problème, n'hésitez pas à me contacter sur le Discord ! Pareil, si vous voyez une coquille ou une erreur, on n'est jamais à l'abri d'un oubli. :)
 
-A bientot sur le site !
+A bientôt sur le site !

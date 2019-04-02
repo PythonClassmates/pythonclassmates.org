@@ -3,6 +3,7 @@ theme*/
 __pycache__/
 output/
 plugins/
+.mypy_cache
 
 .DS_Store
 *.swp
