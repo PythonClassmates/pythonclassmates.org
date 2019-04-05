@@ -18,6 +18,7 @@ CONFIG['publishconf'] = CONFIG['basedir'] / 'publishconf.py'
 CONFIG['opts'] = '--fatal=warnings'
 CONFIG['port'] = 8000
 
+
 @task
 def clean(c):
     """Remove generated files"""
@@ -25,18 +26,21 @@ def clean(c):
         shutil.rmtree(CONFIG['outputdir'])
         CONFIG['outputdir'].mkdir(parents=True, exist_ok=True)
 
+
 @task
 def build(c):
     """Builds the local Pelican blog"""
     c.run('echo "Building your Pelican website"')
     c.run('pelican {inputdir} -o {outputdir} -s {conffile} {opts}'
-        .format(**CONFIG)
-    )
+          .format(**CONFIG)
+          )
+
 
 @task
 def html(c):
     """Builds the local Pelican blog"""
     build(c)
+
 
 @task
 def rebuild(c):
@@ -44,26 +48,30 @@ def rebuild(c):
     c.run('echo "Re-building your Pelican website"')
     c.run('pelican -d -s {conffile} {opts}'.format(**CONFIG))
 
+
 @task
 def publish(c):
     """Builds the Pelican blog with deployment settings"""
     c.run('echo "Publishing your Pelican website"')
     c.run('pelican {inputdir} -o {outputdir} -s {publishconf} {opts}'
-        .format(**CONFIG)
-    )
+          .format(**CONFIG)
+          )
+
 
 @task
 def autoreload(c):
     """Starts the autoreload server to help during writing of blog articles"""
     c.run('echo "Running autoreload server. Press CTRL+C to stop"')
     c.run('pelican -r {inputdir} -o {outputdir} -s {conffile} {opts}'
-        .format(**CONFIG)
-    )
+          .format(**CONFIG)
+          )
+
 
 @task
 def regenerate(c):
     """Starts the autoreload server to help during writing of blog articles"""
     autoreload(c)
+
 
 @task
 def serve(c):
@@ -81,10 +89,12 @@ def serve(c):
     sys.stderr.write('Serving on port {port} ...\n'.format(**CONFIG))
     server.serve_forever()
 
+
 @task
 def runserver(c):
     """Serve site at http://localhost:8000/"""
     serve(c)
+
 
 @task
 def reserve(c):
@@ -92,10 +102,12 @@ def reserve(c):
     build(c)
     serve(c)
 
+
 @task
 def preview(c):
     """Builds the production version of site"""
     c.run('pelican -s publishconf.py')
+
 
 @task
 def revert(c):
@@ -104,7 +116,7 @@ def revert(c):
     """
     if not os.getenv('TRAVIS_PULL_REQUEST'):
         c.run('echo "Build errors were encountered. Reverting last commit..."')
-        c.run('git revert HEAD -n') 
+        c.run('git revert HEAD -n')
         c.run(
             'git commit -m "Revert to last commit because errors were found."'
         )
@@ -113,7 +125,7 @@ def revert(c):
             'git push -f https://{GITHUB_TOKEN}@github.com/'
             'PythonClassmates/PythonClassmates.org.git errors:master'
             .format(**os.environ)
-        ) 
+        )
         c.run('echo "Last commit reverted"')
     else:
-	    c.run('echo "In a pull request. Nothing to revert."') 
+        c.run('echo "In a pull request. Nothing to revert."')
