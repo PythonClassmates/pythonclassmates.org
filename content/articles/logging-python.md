@@ -19,7 +19,7 @@ Pour démarrer voici le code de survie minimum qui te permettra de passer du cot
     variable = 12
 
     # là où tu mettais un print(), maintenant tu mets ça:
-    logger.debug(f"ma variable : {variable}")
+    logger.debug("ma variable : %s" % variable)
 
 Voici ce que cela affichera:
 
@@ -98,7 +98,7 @@ Voici le code pour modifier le formatage:
     # ICI DU CODE #
     variable = 12
     # là où tu mettais un print(), maintenant tu mets ça:
-    logger.warning(f"ma variable : {variable}")
+    logger.warning("ma variable : %s" % variable)
 
 le résultat dans la console:
 
