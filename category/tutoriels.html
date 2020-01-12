@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+        <meta charset="utf-8" />
+        <title>Python I/O - Tutoriels</title>
+        <link rel="stylesheet" href="https://www.pythonclassmates.org/theme/css/main.css" />
+        <link href="https://www.pythonclassmates.org/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Python I/O Atom Feed" />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="https://www.pythonclassmates.org/">Python I/O <strong>Articles et news par des Pythonistas passionnés</strong></a></h1>
+                <nav><ul>
+                    <li><a href="/category/news.html">News</a></li>
+                    <li><a href="/category/articles.html">Articles</a></li>
+                    <li><a href="/category/tutoriels.html">Tutoriels</a></li>
+                    <li><a href="/categories.html">Catégories</a></li>
+                    <li><a href="/tags.html">Tags</a></li>
+                    <li><a href="https://www.pythonclassmates.org/category/article.html">Article</a></li>
+                    <li><a href="https://www.pythonclassmates.org/category/articles.html">Articles</a></li>
+                    <li><a href="https://www.pythonclassmates.org/category/news.html">News</a></li>
+                    <li class="active"><a href="https://www.pythonclassmates.org/category/tutoriels.html">Tutoriels</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+
+            <aside id="featured" class="body">
+                <article>
+                    <h1 class="entry-title"><a href="https://www.pythonclassmates.org/presentation-requests.html">Présentation de la librairie requests</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2019-01-31T16:00:00+01:00">
+                Published: Thu 31 January 2019
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="https://www.pythonclassmates.org/author/cedric-migazzi.html">Cédric Migazzi</a>
+        </address>
+<p>In <a href="https://www.pythonclassmates.org/category/tutoriels.html">Tutoriels</a>.</p>
+<p>tags: <a href="https://www.pythonclassmates.org/tag/requests.html">requests</a> </p>
+</footer><!-- /.post-info --><h3>Présentation</h3>
+<p><code>requests</code> est une librairie Python qui permet de gérer facilement les requêtes HTTP. Elle utilise la librairie standard <code>urllib3</code> et en simplifie l'utilisation pour la rendre plus "humaine" (<a href="http://docs.python-requests.org/en/master/"><em>HTTP for humans</em></a>).</p>
+<p>Pour cet article, nous allons voir un usage basique de dialogue avec  l'API d'<a href="https://fr.openfoodfacts.org/">OpenFoodFacts</a>.</p>
+<blockquote>
+<p><em>"OpenFoodFacts est une base de données sur les produits alimentaires faite par tout le monde, pour tout le monde"</em></p>
+<p>Le site dispose d’une API dont la documentation se trouve <a href="https://en.wiki.openfoodfacts.org/API">ici</a>. Il est ainsi possible de faire toutes sortes de recherches, de récupérer les données avec <code>requests</code> et de les exploiter avec Python.</p>
+</blockquote>
+<h3>Installation</h3>
+<p><code>pipenv install requests</code></p>
+<h3>Une simple requête</h3>
+<p>Pour réaliser une requête:</p>
+<p>avec <code>urllib3</code>...</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">urllib3</span> <span class="kn">import</span> <span class="n">PoolManager</span>
+
+<span class="n">http</span> <span class="o">=</span> <span class="n">PoolManager</span><span class="p">()</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">http</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;https://fr.openfoodfacts.org/&quot;</span><span class="p">)</span>
+</pre></div>
+
+
+<p>... et pour obtenir le même résultat avec <code>requests</code>:</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="n">res</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;https://fr.openfoodfacts.org/&quot;</span><span class="p">)</span>
+</pre></div>
+
+
+<p>C'est effectivement beaucoup plus simple, mais que se passe-t-il ?</p>
+<p>Dans les deux cas, <code>res</code> contient la réponse du serveur HTTP.</p>
+<p>Avec <code>requests</code>, l’import de <code>http</code> et l’instanciation de <code>PoolManager()</code> est transparent pour l’utilisateur, ce qui économise du code. Les méthodes HTTP sont des fonctions de <code>requests</code> au lieu d'être des paramètres dans <code>urllib3</code>. </p>
+<p>On peut aussi faire de même avec les autres méthodes HTTP :</p>
+<div class="highlight"><pre><span></span><span class="n">res</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="n">post</span><span class="p">(</span><span class="ss">&quot;https://mon-url.de/post&quot;</span><span class="p">,</span> <span class="k">data</span><span class="o">=</span><span class="err">{</span><span class="k">key</span><span class="p">:</span><span class="n">value</span><span class="err">}</span><span class="p">)</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="ss">&quot;https://mon-url.de/put&quot;</span><span class="p">,</span> <span class="k">data</span><span class="o">=</span><span class="err">{</span><span class="k">key</span><span class="p">:</span><span class="n">value</span><span class="err">}</span><span class="p">)</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="k">delete</span><span class="p">(</span><span class="ss">&quot;https://mon-url.de/delete&quot;</span><span class="p">)</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="n">head</span><span class="p">(</span><span class="ss">&quot;https://mon-url.de/get&quot;</span><span class="p">)</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">request</span><span class="p">.</span><span class="n">head</span><span class="p">(</span><span class="ss">&quot;https://mon-url.de/get&quot;</span><span class="p">)</span>
+</pre></div>
+
+
+<p><strong>Et qu'est-ce qu'on en fait ?</strong></p>
+<p><code>requests</code> renvoie un objet de type <code>Response</code> qui possède les attributs suivants:</p>
+<div class="highlight"><pre><span></span><span class="o">#</span> <span class="n">le</span> <span class="n">code</span> <span class="n">HTTP</span> <span class="n">de</span> <span class="n">la</span> <span class="n">réponse</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">res</span><span class="p">.</span><span class="n">status_code</span>
+<span class="mi">200</span>
+
+<span class="o">#</span> <span class="n">l</span><span class="s1">&#39;url</span>
+<span class="s1">&gt;&gt;&gt; res.url</span>
+<span class="s1">&#39;</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">fr</span><span class="p">.</span><span class="n">openfoodfacts</span><span class="p">.</span><span class="n">org</span><span class="o">/</span><span class="s1">&#39;</span>
+
+<span class="s1"># les headers HTTP.</span>
+<span class="s1">&gt;&gt;&gt; res.headers # dictionnaire</span>
+
+<span class="s1">#l&#39;</span><span class="n">encodage</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">res</span><span class="p">.</span><span class="k">encoding</span>
+<span class="s1">&#39;UTF-8&#39;</span>
+</pre></div>
+
+
+<p>Et quelques méthodes de base:</p>
+<div class="highlight"><pre><span></span><span class="o">#</span> <span class="n">le</span> <span class="n">code</span> <span class="n">html</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">res</span><span class="p">.</span><span class="nb">text</span> <span class="o">#</span> <span class="n">chaine</span> <span class="n">de</span> <span class="n">charactère</span>
+
+<span class="o">#</span> <span class="n">Si</span> <span class="n">la</span> <span class="n">réponse</span> <span class="n">est</span> <span class="n">au</span> <span class="n">format</span> <span class="n">json</span><span class="p">,</span> <span class="k">on</span> <span class="n">peut</span> <span class="n">la</span> <span class="n">convertir</span> <span class="n">en</span> <span class="n">dictionnaire</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">res</span><span class="p">.</span><span class="n">json</span><span class="p">()</span>
+</pre></div>
+
+
+<h3>Un premier exemple:</h3>
+<p>Petit exemple avec du Nutella que l’on peut retrouver grâce à son code barre : 3017620425400.</p>
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span><span class="n">res</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="k">get</span><span class="p">(</span><span class="ss">&quot;https://world.openfoodfacts.org/api/v0/product/3017620425400.json&quot;</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Comme la réponse est au format json, on peut la transformer en dictionnaire:</p>
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span><span class="n">results</span> <span class="o">=</span> <span class="n">res</span><span class="p">.</span><span class="n">json</span><span class="p">()</span>
+
+<span class="o">#</span> <span class="n">voir</span> <span class="n">toutes</span> <span class="n">les</span> <span class="n">clés</span>
+<span class="o">&gt;&gt;&gt;</span><span class="n">results</span><span class="p">.</span><span class="n">keys</span><span class="p">()</span>
+<span class="n">dict_keys</span><span class="p">([</span><span class="s1">&#39;code&#39;</span><span class="p">,</span> <span class="s1">&#39;status_verbose&#39;</span><span class="p">,</span> <span class="s1">&#39;product&#39;</span><span class="p">,</span> <span class="s1">&#39;status&#39;</span><span class="p">])</span>
+
+<span class="o">#</span> <span class="n">faire</span> <span class="n">un</span> <span class="n">dictionnaire</span> <span class="n">contenant</span> <span class="n">les</span> <span class="n">attributs</span> <span class="n">du</span> <span class="n">produit</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">product</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="ss">&quot;product&quot;</span><span class="p">]</span>
+
+<span class="o">#</span> <span class="n">voir</span> <span class="n">le</span> <span class="n">nombre</span> <span class="n">d</span><span class="s1">&#39;attributs du produit</span>
+<span class="s1">&gt;&gt;&gt; len(prodcut)</span>
+<span class="s1">191</span>
+
+<span class="s1"># et par exemple, voir les catégories qui lui sont associé</span>
+<span class="s1">&gt;&gt;&gt;product[&quot;categories&quot;]</span>
+<span class="s1">&#39;</span><span class="n">Petit</span><span class="o">-</span><span class="n">déjeuners</span><span class="p">,</span> <span class="n">Produits</span> <span class="err">à</span> <span class="n">tartiner</span><span class="p">,</span> <span class="n">Produits</span> <span class="err">à</span> <span class="n">tartiner</span> <span class="n">sucrés</span><span class="p">,</span> <span class="n">Pâtes</span> <span class="err">à</span> <span class="n">tartiner</span><span class="p">,</span> <span class="n">Pâtes</span> <span class="err">à</span> <span class="n">tartiner</span> <span class="n">au</span> <span class="n">chocolat</span><span class="p">,</span> <span class="n">Pâtes</span> <span class="err">à</span> <span class="n">tartiner</span> <span class="n">aux</span> <span class="n">noisettes</span> <span class="n">et</span> <span class="n">au</span> <span class="n">cacao</span><span class="p">,</span> <span class="n">Pâtes</span> <span class="err">à</span> <span class="n">tartiner</span> <span class="n">aux</span> <span class="n">noisettes</span><span class="err">&#39;</span>
+</pre></div>
+
+
+<h3>Ajouter des paramètres</h3>
+<p>Pour des requêtes plus claires, il est possible de passer une liste d'objets  clé/valeur en paramètre de la requête.</p>
+<p>Avec l'API d'OpenFoodFacts, il est possible de le mettre en pratique grâce à son url de recherche:</p>
+<p><em>Vous trouverez toutes les options de recherche sur la <a href="https://en.wiki.openfoodfacts.org/API/Read/Search#Parameters">doc officielle</a></em></p>
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span><span class="n">payload</span> <span class="o">=</span> <span class="err">{</span><span class="ss">&quot;search_terms&quot;</span><span class="p">:</span> <span class="ss">&quot;Lindt, &quot;</span><span class="n">json</span><span class="ss">&quot;:1}</span>
+<span class="ss">&gt;&gt;&gt;res = requests.get(&quot;</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">fr</span><span class="p">.</span><span class="n">openfoodfacts</span><span class="p">.</span><span class="n">org</span><span class="o">/</span><span class="n">cgi</span><span class="o">/</span><span class="k">search</span><span class="p">.</span><span class="n">pl</span><span class="o">?</span><span class="ss">&quot;, params=payload)</span>
+
+<span class="ss"># Pour voir l&#39;url correspondante</span>
+<span class="ss">&gt;&gt;&gt;res.url</span>
+<span class="ss">&#39;https://fr.openfoodfacts.org/cgi/search.pl?search_terms=Lindt&amp;json=1&#39;</span>
+
+<span class="ss"># pour voir le nombre de résultats</span>
+<span class="ss">&gt;&gt;&gt; results = res.json()</span>
+<span class="ss">&gt;&gt;&gt; results[&quot;</span><span class="k">count</span><span class="err">&quot;</span><span class="p">]</span>
+<span class="mi">802</span>
+</pre></div>
+
+
+<p>Si on veut retrouver les 50 produits les plus populaires de la marque Lindt, on pourra faire:</p>
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span><span class="nv">payload</span> <span class="o">=</span> {<span class="s2">&quot;</span><span class="s">search_terms</span><span class="s2">&quot;</span>: <span class="s2">&quot;</span><span class="s">Lindt</span><span class="s2">&quot;</span>,
+...           <span class="s2">&quot;</span><span class="s">search_tag</span><span class="s2">&quot;</span>: <span class="s2">&quot;</span><span class="s">brands</span><span class="s2">&quot;</span>, 
+...           <span class="s2">&quot;</span><span class="s">sort_by</span><span class="s2">&quot;</span>: <span class="s2">&quot;</span><span class="s">unique_scans_n</span><span class="s2">&quot;</span>,
+...           <span class="s2">&quot;</span><span class="s">page_size</span><span class="s2">&quot;</span>: <span class="mi">50</span>, 
+...           <span class="s2">&quot;</span><span class="s">json</span><span class="s2">&quot;</span>: <span class="mi">1</span>}
+<span class="o">&gt;&gt;&gt;</span><span class="nv">res</span> <span class="o">=</span> <span class="nv">requests</span>.<span class="nv">get</span><span class="ss">(</span><span class="s2">&quot;</span><span class="s">https://fr.openfoodfacts.org/cgi/search.pl?</span><span class="s2">&quot;</span>, <span class="nb">params</span><span class="o">=</span><span class="nv">payload</span><span class="ss">)</span>
+
+# <span class="nv">l</span><span class="s1">&#39;</span><span class="s">url correspondante</span>
+<span class="o">&gt;&gt;&gt;</span><span class="nv">res</span>.<span class="nv">url</span>
+<span class="s1">&#39;</span><span class="s">https://fr.openfoodfacts.org/cgi/search.pl?search_terms=Lindt&amp;search_tag=brands&amp;sort_by=unique_scans_n&amp;page_size=50&amp;json=1</span><span class="s1">&#39;</span>
+
+# <span class="nv">on</span> <span class="nv">peut</span> <span class="nv">ensuite</span> <span class="nv">r</span>é<span class="nv">cup</span>é<span class="nv">rer</span> <span class="nv">les</span> <span class="nv">produits</span>
+<span class="o">&gt;&gt;&gt;</span><span class="nv">results</span> <span class="o">=</span> <span class="nv">res</span>.<span class="nv">json</span><span class="ss">()</span>
+<span class="o">&gt;&gt;&gt;</span><span class="nv">products</span> <span class="o">=</span> <span class="nv">results</span>[<span class="s2">&quot;</span><span class="s">products</span><span class="s2">&quot;</span>]
+
+# <span class="nv">Et</span> <span class="nv">afficher</span> <span class="nv">leurs</span> <span class="nv">noms</span>
+<span class="o">&gt;&gt;&gt;</span><span class="k">for</span> <span class="nv">product</span> <span class="nv">in</span> <span class="nv">products</span>:
+    <span class="nv">print</span><span class="ss">(</span><span class="nv">product</span>[<span class="s2">&quot;</span><span class="s">product_name</span><span class="s2">&quot;</span>]<span class="ss">)</span>
+</pre></div>
+
+
+<h3>Pour aller plus loin</h3>
+<p>Nous avons vu un usage basique de <code>requests</code>, mais il est aussi possible de:</p>
+<ul>
+<li>vérifier si la réponse HTTP est valide:</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">res</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="k">get</span><span class="p">(</span><span class="s1">&#39;https://fr.openfoodfacts.org&#39;</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">res</span><span class="p">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="n">requests</span><span class="p">.</span><span class="n">codes</span><span class="p">.</span><span class="n">ok</span>
+<span class="k">True</span>
+</pre></div>
+
+
+<ul>
+<li>voir et gérer les redirections (HTTP vers HTTPS) avec l'attribut <code>history</code>:</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="n">res</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="k">get</span><span class="p">(</span><span class="ss">&quot;http://fr.openfoodfacts.org/&quot;</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">res</span><span class="p">.</span><span class="n">status_code</span>
+<span class="mi">200</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">res</span><span class="p">.</span><span class="n">history</span>
+<span class="p">[</span><span class="o">&lt;</span><span class="n">Response</span> <span class="p">[</span><span class="mi">301</span><span class="p">]</span><span class="o">&gt;</span><span class="p">]</span>
+
+<span class="o">#</span> <span class="n">Poosibilité</span> <span class="n">de</span> <span class="n">désactiver</span> <span class="n">les</span> <span class="n">redirections</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="k">get</span><span class="p">(</span><span class="ss">&quot;http://fr.openfoodfacts.org/&quot;</span><span class="p">,</span> <span class="n">allow_redirects</span><span class="o">=</span><span class="k">False</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">res</span><span class="p">.</span><span class="n">status_code</span>
+<span class="mi">301</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">res</span><span class="p">.</span><span class="n">history</span>
+<span class="p">[]</span>
+</pre></div>
+
+
+<ul>
+<li>personnaliser les headers d'une requête en passant un dictionnaire:</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="n">url</span> <span class="o">=</span> <span class="ss">&quot;http://fr.openfoodfacts.org/&quot;</span>
+<span class="n">headers</span> <span class="o">=</span> <span class="err">{</span><span class="ss">&quot;user-agent&quot;</span><span class="p">:</span> <span class="ss">&quot;python-app/0.0.1&quot;</span><span class="err">}</span>
+<span class="o">&gt;&gt;&gt;</span><span class="n">res</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="k">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+</pre></div>
+
+
+<ul>
+<li>retrouver facilement la valeur d'un header:</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span><span class="n">res</span><span class="p">.</span><span class="n">headers</span><span class="p">[</span><span class="ss">&quot;content-type&quot;</span><span class="p">]</span>
+<span class="s1">&#39;text/html; charset=UTF-8&#39;</span>
+</pre></div>
+
+
+<ul>
+<li>Et pleins d'autres choses avec les cookies, les certificats SSL ou encore les requêtes préparées que vous retrouveregit checkz sur la <a href="http://docs.python-requests.org/en/master/user/advanced/">doc officielle</a></li>
+</ul>
+<h3>Conclusion</h3>
+<p><code>requests</code>  est une librairie simple d'utilisation et très complète. Que ce soit pour un usage basique (comme on vient de voir) ou plus avancé, c'est la librairie conseillée pour effectuer des requêtes HTTP.</p>                </article>
+            </aside><!-- /#featured -->
+                <section id="content" class="body">
+                    <h1>Other articles</h1>
+                    <hr />
+                    <ol id="posts-list" class="hfeed">
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="https://www.pythonclassmates.org/installer-pelican.html" rel="bookmark"
+                           title="Permalink to Installer Pelican">Installer Pelican</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2019-01-09T15:29:00+01:00">
+                Published: Wed 09 January 2019
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="https://www.pythonclassmates.org/author/freezed.html">Freezed</a>
+        </address>
+<p>In <a href="https://www.pythonclassmates.org/category/tutoriels.html">Tutoriels</a>.</p>
+<p>tags: <a href="https://www.pythonclassmates.org/tag/web.html">web</a> <a href="https://www.pythonclassmates.org/tag/python.html">python</a> <a href="https://www.pythonclassmates.org/tag/pelican.html">pelican</a> </p>
+</footer><!-- /.post-info -->                <p>Installation rapide de <em>Pelican</em></p>
+                <a class="readmore" href="https://www.pythonclassmates.org/installer-pelican.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+                </ol><!-- /#posts-list -->
+                </section><!-- /#content -->
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="https://www.pythonclassmates.org/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Python I/O - Article</title><link href="https://www.pythonclassmates.org/" rel="alternate"></link><link href="https://www.pythonclassmates.org/feeds/article.atom.xml" rel="self"></link><id>https://www.pythonclassmates.org/</id><updated>2020-01-05T12:34:00+01:00</updated><subtitle>Articles et news par des Pythonistas passionnés</subtitle><entry><title>Un petit guide (non exhaustif) sur le logging en Python</title><link href="https://www.pythonclassmates.org/logging-python.html" rel="alternate"></link><published>2020-01-05T12:34:00+01:00</published><updated>2020-01-05T12:34:00+01:00</updated><author><name>ZepmanBC</name></author><id>tag:www.pythonclassmates.org,2020-01-05:/logging-python.html</id><summary type="html">&lt;h2&gt;Ce jour où le &lt;code&gt;print()&lt;/code&gt; doit sortir de ta vie&lt;/h2&gt;
+&lt;p&gt;Alors oui le &lt;code&gt;print()&lt;/code&gt; c'est rapide et facile, mais on l'utilise parce que le logging n'est pas quelque chose qui est utilisé régulièrement donc on ne sait pas trop comment s'y prendre.&lt;/p&gt;
+&lt;p&gt;Pour démarrer voici le code de survie minimum …&lt;/p&gt;</summary><content type="html">&lt;h2&gt;Ce jour où le &lt;code&gt;print()&lt;/code&gt; doit sortir de ta vie&lt;/h2&gt;
+&lt;p&gt;Alors oui le &lt;code&gt;print()&lt;/code&gt; c'est rapide et facile, mais on l'utilise parce que le logging n'est pas quelque chose qui est utilisé régulièrement donc on ne sait pas trop comment s'y prendre.&lt;/p&gt;
+&lt;p&gt;Pour démarrer voici le code de survie minimum qui te permettra de passer du coté des &lt;em&gt;loggers&lt;/em&gt;.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;# A mettre au début du code&lt;/span&gt;
+&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;logging&lt;/span&gt;
+&lt;span class="n"&gt;logging&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;basicConfig&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;level&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;logging&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;DEBUG&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;logger&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;logging&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;getLogger&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="vm"&gt;__name__&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="c1"&gt;# ICI DU CODE #&lt;/span&gt;
+&lt;span class="n"&gt;variable&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;12&lt;/span&gt;
+
+&lt;span class="c1"&gt;# là où tu mettais un print(), maintenant tu mets ça:&lt;/span&gt;
+&lt;span class="n"&gt;logger&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;debug&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;ma variable : &lt;/span&gt;&lt;span class="si"&gt;%s&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;variable&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Voici ce que cela affichera:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;DEBUG&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;__main__&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;ma&lt;/span&gt; &lt;span class="n"&gt;variable&lt;/span&gt; &lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;12&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Tu peux arrêter de lire ici et revenir quand tu sentiras le besoin d'approfondir, tu es un &lt;em&gt;logger&lt;/em&gt;, félicitation!&lt;/p&gt;
+&lt;h2&gt;Les différents niveaux et quand les utiliser&lt;/h2&gt;
+&lt;p&gt;Le logging permet d'avoir 5 niveaux de granularité suivant ce que tu souhaites afficher. L'avantage est de pouvoir laisser toutes les lignes DEBUG et de remonter le niveau d'affichage pour ne plus les voir. C'est terminé le temps où tu repassait au peigne fin tout ton code pour commenter/supprimer les print()!&lt;/p&gt;
+&lt;p&gt;Comme tu l'auras deviné dans le code de base, c'est cette ligne qui définit le niveau minima d'affichage, tu peux essayer de le changer et les lignes de niveau inférieur ne s'afficheront plus dans la console:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;logging&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;basicConfig&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;level&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;logging&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;DEBUG&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Voici les 5 niveaux par ordre croissant avec une proposition d'utilisation, mais rien n'est normalisé.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;DEBUG&lt;/strong&gt;: il doit être utilisé uniquement lors du debuggage, par exemple dans une boucle pour voir tout ce qu'il se passe et pouvoir comprendre le processus, cela permet de rentrer dans le détail.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;INFO&lt;/strong&gt;: c'est le niveau où on peut afficher les différentes étapes pour prévenir qu'une action est lancée ou un appel est effectué. On prend un peu de recul/hauteur par rapport au DEBUG.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;WARNING&lt;/strong&gt;: pour prévenir d'un événement hors de l'utilisation standard mais qui n'est pas une erreur, par exemple un utilisateur qui utilise un mauvais mot de passe. Ce n'est pas une erreur de programme.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;ERROR&lt;/strong&gt;: quand une exception est remontée, une opération a échouée.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;CRITICAL&lt;/strong&gt;: à utiliser en cas extrême, pour un manque de place de mémoire, un serveur qui est HS, un problème qui est hors de notre contrôle.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Tu définis le niveau en changent la méthode de ton logger:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;logger&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;debug&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="n"&gt;logger&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;info&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="n"&gt;logger&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;warning&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="n"&gt;logger&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;error&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="n"&gt;logger&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;critical&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Il existe également le &lt;code&gt;logger.exception()&lt;/code&gt; qui est en fait au niveau ERROR et qui va rajouter le message de l'exception automatiquement après notre message définit.&lt;/p&gt;
+&lt;h2&gt;Les différentes sorties&lt;/h2&gt;
+&lt;p&gt;L'affichage dans la console c'est bien mais quand on pense au logging on imagine des fichiers *.log.&lt;/p&gt;
+&lt;p&gt;Effectivement il est possible de ressortir les logs de beaucoup de manières différentes. Pour comprendre comment cela se passe:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="logging_schema1" src="../extra/images/logging-python/logging_schema1.png"&gt;&lt;/p&gt;
+&lt;p&gt;Dans chaque fichier de l'application que l'on veut suivre on créé un &lt;em&gt;logger&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;L'application est dans un processus qui contient le &lt;em&gt;logRecord&lt;/em&gt; qui récupère toutes les données envoyés par les &lt;em&gt;loggers&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;La configuration par défaut (basicConfig) renvoie les données dans la console, mais il est possible de créér autant de &lt;em&gt;Handler&lt;/em&gt; (gestionnaire) que l'on souhaite qui permettront de configurer la &lt;strong&gt;sortie&lt;/strong&gt; et le &lt;strong&gt;niveau&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Il est donc possible par exemple que le &lt;em&gt;Handler_A&lt;/em&gt; écrive dans un fichier au niveau DEBUG et le &lt;em&gt;Handler_B&lt;/em&gt; envoie un mail au niveau WARNING. De cette manière on est prévenu quand il y a un événement non prévu et il est possible de consulter le fichier de log pour retracer les événements.&lt;/p&gt;
+&lt;p&gt;Il existe différents types de sortie comme la console, des fichiers, l'envoie de mail, le streaming vers un serveur, etc... La doc officielle pour plus d'exhaustivité: &lt;a href="https://docs.python.org/fr/3/library/logging.handlers.html"&gt;logging.handlers&lt;/a&gt;&lt;/p&gt;
+&lt;h2&gt;Le formatage&lt;/h2&gt;
+&lt;p&gt;La sortie standard nous donnait quelque chose sous cette forme dans le code minimal: &lt;code&gt;DEBUG:__main__:ma variable : 12&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Cela correspond à la configuration par défaut: &lt;code&gt;%(levelname)s:%(name)s:%(message)s&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Il est possible de changer la nature et la forme des informations que l'on souhaite en créant des &lt;em&gt;Formatters&lt;/em&gt; qui seront attribué à des &lt;em&gt;Handlers&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Un &lt;em&gt;Formatter&lt;/em&gt; peut être attribué à plusieurs &lt;em&gt;Handlers&lt;/em&gt;, mais on peut en créer un spécifique pour chaque.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="logging_schema2" src="../extra/images/logging-python/logging_schema2.png"&gt;&lt;/p&gt;
+&lt;p&gt;Voici le code pour modifier le formatage:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;logging&lt;/span&gt;
+&lt;span class="c1"&gt;# logging.basicConfig(level=logging.DEBUG)  # ligne inutile mais pour montrer qu&amp;#39;on n&amp;#39;est plus sur la config par défaut&lt;/span&gt;
+&lt;span class="n"&gt;logger&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;logging&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;getLogger&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="vm"&gt;__name__&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="n"&gt;c_handler&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;logging&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;StreamHandler&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;  &lt;span class="c1"&gt;# Création d&amp;#39;un handler vers la console&lt;/span&gt;
+&lt;span class="n"&gt;c_handler&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;setLevel&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;logging&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;DEBUG&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;    &lt;span class="c1"&gt;# Définition du niveau du handler&lt;/span&gt;
+&lt;span class="n"&gt;c_format&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;logging&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Formatter&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="si"&gt;%(asctime)s&lt;/span&gt;&lt;span class="s2"&gt; - &lt;/span&gt;&lt;span class="si"&gt;%(name)s&lt;/span&gt;&lt;span class="s2"&gt; - &lt;/span&gt;&lt;span class="si"&gt;%(levelname)s&lt;/span&gt;&lt;span class="s2"&gt; - &lt;/span&gt;&lt;span class="si"&gt;%(message)s&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;  &lt;span class="c1"&gt;# création/définition d&amp;#39;un Formatter&lt;/span&gt;
+&lt;span class="n"&gt;c_handler&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;setFormatter&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;c_format&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;     &lt;span class="c1"&gt;# attribution du Formatter au Handler&lt;/span&gt;
+&lt;span class="n"&gt;logger&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;addHandler&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;c_handler&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;         &lt;span class="c1"&gt;# Connection du Handler sur le logger&lt;/span&gt;
+
+&lt;span class="c1"&gt;# ICI DU CODE #&lt;/span&gt;
+&lt;span class="n"&gt;variable&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;12&lt;/span&gt;
+&lt;span class="c1"&gt;# là où tu mettais un print(), maintenant tu mets ça:&lt;/span&gt;
+&lt;span class="n"&gt;logger&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;warning&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;ma variable : &lt;/span&gt;&lt;span class="si"&gt;%s&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;variable&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;le résultat dans la console:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="mi"&gt;2020&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;01&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;05&lt;/span&gt; &lt;span class="mi"&gt;12&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;04&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;38&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;420&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;__main__&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;WARNING&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;ma&lt;/span&gt; &lt;span class="k"&gt;variable&lt;/span&gt; &lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;12&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Si tu dé-commentes la ligne de la configuration par défaut tu pourras voir qu'il y a du coup 2 Handlers vers la console. Le premier correspond à notre &lt;em&gt;c_handler&lt;/em&gt; et le second est celui de &lt;em&gt;basicConfig&lt;/em&gt; :&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="mi"&gt;2020&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;01&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;05&lt;/span&gt; &lt;span class="mi"&gt;12&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;13&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;31&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;913&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;__main__&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;WARNING&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;ma&lt;/span&gt; &lt;span class="k"&gt;variable&lt;/span&gt; &lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;12&lt;/span&gt;
+&lt;span class="n"&gt;WARNING&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="n"&gt;__main__&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="n"&gt;ma&lt;/span&gt; &lt;span class="k"&gt;variable&lt;/span&gt; &lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;12&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Tu trouveras la liste des arguments qu'il est possible de mettre dans la doc: &lt;a href="https://docs.python.org/fr/3/library/logging.html#logrecord-attributes"&gt;logrecord-attributes&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Le formatage ne facilite pas seulement la lecture, cela peut être un outil très puissant en parsant les fichiers log afin d'en extraire les informations intéressantes. Il est également possible de sortir des logs sous forme de json pour simplifier l'exploitation (&lt;a href="https://github.com/madzak/python-json-logger"&gt;Python JSON logger&lt;/a&gt;).&lt;/p&gt;
+&lt;h2&gt;La configuration&lt;/h2&gt;
+&lt;p&gt;Dans la partie précédente on a vu comment créer ses &lt;em&gt;Handler&lt;/em&gt; et ses &lt;em&gt;Formatter&lt;/em&gt;, c'est bien pour des projets ne contenant pas beaucoup de fichiers. A partir d'une certaine taille il est indispensable de passer sur de la configuration par fichier, cela permet de centraliser des configurations complexes et de les appeler en 1 seule ligne.&lt;/p&gt;
+&lt;p&gt;Cette configuration peut se faire dans un fichier &lt;em&gt;configParse&lt;/em&gt; ou sous le format &lt;em&gt;YAML&lt;/em&gt;, le second n'étant pas dans la librairie standard je préfère présenter la première solution.&lt;/p&gt;
+&lt;p&gt;le contenu du fichier &lt;em&gt;logging.conf&lt;/em&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;[loggers]&lt;/span&gt;
+&lt;span class="na"&gt;keys&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;root&lt;/span&gt;
+
+&lt;span class="k"&gt;[handlers]&lt;/span&gt;
+&lt;span class="na"&gt;keys&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;inFile, console&lt;/span&gt;
+
+&lt;span class="k"&gt;[formatters]&lt;/span&gt;
+&lt;span class="na"&gt;keys&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;monFormatter&lt;/span&gt;
+
+&lt;span class="k"&gt;[logger_root]&lt;/span&gt;
+&lt;span class="na"&gt;level&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;DEBUG&lt;/span&gt;
+&lt;span class="na"&gt;handlers&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;all, console&lt;/span&gt;
+
+&lt;span class="k"&gt;[handler_inFile]&lt;/span&gt;
+&lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;FileHandler&lt;/span&gt;
+&lt;span class="na"&gt;level&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;DEBUG&lt;/span&gt;
+&lt;span class="na"&gt;formatter&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;monFormatter&lt;/span&gt;
+&lt;span class="na"&gt;args&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;(&amp;quot;./log/myLog.log&amp;quot;)&lt;/span&gt;
+
+&lt;span class="k"&gt;[handler_console]&lt;/span&gt;
+&lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;logging.StreamHandler&lt;/span&gt;
+&lt;span class="na"&gt;level&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;INFO&lt;/span&gt;
+&lt;span class="na"&gt;formatter&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;monFormatter&lt;/span&gt;
+&lt;span class="na"&gt;stream&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;ext://sys.stdout&lt;/span&gt;
+
+&lt;span class="k"&gt;[formatter_monFormatter]&lt;/span&gt;
+&lt;span class="na"&gt;format&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;%(asctime)s | %(name)s | %(levelname)s:%(message)s&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Le code à ajouter dans chaque fichier pour charger la configuration et créer le logger:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;logging&lt;/span&gt;
+&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;logging.config&lt;/span&gt;
+
+&lt;span class="n"&gt;logging&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;config&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;fileConfig&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;fname&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;logging.conf&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;disable_existing_loggers&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;False&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="n"&gt;logger&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;logging&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;getLogger&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="vm"&gt;__name__&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="c1"&gt;# on utilise le logger comme d&amp;#39;habitude&lt;/span&gt;
+&lt;span class="n"&gt;logger&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;debug&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;This is a debug message&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;em&gt;disable_existing_loggers&lt;/em&gt; permet de faire cohabiter plusieurs logger dans le &lt;em&gt;logRecord&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Que fait cette configuration:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;création d'un Handler vers la console em mode DEBUG &lt;strong&gt;[handler_console]&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;création d'un Handler vers un fichier &lt;em&gt;myLog.log&lt;/em&gt; dans le dossier &lt;em&gt;./log/&lt;/em&gt; &lt;strong&gt;[handler_inFile]&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;création du Formatter &lt;em&gt;monFormatter&lt;/em&gt; &lt;strong&gt;[formatter_monFormatter]&lt;/strong&gt;, qui affiche un message sous cette forme:&lt;/p&gt;
+&lt;p&gt;2020-01-05 13:28:33,363 | nom.du_module | DEBUG:Mon message de debug&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Pourquoi mettre &lt;code&gt;__name__&lt;/code&gt; lors de la création du logger?&lt;/h3&gt;
+&lt;p&gt;Cela permet de mettre le nom du module en cours dans le log et donc de savoir d'où provient le message.&lt;/p&gt;
+&lt;p&gt;Dans l'exemple précédent (&lt;code&gt;nom.du_module&lt;/code&gt;) on peut donc en conclure que cela provient du module &lt;em&gt;du_module&lt;/em&gt; qui est lui même dans le module &lt;em&gt;mon&lt;/em&gt;.&lt;/p&gt;
+&lt;h3&gt;Faire des fichiers log qui s'incrémentent&lt;/h3&gt;
+&lt;p&gt;Avec les exemples précédent tu pourras te débrouiller pour les adapter à ton besoin. Néanmoins on a vu comment écrire dans un fichier log mais une fois qu'il est plein il faut que tu penses à aller le vider et donc te mettre un rappels dans l'agenda comme pour sortir la poubelle...&lt;/p&gt;
+&lt;p&gt;Heuresement que non, il y a les &lt;a href="https://docs.python.org/fr/3/library/logging.handlers.html#rotatingfilehandler"&gt;&lt;em&gt;RotatingFileHandler&lt;/em&gt;&lt;/a&gt; et &lt;a href="https://docs.python.org/fr/3/library/logging.handlers.html#timedrotatingfilehandler"&gt;&lt;em&gt;TimedRotatingFileHandler&lt;/em&gt;&lt;/a&gt; qui permettent d'incrémenter les fichiers une fois une taille atteinte ou périodiquement à un moment donné.&lt;/p&gt;
+&lt;p&gt;Un exemple de configuration de handler qui gardera 5 versions avec la création d'un nouveau fichier tous les dimanches&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;[handler_weekly]&lt;/span&gt;
+&lt;span class="na"&gt;class&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;handlers.TimedRotatingFileHandler&lt;/span&gt;
+&lt;span class="na"&gt;level&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;WARNING&lt;/span&gt;
+&lt;span class="na"&gt;formatter&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;simpleFormatter&lt;/span&gt;
+&lt;span class="na"&gt;args&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;(&amp;quot;./weekly.log&amp;quot;, &amp;#39;W6&amp;#39;, 1, 5, &amp;#39;utf-8&amp;#39;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;Te voilà prêt à ne plus utiliser &lt;code&gt;print()&lt;/code&gt; pour débugger et à comprendre les exemples du &lt;a href="https://docs.python.org/fr/3.8/howto/logging-cookbook.html"&gt;logging cookbook&lt;/a&gt; de la doc officielle si tu as des besoins plus spécifiques.&lt;/p&gt;
+&lt;h2&gt;Ressources&lt;/h2&gt;
+&lt;p&gt;Pour écrire cet article je me suis inspiré des parties que j'ai jugé intéressantes de ces articles anglophones:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://realpython.com/python-logging/"&gt;https://realpython.com/python-logging/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://fangpenlin.com/posts/2012/08/26/good-logging-practice-in-python/"&gt;https://fangpenlin.com/posts/2012/08/26/good-logging-practice-in-python/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Et la documentation officielle évidemment: &lt;a href="https://docs.python.org/"&gt;https://docs.python.org/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Je suis tombé dessus après coup: &lt;a href="http://sametmax.com/ecrire-des-logs-en-python/"&gt;http://sametmax.com/ecrire-des-logs-en-python/&lt;/a&gt;&lt;/p&gt;</content></entry></feed>

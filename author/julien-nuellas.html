@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+        <meta charset="utf-8" />
+        <title>Python I/O - Julien Nuellas</title>
+        <link rel="stylesheet" href="https://www.pythonclassmates.org/theme/css/main.css" />
+        <link href="https://www.pythonclassmates.org/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Python I/O Atom Feed" />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="https://www.pythonclassmates.org/">Python I/O <strong>Articles et news par des Pythonistas passionnés</strong></a></h1>
+                <nav><ul>
+                    <li><a href="/category/news.html">News</a></li>
+                    <li><a href="/category/articles.html">Articles</a></li>
+                    <li><a href="/category/tutoriels.html">Tutoriels</a></li>
+                    <li><a href="/categories.html">Catégories</a></li>
+                    <li><a href="/tags.html">Tags</a></li>
+                    <li><a href="https://www.pythonclassmates.org/category/article.html">Article</a></li>
+                    <li><a href="https://www.pythonclassmates.org/category/articles.html">Articles</a></li>
+                    <li><a href="https://www.pythonclassmates.org/category/news.html">News</a></li>
+                    <li><a href="https://www.pythonclassmates.org/category/tutoriels.html">Tutoriels</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+
+            <aside id="featured" class="body">
+                <article>
+                    <h1 class="entry-title"><a href="https://www.pythonclassmates.org/les-mocks-avec-unittest.html">Les mocks avec unittest</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2018-07-14T14:00:00+02:00">
+                Published: Sat 14 July 2018
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="https://www.pythonclassmates.org/author/julien-nuellas.html">Julien Nuellas</a>
+        </address>
+<p>In <a href="https://www.pythonclassmates.org/category/articles.html">Articles</a>.</p>
+<p>tags: <a href="https://www.pythonclassmates.org/tag/python.html">python</a> <a href="https://www.pythonclassmates.org/tag/unittest.html">unittest</a> </p>
+</footer><!-- /.post-info --><p>Malgré les blagues et les débats que l'on peut lire concernant les tests unitaires (si vous ne les avez pas encore vu, voici quelques <a href="https://twitter.com/thepracticaldev/status/687672086152753152">exemples</a> qui donne le <a href="https://twitter.com/MonkeyTestIt/status/958661917375172609">sourire</a>), les test unitaires sont largement utilisés et s'intègrent directement dans l'approche <a href="https://fr.wikipedia.org/wiki/Test_driven_development">TDD</a>.</p>
+<p>Les test unitaires servent donc à tester un bout de son code de façon isolée et vérifier que ce dernier fasse bien le travail qui lui a été demandé.
+Prenons l'exemple suivant, je dois créer un algorithme qui reçoit en entrée une liste de tuples composée d'un prénom, d'un âge et d'une taille et je dois le retourner sous forme d'un dictionnaire.</p>
+<p>Pour tester ce code, je vais donc dans la réalisation de mon test simuler une fausse entrée (une liste de tuple) et indiquer le résultat attendu (le dictionnaire que je souhaiterais renvoyer). Je vais appliquer mon algorithme avec cette fausse entrée et comparer la sortie avec le résultat attendu. Si c'est pareil, le test est validé et si c'est pas pareil, faut retourner travailler.
+C'est logique, c'est propre, c'est net. Malheureusement que faire si l'entrée en question provient d'une source externe comme une API par exemple ? Dans ce cas-là, on va avoir un peu plus de difficulté à simuler l'entrée. Autre point, comment fait-on si la sortie de l'algorithme consiste à envoyer un mail à l'utilisateur ? Pas évident non plus de comparer les résultats attendus.</p>
+<p>Mais ne vous inquiétez pas pour autant, car vous n'êtes pas le premier à être confronté à ce type de problématiques et des solutions ont été trouvées pour y répondre. Et c'est justement l'objectif de cet article qui va vous présenter la magie des Mocks !</p>
+<h2>Qu'est-ce qu'un Mock ?</h2>
+<p>Un Mock, comme son nom l'indique (et oui c'est de l'anglais) est un objet qui consiste à imiter un autre objet.
+Conceptuel n'est-ce pas ? Tout simplement, un mock c'est ce qui va vous permettre de simuler un retour API sans vraiment appeler une API ou simuler un envoi d'email sans vraiment envoyer un email. Cela permet d'imiter pas mal de choses afin de vous permettre de réaliser vos tests unitaires de façon indépendante.</p>
+<h2>Dans la pratique, ça donne quoi ?</h2>
+<p>Rien de mieux qu'un exemple pour appréhender un peu mieux ce concept.
+Imaginons le besoin suivant : je développe un site qui a pour objectif d'identifier des produits de substitution meilleur pour la santé par rapport à un produit donné. Pour cela, je souhaite interroger via l'<a href="https://fr.openfoodfacts.org/data">API OpenFoodFacts</a> les produits liés à une marque et compter le nombre de produits ayant une bonne note alimentaire.
+Voici le code de ma classe (fichier app.py) :</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">urllib.error</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="k">class</span> <span class="nc">OpenFoodFactsAPI</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Cette classe a pour objectif de récupérer les produits associée à une marque</span>
+<span class="sd">    via l&#39;API d&#39;OpenFoodFacts et de compter le nombre de produits ayant une bonne</span>
+<span class="sd">    note alimentaire.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_get_product_from_api</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">brand</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Cette méthode a pour objectif de récupérer les 150 premiers produits liés</span>
+<span class="sd">        à une marque via l&#39;API OpenFoodFacts</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">payload</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;action&#39;</span> <span class="p">:</span> <span class="s1">&#39;process&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;json&#39;</span> <span class="p">:</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;tagtype_0&#39;</span> <span class="p">:</span> <span class="s1">&#39;brands&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;tag_contains_0&#39;</span> <span class="p">:</span> <span class="s1">&#39;contains&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;tag_0&#39;</span> <span class="p">:</span> <span class="n">brand</span><span class="p">,</span>
+            <span class="s1">&#39;page_size&#39;</span> <span class="p">:</span> <span class="s1">&#39;150&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;page&#39;</span> <span class="p">:</span> <span class="s1">&#39;1&#39;</span>
+        <span class="p">}</span>
+
+        <span class="n">parameters</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlencode</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;http://fr.openfoodfacts.org/cgi/search.pl&quot;</span>
+        <span class="n">parameters</span> <span class="o">=</span> <span class="n">parameters</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+        <span class="n">req</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+            <span class="n">response_body</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">response_body</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">data</span>
+        <span class="k">except</span> <span class="n">urllib</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">HTTPError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s1">&#39;The server couldn</span><span class="se">\&#39;</span><span class="s1">t fulfill the request.&#39;</span><span class="p">)</span>
+            <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Error code: &#39;</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">code</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">urllib</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">URLError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s1">&#39;We failed to reach a server.&#39;</span><span class="p">)</span>
+            <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Reason: &#39;</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">reason</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">count_product_numb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">brand</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Cette méthode a pour objectif de dénombrer le nombre de produits ayant</span>
+<span class="sd">        une bonne note alimentaire</span>
+<span class="sd">        Il s&#39;agit de la méthode à tester pour cette exercice</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_product_from_api</span><span class="p">(</span><span class="n">brand</span><span class="p">)</span>
+        <span class="n">healthy_product</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">product</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;products&quot;</span><span class="p">]:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">product</span><span class="p">[</span><span class="s2">&quot;nutrition_grade_fr&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;a&quot;</span><span class="p">:</span>
+                    <span class="n">healthy_product</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+        <span class="k">return</span> <span class="n">healthy_product</span>
+</pre></div>
+
+
+<h3>Objectif de mon test</h3>
+<p>Je souhaite tester ma méthode <strong>count_product_numb()</strong> afin de m'assurer que cette dernière me renvoie bien le bon nombre de produits ayant une bonne note alimentaire.
+Dans notre cas, l'algorithme est censé travailler sur la donnée provenant de l'API récupérée via la méthode <strong>_get_product_from_api()</strong>. Hors, j'y vois deux problèmes pour mon test :
+* D'un point de vue performance, si j'ai 150 tests qui font tous des appels externes, je ne suis pas prêt de visualiser les résultats de ces derniers.
+* Je n'ai aucune idée du nombre de produits (dont des produits avec une bonne note alimentaire) que l'API va me renvoyer. Je pourrais bien évidemment faire le test à coté et les compter mais qui me dit que dans le temps, des produits ne seront pas rajouté ou supprimé ?</p>
+<p>Du coup, pour tester ma méthode, il faudrait que je puisse simuler ce retour d'API pour avoir une donnée similaire à celle-ci.
+Et bien, c'est tout l'intérêt des mocks justement.</p>
+<h3>Mise en place de mon test</h3>
+<p>Pour mettre en place ce test, je vais utiliser le module unittest. L'avantage de ce module, c'est qu'il est directement intégré dans Python et qu'il dispose de la possibilité de mettre en place des mocks, et même de plusieurs façons différentes !</p>
+<p>Je mets donc en place la structure de test suivante (fichier test_app.py) :</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">app</span> <span class="kn">import</span> <span class="n">OpenFoodFactsAPI</span>
+<span class="kn">from</span> <span class="nn">unittest</span> <span class="kn">import</span> <span class="n">TestCase</span>
+
+<span class="k">class</span> <span class="nc">TestOpenFoodFactsAPI</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">test_count_product_numb</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        La méthode qui doit tester le fonctionnement de ma méthode</span>
+<span class="sd">        count_product_numb()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">test_api</span> <span class="o">=</span> <span class="n">OpenFoodFactsAPI</span><span class="p">()</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">test_api</span><span class="o">.</span><span class="n">count_product_numb</span><span class="p">(</span><span class="s1">&#39;nutella&#39;</span><span class="p">),</span> <span class="n">result</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Il y déja quelques informations avec la structure de test présentée au-dessus. En effet, que se passe-t-il déjà ?
+1. On importe dans une variable locale la classe <strong>OpenFoodFactsAPI</strong> afin de pouvoir l'utiliser dans notre test
+2. On importe dans une variable locale la classe <strong>TestCase</strong> du module unittest dont notre classe de test va hériter afin de pouvoir notamment utiliser les méthodes de comparaison
+3. On définit une méthode de test où :
+    * on instancie un objet de la classe OpenFoodFactsAPI
+    * on définie un résultat (ici 2)
+    * on utilise la méthode assertEqual de la classe TestCase pour comparer le résultat renvoyé par la méthode <strong>count_product_numb()</strong> avec le résultat que l'on attend</p>
+<p>Ne criez pas au scandale ! J'entend d'ici votre question. Pourquoi 2 comme résultat ? Comment sait-on que l'API va nous renvoyer deux produits avec une bonne note alimentaire ?
+Et bien oui, on ne le sait pas... Vous voyez un peu l'impasse ? Pourtant, cette méthode doit absolument être testée car ce qu'elle renvoie sera utilisée à l'extérieur de la classe et il est donc important que cette dernière fasse bien le travail qui lui a été demandé.</p>
+<p>Comment faire alors ?... Il faut que je puisse tester cette méthode en lui donnant en entrée un json similaire à ce qui est renvoyé par la méthode <strong>_get_product_from_api()</strong> comportant donc 2 produits avec une bonne note alimentaire. (J'aurais bien évidemment pu en choisir 3, 5 ou 10000). Voyons dans la suite de l'article comment faire.</p>
+<h3>La solution sans utilisation d'un mock</h3>
+<p>Comment ??? On parle d'un sujet sur les mocks et on propose une solution sans mock ? Oui, je l'admets, c'est un peu culotté de ma part mais je pense que ce n'est pas inutile de la décrire car ça aide à comprendre un peu la logique de fonctionnement.</p>
+<p>Regardons déjà la solution :</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">app</span> <span class="kn">import</span> <span class="n">OpenFoodFactsAPI</span>
+<span class="kn">from</span> <span class="nn">unittest</span> <span class="kn">import</span> <span class="n">TestCase</span>
+
+<span class="k">class</span> <span class="nc">TestOpenFoodFactsAPI</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">test_count_product_numb</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="c1"># On instancie un object de la classe OpenFoodFactsAPI</span>
+        <span class="n">healthy_product</span> <span class="o">=</span> <span class="n">OpenFoodFactsAPI</span><span class="p">()</span>
+
+        <span class="c1"># On crée une méthode au sein de la méthode de test</span>
+        <span class="c1"># Il définit juste un exemple de retour de la méthode _get_product_from_api()</span>
+        <span class="k">def</span> <span class="nf">fake_api_result</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;count&quot;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+            <span class="s2">&quot;skip&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s2">&quot;page_size&quot;</span><span class="p">:</span> <span class="s2">&quot;150&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;page&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="s2">&quot;products&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;product_name_fr&quot;</span> <span class="p">:</span> <span class="s2">&quot;Ferrero boite de 30&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;nutrition_grade_fr&quot;</span><span class="p">:</span> <span class="s2">&quot;a&quot;</span><span class="p">,</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;product_name_fr&quot;</span> <span class="p">:</span> <span class="s2">&quot;Ferrero Light sans sucre et sans goût&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;nutrition_grade_fr&quot;</span><span class="p">:</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;product_name_fr&quot;</span> <span class="p">:</span> <span class="s2">&quot;Ferrero Rocher&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;nutrition_grade_fr&quot;</span><span class="p">:</span> <span class="s2">&quot;e&quot;</span><span class="p">,</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;product_name_fr&quot;</span> <span class="p">:</span> <span class="s2">&quot;Ferrero couscous&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;nutrition_grade_fr&quot;</span><span class="p">:</span> <span class="s2">&quot;a&quot;</span><span class="p">,</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;product_name_fr&quot;</span> <span class="p">:</span> <span class="s2">&quot;Ferrero chocolat praliné&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;nutrition_grade_fr&quot;</span><span class="p">:</span> <span class="s2">&quot;d&quot;</span><span class="p">,</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;product_name_fr&quot;</span> <span class="p">:</span> <span class="s2">&quot;Ferrero à la fraise&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;nutrition_grade_fr&quot;</span><span class="p">:</span> <span class="s2">&quot;c&quot;</span><span class="p">,</span>
+                <span class="p">},</span>
+                <span class="p">]</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="n">result</span>
+
+        <span class="c1"># On assigne ensuite ce retour à la méthode ciblée</span>
+        <span class="n">healthy_product</span><span class="o">.</span><span class="n">_get_product_from_api</span> <span class="o">=</span> <span class="n">fake_api_result</span>
+
+        <span class="c1"># On fait le test de comparaison</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">healthy_product</span><span class="o">.</span><span class="n">count_product_numb</span><span class="p">(</span><span class="s2">&quot;ferrero&quot;</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Et voilà le travail ! On utilise ici le caractère dynamique de Python ainsi que ces règle de portées de variables pour "forcer" le retour de la méthode <strong>_get_product_from_api</strong>. De cette façon, la méthode <strong>count_product_numb()</strong> va utiliser le dictionnaire défini et retourné par la méthode <strong>fake_api_result()</strong> pour compter le nombre de produit ayant une bonne note.</p>
+<p>Alors c'est super et ça fonctionne mais imaginons maintenant que l'on ait à mocker plusieurs éléments, cela risque de rendre le code difficilement lisible et il doit y avoir une méthode plus sympa que de créer des méthodes imbriquées.
+Et bien oui, c'est le cas. Voyons maintenant deux autres façons de faire en utilisant l'object <strong>Mock</strong> du module unittest, puis de son décorateur <strong>patch</strong>.</p>
+<h3>Utilisation de la classe Mock</h3>
+<p>Unittest propose une classe Mock permettant de "mocker" facilement une classe, un objet ou une méthode. Cela permet d'indiquer au processus de test que cet objet est une imitation et on va pouvoir agir dessus par l'intermédiaire des méthodes de la classe Mock (comme par exemple lui retourner une valeur !).</p>
+<p>Voyons ce que cela donne :</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">app</span> <span class="kn">import</span> <span class="n">OpenFoodFactsAPI</span>
+<span class="kn">from</span> <span class="nn">unittest</span> <span class="kn">import</span> <span class="n">TestCase</span>
+<span class="kn">from</span> <span class="nn">unittest.mock</span> <span class="kn">import</span> <span class="n">Mock</span>
+
+<span class="k">class</span> <span class="nc">TestOpenFoodFactsAPI</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">test_count_product_numb</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">api_response</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;count&quot;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+            <span class="s2">&quot;skip&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s2">&quot;page_size&quot;</span><span class="p">:</span> <span class="s2">&quot;150&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;page&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="s2">&quot;products&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;product_name_fr&quot;</span> <span class="p">:</span> <span class="s2">&quot;Ferrero boite de 30&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;nutrition_grade_fr&quot;</span><span class="p">:</span> <span class="s2">&quot;a&quot;</span><span class="p">,</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;product_name_fr&quot;</span> <span class="p">:</span> <span class="s2">&quot;Ferrero Light sans sucre et sans goût&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;nutrition_grade_fr&quot;</span><span class="p">:</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;product_name_fr&quot;</span> <span class="p">:</span> <span class="s2">&quot;Ferrero Rocher&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;nutrition_grade_fr&quot;</span><span class="p">:</span> <span class="s2">&quot;e&quot;</span><span class="p">,</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;product_name_fr&quot;</span> <span class="p">:</span> <span class="s2">&quot;Ferrero couscous&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;nutrition_grade_fr&quot;</span><span class="p">:</span> <span class="s2">&quot;a&quot;</span><span class="p">,</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;product_name_fr&quot;</span> <span class="p">:</span> <span class="s2">&quot;Ferrero chocolat praliné&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;nutrition_grade_fr&quot;</span><span class="p">:</span> <span class="s2">&quot;d&quot;</span><span class="p">,</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;product_name_fr&quot;</span> <span class="p">:</span> <span class="s2">&quot;Ferrero à la fraise&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;nutrition_grade_fr&quot;</span><span class="p">:</span> <span class="s2">&quot;c&quot;</span><span class="p">,</span>
+                <span class="p">},</span>
+            <span class="p">]</span>
+        <span class="p">}</span>
+
+        <span class="n">healthy_product</span> <span class="o">=</span> <span class="n">OpenFoodFactsAPI</span><span class="p">()</span>
+        <span class="n">healthy_product</span><span class="o">.</span><span class="n">_get_product_from_api</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">()</span>
+        <span class="n">healthy_product</span><span class="o">.</span><span class="n">_get_product_from_api</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">api_response</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">healthy_product</span><span class="o">.</span><span class="n">count_product_numb</span><span class="p">(</span><span class="s2">&quot;ferrero&quot;</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Il y a plusieurs étapes derrière ce code :
+1. On importe tout d'abord la classe Mock du module unittest
+2. On définit la valeur de retour de l'API représentée ici par la variable api_response
+3. On mock la méthode get_product_from_api de l'objet healthy_product
+4. On lui associe la valeur de retour via la méthode return.value
+5. On utilise la méthode assertEqual() de la classe TestCase afin de comparer le retour de la méthode que l'on teste avec le résultat attendu</p>
+<p>A noter qu'il est possible de fusionner le point 3 et 4 en une seule fois en utilisant l'argument return_value lorsque la méthode est mockée :</p>
+<div class="highlight"><pre><span></span><span class="n">healthy_product</span><span class="o">.</span><span class="n">_get_product_from_api</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">(</span><span class="n">return_value</span><span class="o">=</span><span class="n">api_response</span><span class="p">)</span>
+</pre></div>
+
+
+<h3>Utilisation du décorateur patch</h3>
+<p>Une des autres façons de mettre en place un mock avec unittest est d'utiliser son décorateur patch.
+Ce décorateur permet - comme son nom l'indique - de 'patcher' un objet uniquement au sein de la fonction à laquelle elle est appelée. En effet, cela gère automatiquement le 'dé-patching' même si des exceptions sont levées.</p>
+<p>Voyons un peu ce que cela donne :</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">app</span> <span class="kn">import</span> <span class="n">OpenFoodFactsAPI</span>
+<span class="kn">from</span> <span class="nn">unittest</span> <span class="kn">import</span> <span class="n">TestCase</span>
+<span class="kn">from</span> <span class="nn">unittest.mock</span> <span class="kn">import</span> <span class="n">patch</span>
+
+<span class="k">class</span> <span class="nc">TestOpenFoodFactsAPI</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
+
+    <span class="nd">@patch</span><span class="p">(</span><span class="s1">&#39;app.OpenFoodFactsAPI._get_product_from_api&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">test_count_product_numb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mock_get_product_from_api</span><span class="p">):</span>
+
+        <span class="n">mock_get_product_from_api</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;count&quot;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+            <span class="s2">&quot;skip&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s2">&quot;page_size&quot;</span><span class="p">:</span> <span class="s2">&quot;150&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;page&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="s2">&quot;products&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;product_name_fr&quot;</span> <span class="p">:</span> <span class="s2">&quot;Ferrero boite de 30&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;nutrition_grade_fr&quot;</span><span class="p">:</span> <span class="s2">&quot;a&quot;</span><span class="p">,</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;product_name_fr&quot;</span> <span class="p">:</span> <span class="s2">&quot;Ferrero Light sans sucre et sans goût&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;nutrition_grade_fr&quot;</span><span class="p">:</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;product_name_fr&quot;</span> <span class="p">:</span> <span class="s2">&quot;Ferrero Rocher&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;nutrition_grade_fr&quot;</span><span class="p">:</span> <span class="s2">&quot;e&quot;</span><span class="p">,</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;product_name_fr&quot;</span> <span class="p">:</span> <span class="s2">&quot;Ferrero couscous&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;nutrition_grade_fr&quot;</span><span class="p">:</span> <span class="s2">&quot;a&quot;</span><span class="p">,</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;product_name_fr&quot;</span> <span class="p">:</span> <span class="s2">&quot;Ferrero chocolat praliné&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;nutrition_grade_fr&quot;</span><span class="p">:</span> <span class="s2">&quot;d&quot;</span><span class="p">,</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;product_name_fr&quot;</span> <span class="p">:</span> <span class="s2">&quot;Ferrero à la fraise&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;nutrition_grade_fr&quot;</span><span class="p">:</span> <span class="s2">&quot;c&quot;</span><span class="p">,</span>
+                <span class="p">},</span>
+                <span class="p">]</span>
+        <span class="p">}</span>
+
+        <span class="n">healthy_product</span> <span class="o">=</span> <span class="n">OpenFoodFactsAPI</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">healthy_product</span><span class="o">.</span><span class="n">count_product_numb</span><span class="p">(</span><span class="s2">&quot;ferrero&quot;</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Décrivons également les différentes étapes :
+1. On importe le décorateur patch du module unittest
+2. On met en place le décorateur qui prend en argument l'objet à mocker
+3. Le décorateur injecte l'objet mocker au sein de la fonction comme un argument de la méthode. Le nom de l'argument est libre de choix. Ici, il s'agit de l'argument <strong>mock_get_product_from_api</strong>.
+4. On utilise la méthode return_value pour associer la valeur de retour souhaitée au mock.
+5. On instancie un objet via la classe OpenFoodFactsAPI()
+6. On utilise la méthode assertEqual de la classe TestCase pour comparer la valeur renvoyée par la méthode que l'on teste avec le résultat attendu</p>
+<p>Petite remarque supplémentaire, attention à ne patcher uniquement que la méthode que l'on souhaite mocker et non la classe entière.
+En effet, en faisant comme ceci :</p>
+<div class="highlight"><pre><span></span><span class="o">...</span>
+<span class="k">class</span> <span class="nc">TestOpenFoodFactsAPI</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
+
+    <span class="nd">@patch</span><span class="p">(</span><span class="s1">&#39;app.OpenFoodFactsAPI&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">test_count_product_numb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mock_OpenFoodFactsAPI</span><span class="p">):</span>
+        <span class="n">mock_OpenFoodFactsAPI</span><span class="o">.</span><span class="n">_get_product_from_api</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;count&quot;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+            <span class="s2">&quot;skip&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s2">&quot;page_size&quot;</span><span class="p">:</span> <span class="s2">&quot;150&quot;</span><span class="p">,</span>
+            <span class="o">...</span>
+</pre></div>
+
+
+<p>Le mock ne fonctionnera pas. En effet, unittest va créer un grand objet mock sur l'ensemble de la classe et ne dissociera pas la partie de la classe qui doit être imitée et celle qui ne le doit pas.
+Du coup, lors du lancement du test, l'appel à l'API sera réalisé et la méthode <strong>count_product_numb</strong> sera appliquée sur la donnée renvoyée par l'API et non celle que l'on a configurée. </p>
+<p>Attention donc à bien mocker le périmètre que l'on souhaite imiter.</p>
+<h2>Quelle solution choisir au final ?</h2>
+<p>Et bien, de mon côté, j'ai une préférence pour l'utilisation du décorateur <strong>patch</strong> car je trouve que le code est plus lisible et cela m'assure surtout que le mock ne sera actif que durant le test de ma méthode car comme indiqué plus haut, il gère automatiquement la destruction du mock à la fin du test.
+En revanche, l'utilisation de la classe Mock n'est pas dénué d'intérêt lorsque plusieurs tests (donc plusieurs méthodes) doivent faire appel au même objet à mocker. J'aurais plus tendance à utiliser cette solution dans ce type de cas en définissant mon objet mockée dans une méthode <em>SetUp</em>.</p>
+<p>Mais au final, il n'appartient qu'à vous de choisir. Les goûts et les couleurs, ça ne se discute pas !</p>
+<h2>Pour faire quelques tests</h2>
+<p>Si vous souhaitez faire quelques tests sur l'exemple de l'article, vous pouvez retrouver le code source à cette adresse :
+<a href="https://github.com/JN-Lab/Test-Mock-Unittest">https://github.com/JN-Lab/Test-Mock-Unittest</a></p>
+<p>Il y a différents fichiers de tests avec différentes méthodes appliquées dont une qui ne fonctionnent pas et qui faitréférence au danger expliqué plus haut.</p>
+<p>J'espère en tout cas que cet article vous aura permis d'y voir un peu plus clair sur la façon de mettre en place des mocks avec le module unittest.</p>
+<p>Bon codage à tous !</p>                </article>
+            </aside><!-- /#featured -->
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="https://www.pythonclassmates.org/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

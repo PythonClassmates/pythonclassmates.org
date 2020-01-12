@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+        <meta charset="utf-8" />
+        <title>Python I/O - Articles</title>
+        <link rel="stylesheet" href="https://www.pythonclassmates.org/theme/css/main.css" />
+        <link href="https://www.pythonclassmates.org/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Python I/O Atom Feed" />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="https://www.pythonclassmates.org/">Python I/O <strong>Articles et news par des Pythonistas passionnés</strong></a></h1>
+                <nav><ul>
+                    <li><a href="/category/news.html">News</a></li>
+                    <li><a href="/category/articles.html">Articles</a></li>
+                    <li><a href="/category/tutoriels.html">Tutoriels</a></li>
+                    <li><a href="/categories.html">Catégories</a></li>
+                    <li><a href="/tags.html">Tags</a></li>
+                    <li><a href="https://www.pythonclassmates.org/category/article.html">Article</a></li>
+                    <li class="active"><a href="https://www.pythonclassmates.org/category/articles.html">Articles</a></li>
+                    <li><a href="https://www.pythonclassmates.org/category/news.html">News</a></li>
+                    <li><a href="https://www.pythonclassmates.org/category/tutoriels.html">Tutoriels</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+
+            <aside id="featured" class="body">
+                <article>
+                    <h1 class="entry-title"><a href="https://www.pythonclassmates.org/asyncio-produce-consume.html">Producers / consumers avec asyncio</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2019-08-28T15:30:00+02:00">
+                Published: Wed 28 August 2019
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="https://www.pythonclassmates.org/author/vianney.html">Vianney</a>
+        </address>
+<p>In <a href="https://www.pythonclassmates.org/category/articles.html">Articles</a>.</p>
+<p>tags: <a href="https://www.pythonclassmates.org/tag/asyncio.html">asyncio</a> </p>
+</footer><!-- /.post-info --><h1>Coroutines concurrentes</h1>
+<p>Quand on cherche à exécuter plusieurs coroutines en concurrence en Python
+on pense tout de suite à <code>gather()</code> ou <code>as_completed()</code>.
+C’est adapté quand on a un ensemble limité de coroutines à dérouler.
+Par exemple :</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">import</span> <span class="nn">random</span>
+
+<span class="n">async</span> <span class="k">def</span> <span class="nf">cor</span><span class="p">():</span>
+    <span class="n">seconds</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;waiting {seconds}s...&#39;</span><span class="p">)</span>
+    <span class="n">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">seconds</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;waiting {seconds}s, done&#39;</span><span class="p">)</span>
+
+<span class="n">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">coroutines</span> <span class="o">=</span> <span class="p">(</span><span class="n">cor</span><span class="p">()</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+    <span class="n">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="o">*</span><span class="n">coroutines</span><span class="p">)</span>
+
+<span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+</pre></div>
+
+
+<h1>Pas plus de trois à la fois</h1>
+<p>Dans l’exemple précédent, on a instancié 10 coroutines, c’est raisonnable.
+Si on n’en veut pas plus de 3 qui s’exécutent en concurrence,
+on peut améliorer un peu le code des coroutines en les bordant
+par un sémaphore commun :</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">import</span> <span class="nn">random</span>
+
+<span class="n">async</span> <span class="k">def</span> <span class="nf">cor</span><span class="p">(</span><span class="n">semaphore</span><span class="p">):</span>
+    <span class="n">async</span> <span class="k">with</span> <span class="n">semaphore</span><span class="p">:</span>
+        <span class="n">seconds</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;waiting {seconds}s...&#39;</span><span class="p">)</span>
+        <span class="n">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">seconds</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;waiting {seconds}s, done&#39;</span><span class="p">)</span>
+
+<span class="n">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">semaphore</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Semaphore</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">coroutines</span> <span class="o">=</span> <span class="p">(</span><span class="n">cor</span><span class="p">(</span><span class="n">semaphore</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+    <span class="n">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="o">*</span><span class="n">coroutines</span><span class="p">)</span>
+
+<span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+</pre></div>
+
+
+<p>C’est élégant et ça peut être très pratique.
+Par exemple si nos coroutines balancent des requêtes à un serveur,
+on le fait poliment : pas plus de 3 à la fois.
+Ça peut éviter de se faire jeter pour DoS.</p>
+<h1>Produire et consommer</h1>
+<p>Maintenant, comment faire si nous avons un nombre très grand, voire infini,
+de coroutines ?
+Le <code>gather()</code> ou le <code>as_completed()</code> n’est plus adapté, puisqu’on ne veut pas instancier
+ce très grand nombre de coroutines.
+Il y a plusieurs façons de résoudre ce problème.
+Voyons voir comment on peut s’en tirer avec une <strong>queue</strong>.</p>
+<p>Une queue asyncio a les propriétés suivantes :</p>
+<ul>
+<li>on peut lui donner une taille maximale à l’instanciation. Sinon, elle a une taille infinie.</li>
+<li>on y ajoute un élément avec la coroutine <code>put(_item_)</code>. C’est une coroutine car elle bloque tant qu’il n’y a pas de place de libre dans la queue. S’il y a de la place, elle ajoute l’élément et rend directement la main, en synchrone, à l’appelant.</li>
+<li>on y récupère un élément avec la coroutine <code>get()</code>. C’est une coroutine car elle bloque tant que la queue reste vide. Le fait de récupérer un élément ne libère pas de place dans la queue. Il faut le faire de manière explicite en appelant la méthode <code>task_done()</code>.</li>
+<li>on peut attendre que la queue soit vide avec la coroutine <code>join()</code> : cela peut être très utile en fin de traitement (nous y reviendrons plus tard).</li>
+</ul>
+<p>On crée donc une coroutine qui va alimenter la queue (le <strong>producer</strong>), et 3 autres qui vont la consommer (les <strong>consumers</strong>). Les consumers vont boucler indéfiniment. Par exemple :</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">import</span> <span class="nn">random</span>
+
+<span class="n">async</span> <span class="k">def</span> <span class="nf">producer</span><span class="p">(</span><span class="n">queue</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+        <span class="n">seconds</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+        <span class="n">await</span> <span class="n">queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">seconds</span><span class="p">)</span>
+
+
+<span class="n">async</span> <span class="k">def</span> <span class="nf">consumer</span><span class="p">(</span><span class="n">queue</span><span class="p">):</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">seconds</span> <span class="o">=</span> <span class="n">await</span> <span class="n">queue</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;waiting {seconds}s...&#39;</span><span class="p">)</span>
+            <span class="n">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">seconds</span><span class="p">)</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;waiting {seconds}s, done&#39;</span><span class="p">)</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">queue</span><span class="o">.</span><span class="n">task_done</span><span class="p">()</span>
+
+
+<span class="n">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">queue</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Queue</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">producer_</span> <span class="o">=</span> <span class="n">producer</span><span class="p">(</span><span class="n">queue</span><span class="p">)</span>
+    <span class="n">consumers</span> <span class="o">=</span> <span class="p">(</span><span class="n">consumer</span><span class="p">(</span><span class="n">queue</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
+    <span class="n">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="n">producer_</span><span class="p">,</span> <span class="o">*</span><span class="n">consumers</span><span class="p">)</span>
+
+
+<span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+</pre></div>
+
+
+<p>Ce qui donne en sortie :</p>
+<div class="highlight"><pre><span></span><span class="p">...</span>
+<span class="n">waiting</span> <span class="mi">3</span><span class="n">s</span><span class="p">,</span> <span class="n">done</span>
+<span class="n">waiting</span> <span class="mi">2</span><span class="n">s</span><span class="p">...</span>
+<span class="n">waiting</span> <span class="mi">5</span><span class="n">s</span><span class="p">,</span> <span class="n">done</span>
+<span class="n">waiting</span> <span class="mi">5</span><span class="n">s</span><span class="p">,</span> <span class="n">done</span>
+<span class="n">waiting</span> <span class="mi">2</span><span class="n">s</span><span class="p">,</span> <span class="n">done</span>
+</pre></div>
+
+
+<p>Notez comment les consumers libèrent la queue dans un finally. C’est plus prudent.</p>
+<h1>C’est bien mais c’est pas top</h1>
+<p>Ok, ça a l’air de marcher, sauf que… notre script reste coincé en boucle infinie.
+Les consumers attendent sans fin de nouvelles valeurs dans la queue sauf que
+le producer, lui, a fini son taf sans prévenir quiconque :
+on est obligé de flinguer le process à coup de [ctrl-c].</p>
+<p>Un autre truc moyen dans ce qu’on vient de faire, c’est que si un consumer plante,
+le comportement par défaut du <code>gather()</code> est de laisser les autres tâches tourner.
+On se trouve ainsi dans le risque d’un producer isolé sans aucun consumer derrière.
+Il attendra comme un con que la queue soit consommée.</p>
+<h1><code>as_completed</code> à la rescousse ?</h1>
+<p>Le <code>gather()</code> rassemblant les consumers et le producer ne semble plus adapté.
+En le remplaçant par un <code>as_completed()</code>, on peut récupérer la valeur de retour de la première coroutine à s’arrêter.
+Si tout se passe bien, ce devrait être le producer.
+Sinon, l’erreur sera correctement propagée :</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">import</span> <span class="nn">random</span>
+
+<span class="n">async</span> <span class="k">def</span> <span class="nf">producer</span><span class="p">(</span><span class="n">queue</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+        <span class="n">seconds</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+        <span class="n">await</span> <span class="n">queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">seconds</span><span class="p">)</span>
+
+
+<span class="n">async</span> <span class="k">def</span> <span class="nf">consumer</span><span class="p">(</span><span class="n">queue</span><span class="p">):</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">seconds</span> <span class="o">=</span> <span class="n">await</span> <span class="n">queue</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;waiting {seconds}s...&#39;</span><span class="p">)</span>
+            <span class="n">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">seconds</span><span class="p">)</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;waiting {seconds}s, done&#39;</span><span class="p">)</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">queue</span><span class="o">.</span><span class="n">task_done</span><span class="p">()</span>
+
+
+<span class="n">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">queue</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Queue</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">producer_</span> <span class="o">=</span> <span class="n">producer</span><span class="p">(</span><span class="n">queue</span><span class="p">)</span>
+    <span class="n">consumers</span> <span class="o">=</span> <span class="p">(</span><span class="n">consumer</span><span class="p">(</span><span class="n">queue</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">completed</span> <span class="ow">in</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">as_completed</span><span class="p">([</span><span class="n">producer_</span><span class="p">,</span> <span class="o">*</span><span class="n">consumers</span><span class="p">]):</span>
+        <span class="n">await</span> <span class="n">completed</span>
+        <span class="k">break</span>
+
+<span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+</pre></div>
+
+
+<p>Notre expérience fonctionne en cas d’erreur 
+(essayez en levant une erreur dans le consumer par exemple) :
+le programme s’arrête brutalement, l’erreur est propagée.
+Mais si tout se passe bien, les consumers resteront dans leur boucle infinie :
+il nous faut un mécanisme d’arrêt des consumers.</p>
+<p>De plus, le break juste après la fin du producer n’est pas très intelligent :
+on arrête le traitement alors qu’il se peut qu’il reste des éléments non traités
+dans la queue.
+Nous devrions attendre que la queue soit vide avant de tout arrêter.</p>
+<h1>Et finalement…</h1>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">import</span> <span class="nn">random</span>
+
+<span class="n">async</span> <span class="k">def</span> <span class="nf">producer</span><span class="p">(</span><span class="n">queue</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+        <span class="n">seconds</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+        <span class="n">await</span> <span class="n">queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">seconds</span><span class="p">)</span>
+
+
+<span class="n">async</span> <span class="k">def</span> <span class="nf">consumer</span><span class="p">(</span><span class="n">queue</span><span class="p">):</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">seconds</span> <span class="o">=</span> <span class="n">await</span> <span class="n">queue</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;waiting {seconds}s...&#39;</span><span class="p">)</span>
+            <span class="n">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">seconds</span><span class="p">)</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;waiting {seconds}s, done&#39;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">CancelledError</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;consumer STOP&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">queue</span><span class="o">.</span><span class="n">task_done</span><span class="p">()</span>
+
+
+<span class="n">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">queue</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Queue</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">producer_</span> <span class="o">=</span> <span class="n">producer</span><span class="p">(</span><span class="n">queue</span><span class="p">)</span>
+    <span class="n">consumers</span> <span class="o">=</span> <span class="p">[</span><span class="n">asyncio</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="n">consumer</span><span class="p">(</span><span class="n">queue</span><span class="p">))</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)]</span>
+    <span class="k">for</span> <span class="n">completed</span> <span class="ow">in</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">as_completed</span><span class="p">([</span><span class="n">producer_</span><span class="p">,</span> <span class="o">*</span><span class="n">consumers</span><span class="p">]):</span>
+        <span class="n">await</span> <span class="n">completed</span>
+        <span class="k">break</span>
+
+    <span class="n">await</span> <span class="n">queue</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">consumers</span><span class="p">:</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">cancel</span><span class="p">()</span>
+
+<span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+</pre></div>
+
+
+<p>Vous aurez noté quelques changements :</p>
+<ul>
+<li>Les consumers ont maintenant une porte de sortie : en cas d’annulation, ils prennent fin.  Cela se fait en traitant spécialement l’erreur <code>CancelledError</code>.</li>
+<li>Nous attendons que la queue soit vide en attendant la coroutine <code>join</code>.</li>
+<li>Nous avons préféré créer des objets <code>Task</code> pour les consumers. En effet une <code>Task</code> est annulable, au contraire d’une coroutine. Le script se termine ainsi proprement.</li>
+</ul>
+<blockquote>
+<p><strong>Note :</strong> les exemples de cet articles sont en python 3.7.
+En python 3.6 il faudra faire quelques ajustements.</p>
+<p><strong>Note 2 :</strong> il n’y a pas de blague salace dans cet article.</p>
+</blockquote>                </article>
+            </aside><!-- /#featured -->
+                <section id="content" class="body">
+                    <h1>Other articles</h1>
+                    <hr />
+                    <ol id="posts-list" class="hfeed">
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="https://www.pythonclassmates.org/ameliorez-votre-front-end-avec-webpack.html" rel="bookmark"
+                           title="Permalink to Django + Webpack : le front-end niveau supérieur">Django + Webpack : le front-end niveau supérieur</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2019-03-28T13:00:00+01:00">
+                Published: Thu 28 March 2019
+        </abbr>
+		<br />
+        <abbr class="modified" title="2019-03-28T13:00:00+01:00">
+                Updated: Thu 28 March 2019
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="https://www.pythonclassmates.org/author/mikael-briolet.html">Mikael Briolet</a>
+        </address>
+<p>In <a href="https://www.pythonclassmates.org/category/articles.html">articles</a>.</p>
+<p>tags: <a href="https://www.pythonclassmates.org/tag/web.html">web</a> <a href="https://www.pythonclassmates.org/tag/front-end.html">front-end</a> </p>
+</footer><!-- /.post-info -->                <p><img alt="webpakc logo" src="https://i0.wp.com/blog.js-republic.com/wp-content/uploads/2018/02/logo-webpack.png?fit=491%2C497"></p>
+<p>Le front-end ne se limite pas à une utilisation basique de HTML, CSS et Javascript. Il existe une infinité de bibliothèques Javascript qui nous facilite la vie, ouvre le champ des possibles.<br>
+Ces bibliothèques Javascript sont aujourd'hui rendues accessibles via le gestionnaire de package <a href="https://www.npmjs.com/"><code>npm</code>, ou "Node Package Manager"</a>.<br>
+Webpack …</p>
+                <a class="readmore" href="https://www.pythonclassmates.org/ameliorez-votre-front-end-avec-webpack.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="https://www.pythonclassmates.org/reutiliser-le-composant-messages-derreurs.html" rel="bookmark"
+                           title="Permalink to Réutiliser le composant messages d'erreurs .">Réutiliser le composant messages d'erreurs .</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2019-01-18T15:25:00+01:00">
+                Published: Fri 18 January 2019
+        </abbr>
+		<br />
+        <abbr class="modified" title="2019-01-17T08:00:00+01:00">
+                Updated: Thu 17 January 2019
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="https://www.pythonclassmates.org/author/aurelia-gourbere.html">Aurélia Gourbère</a>
+        </address>
+<p>In <a href="https://www.pythonclassmates.org/category/articles.html">Articles</a>.</p>
+<p>tags: <a href="https://www.pythonclassmates.org/tag/django.html">Django</a> <a href="https://www.pythonclassmates.org/tag/forms.html">Forms</a> <a href="https://www.pythonclassmates.org/tag/cbv.html">CBV</a> </p>
+</footer><!-- /.post-info -->                <h1>Réutiliser un template d'affichage des messages d'erreurs de formulaire</h1>
+<h2>Contexte</h2>
+<p>Pour éviter la redondance de l'affichage dans un gabarit des messages d'erreur d'un formulaire . Nous pouvons faire un template réutilisable.</p>
+<h2>Template form_errors.html</h2>
+<p>Dans le cas où notre projet a plusieurs apps, nous faisons le choix de le mettre dans …</p>
+                <a class="readmore" href="https://www.pythonclassmates.org/reutiliser-le-composant-messages-derreurs.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="https://www.pythonclassmates.org/supprimer-un-item-a-partir-dun-formulaire-de-selection.html" rel="bookmark"
+                           title="Permalink to Supprimer un item à partir d'un formulaire de sélection.">Supprimer un item à partir d'un formulaire de sélection.</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2019-01-18T10:18:00+01:00">
+                Published: Fri 18 January 2019
+        </abbr>
+		<br />
+        <abbr class="modified" title="2019-01-17T08:00:00+01:00">
+                Updated: Thu 17 January 2019
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="https://www.pythonclassmates.org/author/aurelia-gourbere.html">Aurélia Gourbère</a>
+        </address>
+<p>In <a href="https://www.pythonclassmates.org/category/articles.html">Articles</a>.</p>
+<p>tags: <a href="https://www.pythonclassmates.org/tag/django.html">Django</a> <a href="https://www.pythonclassmates.org/tag/forms.html">Forms</a> <a href="https://www.pythonclassmates.org/tag/cbv.html">CBV</a> </p>
+</footer><!-- /.post-info -->                <h1>Permettre à l'utilisateur de supprimer un de ses items à partir d'un formulaire de sélection.</h1>
+<h2>Contexte</h2>
+<p>Dans ce projet , le musicien peut jouer de plusieurs instruments. Dans le cas où il veuille en supprimer un: il a accès à un formulaire où il peut sélectionner un instrument parmi les siens …</p>
+                <a class="readmore" href="https://www.pythonclassmates.org/supprimer-un-item-a-partir-dun-formulaire-de-selection.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="https://www.pythonclassmates.org/afficher-plusieurs-formulaires-de-maniere-independante-dans-le-meme-gabarit.html" rel="bookmark"
+                           title="Permalink to Afficher plusieurs formulaires de manière indépendante dans le même gabarit">Afficher plusieurs formulaires de manière indépendante dans le même gabarit</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2019-01-18T10:11:00+01:00">
+                Published: Fri 18 January 2019
+        </abbr>
+		<br />
+        <abbr class="modified" title="2019-01-17T08:00:00+01:00">
+                Updated: Thu 17 January 2019
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="https://www.pythonclassmates.org/author/aurelia-gourbere.html">Aurélia Gourbère</a>
+        </address>
+<p>In <a href="https://www.pythonclassmates.org/category/articles.html">Articles</a>.</p>
+<p>tags: <a href="https://www.pythonclassmates.org/tag/django.html">Django</a> <a href="https://www.pythonclassmates.org/tag/cbv.html">CBV</a> </p>
+</footer><!-- /.post-info -->                <h1>Afficher plusieurs formulaires de manière indépendante dans le même gabarit</h1>
+<h2>Problématique</h2>
+<p>Je souhaitais avoir une vue  : update profil qui me permettrait de mettre à jour les différents aspects du profil utilisateur de manière indépendante. Au niveau de l'affichage , je souhaitais que tous ces formulaires (qui me serviraient à changer, créer …</p>
+                <a class="readmore" href="https://www.pythonclassmates.org/afficher-plusieurs-formulaires-de-maniere-independante-dans-le-meme-gabarit.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="https://www.pythonclassmates.org/changer-une-image-davatar-dans-un-profil-utilisateur.html" rel="bookmark"
+                           title="Permalink to Changer une image d'avatar dans un profil utilisateur">Changer une image d'avatar dans un profil utilisateur</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2019-01-18T09:50:00+01:00">
+                Published: Fri 18 January 2019
+        </abbr>
+		<br />
+        <abbr class="modified" title="2019-01-08T08:00:00+01:00">
+                Updated: Tue 08 January 2019
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="https://www.pythonclassmates.org/author/aurelia-gourbere.html">Aurélia Gourbère</a>
+        </address>
+<p>In <a href="https://www.pythonclassmates.org/category/articles.html">Articles</a>.</p>
+<p>tags: <a href="https://www.pythonclassmates.org/tag/django.html">Django</a> <a href="https://www.pythonclassmates.org/tag/pillow.html">Pillow</a> </p>
+</footer><!-- /.post-info -->                <h1>Changer une image d'avatar dans un profil utilisateur</h1>
+<h2>Contraintes de la fonctionnailité:</h2>
+<ul>
+<li>Pouvoir charger une image d'avatar (upload).</li>
+<li>Pouvoir mettre à jour l'avatar (update).</li>
+<li>Redimensionner l'image chargée</li>
+<li>Renommer l'image chargée (date_user_id.jpg)</li>
+<li>Pouvoir envoyer du png comme du jpeg et sortir du jpeg.</li>
+<li>Nettoyer le répertoire de stockage de manière …</li></ul>
+                <a class="readmore" href="https://www.pythonclassmates.org/changer-une-image-davatar-dans-un-profil-utilisateur.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="https://www.pythonclassmates.org/ghi-git-hub-issues.html" rel="bookmark"
+                           title="Permalink to GHI - GitHub Issues">GHI - GitHub Issues</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2018-11-29T21:21:00+01:00">
+                Published: Thu 29 November 2018
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="https://www.pythonclassmates.org/author/freezed.html">Freezed</a>
+        </address>
+<p>In <a href="https://www.pythonclassmates.org/category/articles.html">Articles</a>.</p>
+
+</footer><!-- /.post-info -->                <p><code>ghi</code> : <em>GitHub Issues on the command line. Use your <code>$EDITOR</code>, not your browser.</em></p>
+<p>CLI vs GUI, pour moi le choix est souvent vite fait. Du coup ça fait quelques temps que je gère dès que possible mes <code>issues</code> github en CLI à l'aide de <a href="https://github.com/stephencelis/ghi">ghi</a>, un client dédié aux <code>issues …</code></p>
+                <a class="readmore" href="https://www.pythonclassmates.org/ghi-git-hub-issues.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="https://www.pythonclassmates.org/les-mocks-avec-unittest.html" rel="bookmark"
+                           title="Permalink to Les mocks avec unittest">Les mocks avec unittest</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2018-07-14T14:00:00+02:00">
+                Published: Sat 14 July 2018
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="https://www.pythonclassmates.org/author/julien-nuellas.html">Julien Nuellas</a>
+        </address>
+<p>In <a href="https://www.pythonclassmates.org/category/articles.html">Articles</a>.</p>
+<p>tags: <a href="https://www.pythonclassmates.org/tag/python.html">python</a> <a href="https://www.pythonclassmates.org/tag/unittest.html">unittest</a> </p>
+</footer><!-- /.post-info -->                <p>Malgré les blagues et les débats que l'on peut lire concernant les tests unitaires (si vous ne les avez pas encore vu, voici quelques <a href="https://twitter.com/thepracticaldev/status/687672086152753152">exemples</a> qui donne le <a href="https://twitter.com/MonkeyTestIt/status/958661917375172609">sourire</a>), les test unitaires sont largement utilisés et s'intègrent directement dans l'approche <a href="https://fr.wikipedia.org/wiki/Test_driven_development">TDD</a>.</p>
+<p>Les test unitaires servent donc à tester un bout …</p>
+                <a class="readmore" href="https://www.pythonclassmates.org/les-mocks-avec-unittest.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+                </ol><!-- /#posts-list -->
+                </section><!-- /#content -->
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="https://www.pythonclassmates.org/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

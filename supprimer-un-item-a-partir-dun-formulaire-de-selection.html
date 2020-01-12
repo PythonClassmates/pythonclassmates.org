@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+        <meta charset="utf-8" />
+        <title>Supprimer un item à partir d'un formulaire de sélection.</title>
+        <link rel="stylesheet" href="https://www.pythonclassmates.org/theme/css/main.css" />
+        <link href="https://www.pythonclassmates.org/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Python I/O Atom Feed" />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="https://www.pythonclassmates.org/">Python I/O <strong>Articles et news par des Pythonistas passionnés</strong></a></h1>
+                <nav><ul>
+                    <li><a href="/category/news.html">News</a></li>
+                    <li><a href="/category/articles.html">Articles</a></li>
+                    <li><a href="/category/tutoriels.html">Tutoriels</a></li>
+                    <li><a href="/categories.html">Catégories</a></li>
+                    <li><a href="/tags.html">Tags</a></li>
+                    <li><a href="https://www.pythonclassmates.org/category/article.html">Article</a></li>
+                    <li class="active"><a href="https://www.pythonclassmates.org/category/articles.html">Articles</a></li>
+                    <li><a href="https://www.pythonclassmates.org/category/news.html">News</a></li>
+                    <li><a href="https://www.pythonclassmates.org/category/tutoriels.html">Tutoriels</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="https://www.pythonclassmates.org/supprimer-un-item-a-partir-dun-formulaire-de-selection.html" rel="bookmark"
+           title="Permalink to Supprimer un item à partir d'un formulaire de sélection.">Supprimer un item à partir d'un formulaire de sélection.</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2019-01-18T10:18:00+01:00">
+                Published: Fri 18 January 2019
+        </abbr>
+		<br />
+        <abbr class="modified" title="2019-01-17T08:00:00+01:00">
+                Updated: Thu 17 January 2019
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="https://www.pythonclassmates.org/author/aurelia-gourbere.html">Aurélia Gourbère</a>
+        </address>
+<p>In <a href="https://www.pythonclassmates.org/category/articles.html">Articles</a>.</p>
+<p>tags: <a href="https://www.pythonclassmates.org/tag/django.html">Django</a> <a href="https://www.pythonclassmates.org/tag/forms.html">Forms</a> <a href="https://www.pythonclassmates.org/tag/cbv.html">CBV</a> </p>
+</footer><!-- /.post-info -->      <h1>Permettre à l'utilisateur de supprimer un de ses items à partir d'un formulaire de sélection.</h1>
+<h2>Contexte</h2>
+<p>Dans ce projet , le musicien peut jouer de plusieurs instruments. Dans le cas où il veuille en supprimer un: il a accès à un formulaire où il peut sélectionner un instrument parmi les siens.</p>
+<h2>Contraintes</h2>
+<p>Dans ce cas précis nous ne pouvions pas utiliser de DeleteView car le choix porte sur un queryset contenant plusieurs items. </p>
+<h2>Solution</h2>
+<p>Créer une vue générique Formview qui renvoi un formulaire pré rempli avec un queryset comportant tous les instruments du musiciens.</p>
+<p>De la même manière que le document précédant ce formulaire est présent dans une vue qui fera le GET et dans une autre chargée du POST car nous affichons plusieurs formulaires sur le même gabarit. <a href="https://github.com/horlas/How_to/blob/master/Plusieurs%20formulaires%20dans%20une%20vue.md">cf ce document</a> .</p>
+<p>Lors du post du formulaire, nous supprimons l'instrument sélectionné transmis par l'utilisateur.</p>
+<p>models.py</p>
+<div class="highlight"><pre><span></span><span class="nv">class</span> <span class="nv">Instrument</span><span class="ss">(</span><span class="nv">models</span>.<span class="nv">Model</span><span class="ss">)</span>:
+    <span class="s1">&#39;&#39;&#39;</span><span class="s"> Musicians Instruments</span><span class="s1">&#39;&#39;&#39;</span>
+    <span class="nv">instrument</span> <span class="o">=</span> <span class="nv">models</span>.<span class="nv">CharField</span><span class="ss">(</span><span class="s1">&#39;</span><span class="s">instrument</span><span class="s1">&#39;</span>, <span class="nv">max_length</span><span class="o">=</span><span class="mi">80</span>, <span class="nv">choices</span><span class="o">=</span><span class="nv">INSTRUMENT_CHOICE</span>,                                           <span class="nv">blank</span><span class="o">=</span><span class="nv">False</span><span class="ss">)</span>
+    <span class="nv">level</span> <span class="o">=</span> <span class="nv">models</span>.<span class="nv">CharField</span><span class="ss">(</span><span class="s1">&#39;</span><span class="s">niveau de maitrise</span><span class="s1">&#39;</span>, <span class="nv">max_length</span><span class="o">=</span><span class="mi">80</span>, <span class="nv">choices</span><span class="o">=</span><span class="nv">LEVEL_CHOICE</span>,                                         <span class="nv">blank</span><span class="o">=</span><span class="nv">False</span><span class="ss">)</span>
+    <span class="nv">musician</span> <span class="o">=</span> <span class="nv">models</span>.<span class="nv">ForeignKey</span><span class="ss">(</span><span class="nv">User</span>, <span class="nv">on_delete</span><span class="o">=</span><span class="nv">models</span>.<span class="nv">CASCADE</span><span class="ss">)</span>
+
+    <span class="nv">def</span> <span class="nv">__str__</span><span class="ss">(</span><span class="nv">self</span><span class="ss">)</span>:
+        <span class="k">return</span> <span class="nv">self</span>.<span class="nv">instrument</span>
+</pre></div>
+
+
+<p>forms.py</p>
+<div class="highlight"><pre><span></span><span class="n">class</span> <span class="nf">InstruDeleteForm</span><span class="p">(</span><span class="n">Form</span><span class="p">):</span>
+
+    <span class="c1"># here we use a dummy `queryset`, because ModelChoiceField</span>
+    <span class="c1"># requires some queryset</span>
+    <span class="n">instrument</span> <span class="o">=</span> <span class="nf">ModelChoiceField</span><span class="p">(</span><span class="n">queryset</span><span class="o">=</span><span class="n">Instrument</span><span class="p">.</span><span class="n">objects</span><span class="p">.</span><span class="nf">none</span><span class="p">(),</span> <span class="n">empty_label</span><span class="o">=</span><span class="n">None</span><span class="p">)</span>
+
+    <span class="n">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nf">super</span><span class="p">(</span><span class="n">InstruDeleteForm</span><span class="p">,</span> <span class="n">self</span><span class="p">).</span><span class="nf">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;instrument&#39;</span><span class="p">].</span><span class="n">queryset</span> <span class="o">=</span> <span class="n">Instrument</span><span class="p">.</span><span class="n">objects</span><span class="p">.</span><span class="nf">filter</span><span class="p">(</span><span class="n">musician</span><span class="o">=</span><span class="n">user</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Ici nous passons au constructeur du formulaire <code>user</code>, ce qui nous permettra par la suite de "peupler" le formulaire avec les données de l'utilisateur connecté (request.user)</p>
+<p>Vue en charge du GET</p>
+<p>views.py</p>
+<div class="highlight"><pre><span></span><span class="nv">class</span> <span class="nv">UpdateProfilView</span><span class="ss">(</span><span class="nv">TemplateView</span><span class="ss">)</span>:
+
+    <span class="nv">template_name</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="s">musicians/update_profile.html</span><span class="s1">&#39;</span>
+
+    @<span class="nv">method_decorator</span><span class="ss">(</span><span class="nv">login_required</span><span class="ss">)</span>
+    <span class="nv">def</span> <span class="nv">get</span><span class="ss">(</span><span class="nv">self</span>, <span class="nv">request</span>, <span class="o">*</span><span class="nv">args</span>, <span class="o">**</span><span class="nv">kwargs</span><span class="ss">)</span>:
+        <span class="nv">del_instru_form</span> <span class="o">=</span> <span class="nv">InstruDeleteForm</span><span class="ss">(</span><span class="nv">request</span>.<span class="nv">user</span><span class="ss">)</span>
+        <span class="nv">context</span> <span class="o">=</span> <span class="nv">self</span>.<span class="nv">get_context_data</span><span class="ss">(</span><span class="o">**</span><span class="nv">kwargs</span><span class="ss">)</span>
+        <span class="nv">context</span>[<span class="s1">&#39;</span><span class="s">del_instru_form</span><span class="s1">&#39;</span>] <span class="o">=</span> <span class="nv">del_instru_form</span>
+        <span class="k">return</span> <span class="nv">self</span>.<span class="nv">render_to_response</span><span class="ss">(</span><span class="nv">context</span><span class="ss">)</span>
+</pre></div>
+
+
+<p>Comme on peut le voir ici request.user est passé en argument du formulaire InstruDeleteForm.</p>
+<p>Vue en charge du POST</p>
+<div class="highlight"><pre><span></span><span class="nv">class</span> <span class="nv">InstruDeleteView</span><span class="ss">(</span><span class="nv">FormView</span>, <span class="nv">SuccessMessageMixin</span><span class="ss">)</span>:
+    <span class="s1">&#39;&#39;&#39;</span><span class="s">View to delete instrument based on a Formwview because with deleteview</span>
+    <span class="nv">we</span> <span class="nv">can</span> <span class="nv">not</span> <span class="nv">have</span> <span class="nv">the</span> <span class="nv">select</span> <span class="nv">option</span>. <span class="nv">So</span> <span class="nv">we</span> <span class="nv">use</span> <span class="nv">a</span> <span class="nv">custom</span> <span class="nv">form</span>
+    <span class="nv">witch</span> <span class="nv">display</span> <span class="nv">a</span> <span class="nv">queryset</span> : <span class="nv">request</span>. <span class="nv">user</span> <span class="nv">instrument</span><span class="s1">&#39;&#39;&#39;</span>
+
+    <span class="nv">template_name</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="s">musicians/update_profile.html</span><span class="s1">&#39;</span>
+    <span class="nv">success_url</span> <span class="o">=</span> <span class="nv">reverse_lazy</span><span class="ss">(</span><span class="s1">&#39;</span><span class="s">musicians:update_profile</span><span class="s1">&#39;</span><span class="ss">)</span>
+    <span class="nv">success_message</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="s">Votre Instrument a été supprimé ! </span><span class="s2">&quot;</span>
+
+    @<span class="nv">method_decorator</span><span class="ss">(</span><span class="nv">login_required</span><span class="ss">)</span>
+    @<span class="nv">transaction</span>.<span class="nv">atomic</span>
+    <span class="nv">def</span> <span class="nv">post</span><span class="ss">(</span><span class="nv">self</span>, <span class="nv">request</span>, <span class="o">*</span><span class="nv">args</span>, <span class="o">**</span><span class="nv">kwargs</span><span class="ss">)</span>:
+        <span class="nv">del_instru_form</span> <span class="o">=</span> <span class="nv">InstruDeleteForm</span><span class="ss">(</span><span class="nv">request</span>.<span class="nv">user</span>, <span class="nv">request</span>.<span class="nv">POST</span><span class="ss">)</span>
+        # <span class="nv">get</span> <span class="nv">instrument</span> <span class="nv">id</span> <span class="nv">user</span> <span class="nv">wants</span> <span class="nv">to</span> <span class="nv">delete</span>
+        <span class="nv">delete_id</span> <span class="o">=</span> <span class="nv">request</span>.<span class="nv">POST</span>[<span class="s1">&#39;</span><span class="s">instrument</span><span class="s1">&#39;</span>]
+        <span class="k">if</span> <span class="nv">del_instru_form</span>.<span class="nv">is_valid</span><span class="ss">()</span>:
+            <span class="nv">delete_instrument</span> <span class="o">=</span> <span class="nv">Instrument</span>.<span class="nv">objects</span>.<span class="nv">get</span><span class="ss">(</span><span class="nv">id</span><span class="o">=</span><span class="nv">delete_id</span><span class="ss">)</span>
+            <span class="nv">delete_instrument</span>.<span class="nv">delete</span><span class="ss">()</span>
+            <span class="k">return</span> <span class="nv">redirect</span><span class="ss">(</span><span class="nv">self</span>.<span class="nv">success_url</span><span class="ss">)</span>
+</pre></div>
+
+
+<p>Ici on récupère la valeur du choix de l'utilisateur par <code>delete_id = request.POST['instrument']</code> , ce qui nous permet de supprimer l'entrée directement dans la base.</p>
+<p>urls.py</p>
+<div class="highlight"><pre><span></span><span class="n">app_name</span> <span class="o">=</span> <span class="s1">&#39;musicians&#39;</span>
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+
+    <span class="n">path</span><span class="p">(</span><span class="s1">&#39;profile/&#39;</span><span class="p">,</span> <span class="n">views</span><span class="p">.</span><span class="n">profile</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;profile&#39;</span><span class="p">),</span>
+    <span class="n">path</span><span class="p">(</span><span class="s1">&#39;update_profile/&#39;</span><span class="p">,</span> <span class="n">views</span><span class="p">.</span><span class="n">UpdateProfilView</span><span class="p">.</span><span class="n">as_view</span><span class="p">(),</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;update_profile&#39;</span><span class="p">),</span>
+    <span class="p">...</span>     
+    <span class="n">path</span><span class="p">(</span><span class="s1">&#39;add_instru/submit&#39;</span><span class="p">,</span> <span class="n">views</span><span class="p">.</span><span class="n">InstruCreateView</span><span class="p">.</span><span class="n">as_view</span><span class="p">(),</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;add_instru&#39;</span><span class="p">),</span>
+    <span class="n">path</span><span class="p">(</span><span class="s1">&#39;delete_instru/submit&#39;</span><span class="p">,</span> <span class="n">views</span><span class="p">.</span><span class="n">InstruDeleteView</span><span class="p">.</span><span class="n">as_view</span><span class="p">(),</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;del_instru&#39;</span><span class="p">),</span>
+
+
+<span class="p">]</span>
+</pre></div>
+
+
+<p>update_profile.html</p>
+<div class="highlight"><pre><span></span> <span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">&#39;</span><span class="cp">{%</span> <span class="k">url</span> <span class="s2">&quot;musicians:del_instru&quot;</span> <span class="cp">%}</span><span class="s">&#39;</span> <span class="na">method=</span><span class="s">&quot;post&quot;</span><span class="nt">&gt;</span>
+      <span class="cp">{%</span> <span class="k">csrf_token</span> <span class="cp">%}</span>
+      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;row valign-wrapper&quot;</span><span class="nt">&gt;</span>
+         <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col s6&quot;</span><span class="nt">&gt;</span>
+            <span class="cp">{{</span> <span class="nv">del_instru_form.as_p</span> <span class="cp">}}</span>
+         <span class="nt">&lt;/div&gt;</span>
+         <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col s6 center-align &quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;button</span>  <span class="na">class=</span><span class="s">&quot;btn-floating btn-small waves-effect waves-light&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;i</span> <span class="na">class=</span><span class="s">&quot;material-icons&quot;</span><span class="nt">&gt;</span>delete<span class="nt">&lt;/i&gt;</span>  <span class="nt">&lt;/button&gt;</span>
+         <span class="nt">&lt;/div&gt;</span>
+      <span class="nt">&lt;/div&gt;</span>
+   <span class="nt">&lt;/form&gt;</span>
+</pre></div>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="https://www.pythonclassmates.org/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

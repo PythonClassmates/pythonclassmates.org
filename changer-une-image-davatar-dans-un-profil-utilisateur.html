@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+        <meta charset="utf-8" />
+        <title>Changer une image d'avatar dans un profil utilisateur</title>
+        <link rel="stylesheet" href="https://www.pythonclassmates.org/theme/css/main.css" />
+        <link href="https://www.pythonclassmates.org/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Python I/O Atom Feed" />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="https://www.pythonclassmates.org/">Python I/O <strong>Articles et news par des Pythonistas passionnés</strong></a></h1>
+                <nav><ul>
+                    <li><a href="/category/news.html">News</a></li>
+                    <li><a href="/category/articles.html">Articles</a></li>
+                    <li><a href="/category/tutoriels.html">Tutoriels</a></li>
+                    <li><a href="/categories.html">Catégories</a></li>
+                    <li><a href="/tags.html">Tags</a></li>
+                    <li><a href="https://www.pythonclassmates.org/category/article.html">Article</a></li>
+                    <li class="active"><a href="https://www.pythonclassmates.org/category/articles.html">Articles</a></li>
+                    <li><a href="https://www.pythonclassmates.org/category/news.html">News</a></li>
+                    <li><a href="https://www.pythonclassmates.org/category/tutoriels.html">Tutoriels</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="https://www.pythonclassmates.org/changer-une-image-davatar-dans-un-profil-utilisateur.html" rel="bookmark"
+           title="Permalink to Changer une image d'avatar dans un profil utilisateur">Changer une image d'avatar dans un profil utilisateur</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2019-01-18T09:50:00+01:00">
+                Published: Fri 18 January 2019
+        </abbr>
+		<br />
+        <abbr class="modified" title="2019-01-08T08:00:00+01:00">
+                Updated: Tue 08 January 2019
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="https://www.pythonclassmates.org/author/aurelia-gourbere.html">Aurélia Gourbère</a>
+        </address>
+<p>In <a href="https://www.pythonclassmates.org/category/articles.html">Articles</a>.</p>
+<p>tags: <a href="https://www.pythonclassmates.org/tag/django.html">Django</a> <a href="https://www.pythonclassmates.org/tag/pillow.html">Pillow</a> </p>
+</footer><!-- /.post-info -->      <h1>Changer une image d'avatar dans un profil utilisateur</h1>
+<h2>Contraintes de la fonctionnailité:</h2>
+<ul>
+<li>Pouvoir charger une image d'avatar (upload).</li>
+<li>Pouvoir mettre à jour l'avatar (update).</li>
+<li>Redimensionner l'image chargée</li>
+<li>Renommer l'image chargée (date_user_id.jpg)</li>
+<li>Pouvoir envoyer du png comme du jpeg et sortir du jpeg.</li>
+<li>Nettoyer le répertoire de stockage de manière à ce que seule l'image de l'avatar courant soit en stock.</li>
+</ul>
+<h2>Librairies utilisées</h2>
+<p><code>django-model-utils</code> Fieldtracker <a href="https://django-model-utils.readthedocs.io/en/latest/utilities.html"> Doc</a></p>
+<p><code>Pillow</code> <a href="https://pillow.readthedocs.io/en/stable/">Doc</a></p>
+<h2>Surcharge de la méthode save() du Model Userprofile</h2>
+<p><code>models.py</code> </p>
+<p>Dépendances et bibliothèques</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">model_utils</span> <span class="kn">import</span> <span class="n">FieldTracker</span>
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">date</span>
+<span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">BytesIO</span>
+<span class="kn">from</span> <span class="nn">django.core.files.uploadedfile</span> <span class="kn">import</span> <span class="n">InMemoryUploadedFile</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
+</pre></div>
+
+
+<p>Model Userprofile</p>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="n">UserProfile</span>(<span class="n">models</span>.<span class="n">Model</span>):
+    <span class="s">&#39;&#39;&#39;</span>
+<span class="s">    Custom User Profile</span>
+<span class="s">    &#39;&#39;&#39;</span>
+
+    <span class="n">GENDER_CHOICES</span> = (
+        (<span class="s">&#39;H&#39;</span>, <span class="s">&#39;Homme&#39;</span>),
+        (<span class="s">&#39;F&#39;</span>, <span class="s">&#39;Femme&#39;</span>),
+    )
+
+    <span class="n">user</span> = <span class="n">models</span>.<span class="n">OneToOneField</span>(<span class="n">User</span>, <span class="n">on_delete</span>=<span class="n">models</span>.<span class="n">CASCADE</span>)
+    <span class="n">username</span> = <span class="n">models</span>.<span class="n">CharField</span>(<span class="n">max_length</span>=<span class="mi">60</span>, <span class="n">blank</span>=<span class="nb">True</span>)
+    <span class="n">bio</span> = <span class="n">models</span>.<span class="n">TextField</span>(<span class="n">max_length</span>=<span class="mi">500</span>, <span class="n">blank</span>=<span class="nb">True</span>)
+    <span class="n">dept</span> = <span class="n">models</span>.<span class="n">CharField</span>(<span class="n">max_length</span>=<span class="mi">5</span>, <span class="n">blank</span>=<span class="nb">True</span>)
+    <span class="n">town</span> = <span class="n">models</span>.<span class="n">CharField</span>(<span class="n">max_length</span>=<span class="mi">60</span>, <span class="n">blank</span>=<span class="nb">True</span>)
+    <span class="n">birth_year</span> = <span class="n">YearField</span>(<span class="n">null</span>=<span class="nb">True</span>, <span class="n">blank</span>=<span class="nb">True</span>)
+    <span class="n">avatar</span> = <span class="n">models</span>.<span class="n">ImageField</span>(<span class="n">null</span>=<span class="nb">True</span>, <span class="n">blank</span>=<span class="nb">True</span>, <span class="n">upload_to</span>=<span class="s">&#39;user_avatar/&#39;</span>)
+    <span class="n">gender</span> = <span class="n">models</span>.<span class="n">CharField</span>(<span class="s">&#39;gender&#39;</span> , <span class="n">max_length</span>=<span class="mi">1</span> , <span class="n">choices</span>=<span class="n">GENDER_CHOICES</span>)
+    <span class="n">created_at</span> = <span class="n">models</span>.<span class="n">DateTimeField</span>(<span class="n">auto_now_add</span>=<span class="nb">True</span>)
+    <span class="n">updated_at</span> = <span class="n">models</span>.<span class="n">DateTimeField</span>(<span class="n">auto_now</span>=<span class="nb">True</span>)
+
+    <span class="c1"># Here we instantiate a Fieltracker to track any fields specially avatar field</span>
+    <span class="n">tracker</span> = <span class="n">FieldTracker</span>()
+</pre></div>
+
+
+<div class="highlight"><pre><span></span>    <span class="nv">def</span> <span class="nv">save</span><span class="ss">(</span><span class="nv">self</span>, <span class="o">*</span><span class="nv">args</span>, <span class="o">**</span><span class="nv">kwargs</span><span class="ss">)</span>:
+        <span class="nv">super</span><span class="ss">()</span>.<span class="nv">save</span><span class="ss">()</span>
+
+        # <span class="nv">we</span> <span class="nv">get</span> <span class="nv">here</span> <span class="nv">the</span> <span class="nv">self</span> <span class="nv">avatar</span> <span class="nv">condition</span>
+        # <span class="nv">in</span> <span class="nv">case</span> <span class="nv">of</span> <span class="nv">there</span> <span class="nv">is</span> <span class="nv">no</span> <span class="nv">self</span>.<span class="nv">avatar</span> <span class="nv">as</span> <span class="nv">example</span>
+        # <span class="nv">after</span> <span class="nv">a</span> <span class="nv">clear</span> <span class="nv">action</span>.
+        <span class="k">if</span> <span class="nv">self</span>.<span class="nv">avatar</span> <span class="nv">and</span> <span class="nv">self</span>.<span class="nv">tracker</span>.<span class="nv">has_changed</span><span class="ss">(</span><span class="s1">&#39;</span><span class="s">avatar</span><span class="s1">&#39;</span><span class="ss">)</span>:
+
+            # <span class="nv">keep</span> <span class="nv">the</span> <span class="nv">upload</span> <span class="nv">image</span> <span class="nv">path</span> <span class="nv">in</span> <span class="nv">order</span> <span class="nv">to</span> <span class="nv">delete</span> <span class="nv">it</span> <span class="nv">after</span>
+            <span class="nv">upload_image</span> <span class="o">=</span> <span class="nv">self</span>.<span class="nv">avatar</span>.<span class="nv">path</span>
+
+            # <span class="nv">rename</span> <span class="nv">avatar</span> <span class="nv">image</span>
+            <span class="nv">avatar_name</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="s">{}-{}.jpg</span><span class="s1">&#39;</span>.<span class="nv">format</span><span class="ss">(</span><span class="nv">date</span>.<span class="nv">today</span><span class="ss">()</span>, <span class="nv">self</span>.<span class="nv">user</span>.<span class="nv">id</span><span class="ss">)</span>
+
+            <span class="nv">img</span> <span class="o">=</span> <span class="nv">Image</span>.<span class="nv">open</span><span class="ss">(</span><span class="nv">upload_image</span><span class="ss">)</span>
+
+            # <span class="nv">convert</span> <span class="nv">all</span> <span class="nv">picture</span> <span class="nv">to</span> <span class="nv">jpg</span>
+            <span class="nv">img</span> <span class="o">=</span> <span class="nv">img</span>.<span class="nv">convert</span><span class="ss">(</span><span class="s1">&#39;</span><span class="s">RGB</span><span class="s1">&#39;</span><span class="ss">)</span>
+
+            # <span class="nv">resize</span> <span class="nv">picture</span>
+            <span class="nv">img</span> <span class="o">=</span> <span class="nv">img</span>.<span class="nv">resize</span><span class="ss">((</span><span class="mi">140</span>, <span class="mi">140</span><span class="ss">)</span>, <span class="nv">Image</span>.<span class="nv">ANTIALIAS</span><span class="ss">)</span>
+
+            # <span class="nv">make</span> <span class="nv">readable</span> <span class="nv">picture</span>
+            <span class="nv">output</span> <span class="o">=</span> <span class="nv">BytesIO</span><span class="ss">()</span>
+            <span class="nv">img</span>.<span class="nv">save</span><span class="ss">(</span><span class="nv">output</span>, <span class="nv">format</span><span class="o">=</span><span class="s1">&#39;</span><span class="s">JPEG</span><span class="s1">&#39;</span>, <span class="nv">quality</span><span class="o">=</span><span class="mi">100</span><span class="ss">)</span>
+            <span class="nv">output</span>.<span class="nv">seek</span><span class="ss">(</span><span class="mi">0</span><span class="ss">)</span>
+            <span class="nv">self</span>.<span class="nv">avatar</span> <span class="o">=</span> <span class="nv">InMemoryUploadedFile</span><span class="ss">(</span><span class="nv">output</span>,
+                                              <span class="s1">&#39;</span><span class="s">ImageField</span><span class="s1">&#39;</span>,
+                                              <span class="nv">avatar_name</span>,
+                                              <span class="s1">&#39;</span><span class="s">image/jpeg</span><span class="s1">&#39;</span>,
+                                              <span class="nv">sys</span>.<span class="nv">getsizeof</span><span class="ss">(</span><span class="nv">output</span><span class="ss">)</span>,
+                                              <span class="nv">None</span><span class="ss">)</span>
+
+            <span class="nv">super</span><span class="ss">(</span><span class="nv">UserProfile</span>, <span class="nv">self</span><span class="ss">)</span>.<span class="nv">save</span><span class="ss">()</span>
+
+            # <span class="nv">delete</span> <span class="nv">the</span> <span class="nv">upload</span> <span class="nv">of</span> <span class="nv">avatar</span> <span class="nv">before</span> <span class="nv">resize</span> <span class="nv">it</span>
+            <span class="nv">os</span>.<span class="nv">remove</span><span class="ss">(</span><span class="nv">upload_image</span><span class="ss">)</span>
+
+            # <span class="nv">delete</span> <span class="nv">old</span> <span class="nv">image</span> <span class="nv">file</span>
+            <span class="k">if</span> <span class="nv">self</span>.<span class="nv">tracker</span>.<span class="nv">previous</span><span class="ss">(</span><span class="s1">&#39;</span><span class="s">avatar</span><span class="s1">&#39;</span><span class="ss">)</span>:
+                <span class="nv">old_avatar</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="s">{}{}</span><span class="s1">&#39;</span>.<span class="nv">format</span><span class="ss">(</span><span class="nv">settings</span>.<span class="nv">MEDIA_ROOT</span>, <span class="nv">self</span>.<span class="nv">tracker</span>.<span class="nv">previous</span><span class="ss">(</span><span class="s1">&#39;</span><span class="s">avatar</span><span class="s1">&#39;</span><span class="ss">))</span>
+                <span class="nv">os</span>.<span class="nv">remove</span><span class="ss">(</span><span class="nv">old_avatar</span><span class="ss">)</span>
+
+        # <span class="nv">delete</span> <span class="nv">old</span> <span class="nv">image</span> <span class="nv">file</span> <span class="nv">even</span> <span class="nv">in</span> <span class="nv">case</span> <span class="nv">of</span> <span class="s2">&quot;</span><span class="s">clear</span><span class="s2">&quot;</span> <span class="nv">image</span> <span class="nv">action</span>
+        <span class="k">if</span> <span class="nv">not</span> <span class="nv">self</span>.<span class="nv">avatar</span> <span class="nv">and</span> <span class="nv">self</span>.<span class="nv">tracker</span>.<span class="nv">has_changed</span><span class="ss">(</span><span class="s1">&#39;</span><span class="s">avatar</span><span class="s1">&#39;</span><span class="ss">)</span>:
+            <span class="nv">old_avatar</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="s">{}{}</span><span class="s1">&#39;</span>.<span class="nv">format</span><span class="ss">(</span><span class="nv">settings</span>.<span class="nv">MEDIA_ROOT</span> , <span class="nv">self</span>.<span class="nv">tracker</span>.<span class="nv">previous</span><span class="ss">(</span><span class="s1">&#39;</span><span class="s">avatar</span><span class="s1">&#39;</span><span class="ss">))</span>
+            <span class="nv">os</span>.<span class="nv">remove</span><span class="ss">(</span><span class="nv">old_avatar</span><span class="ss">)</span>
+</pre></div>
+
+
+<p>views.py</p>
+<div class="highlight"><pre><span></span>@<span class="nv">login_required</span>
+@<span class="nv">transaction</span>.<span class="nv">atomic</span>
+<span class="nv">def</span> <span class="nv">update_profile</span><span class="ss">(</span><span class="nv">request</span><span class="ss">)</span>:
+
+    <span class="k">if</span> <span class="nv">request</span>.<span class="nv">method</span> <span class="o">==</span> <span class="s1">&#39;</span><span class="s">POST</span><span class="s1">&#39;</span>:
+
+        <span class="nv">profile_form</span> <span class="o">=</span> <span class="nv">ProfileForm</span><span class="ss">(</span><span class="nv">request</span>.<span class="nv">POST</span>,
+                                   <span class="nv">request</span>.<span class="nv">FILES</span>,
+                                   <span class="nv">instance</span><span class="o">=</span><span class="nv">request</span>.<span class="nv">user</span>.<span class="nv">userprofile</span><span class="ss">)</span>
+
+        <span class="k">if</span> <span class="nv">profile_form</span>.<span class="nv">is_valid</span><span class="ss">()</span>:
+            <span class="nv">profile_form</span>.<span class="nv">save</span><span class="ss">()</span>
+            <span class="nv">messages</span>.<span class="nv">success</span><span class="ss">(</span><span class="nv">request</span> , <span class="nv">_</span><span class="ss">(</span><span class="s1">&#39;</span><span class="s">Your profile was successfully updated!</span><span class="s1">&#39;</span><span class="ss">))</span>
+            <span class="k">return</span> <span class="nv">redirect</span><span class="ss">(</span><span class="s1">&#39;</span><span class="s">musicians:profile</span><span class="s1">&#39;</span><span class="ss">)</span>
+        <span class="k">else</span>:
+            <span class="nv">messages</span>.<span class="nv">error</span><span class="ss">(</span><span class="nv">request</span> , <span class="nv">_</span><span class="ss">(</span><span class="s1">&#39;</span><span class="s">Please correct the error below.</span><span class="s1">&#39;</span><span class="ss">))</span>
+    #
+    <span class="k">else</span>:
+        <span class="nv">profile_form</span> <span class="o">=</span> <span class="nv">ProfileForm</span><span class="ss">(</span><span class="nv">instance</span><span class="o">=</span><span class="nv">request</span>.<span class="nv">user</span>.<span class="nv">userprofile</span><span class="ss">)</span>
+
+    <span class="k">return</span> <span class="nv">render</span><span class="ss">(</span><span class="nv">request</span> , <span class="s1">&#39;</span><span class="s">musicians/update_profile.html</span><span class="s1">&#39;</span>, {
+
+        <span class="s1">&#39;</span><span class="s">profile_form</span><span class="s1">&#39;</span>: <span class="nv">profile_form</span>
+    }<span class="ss">)</span>
+</pre></div>
+
+
+<p>Template : l'aspect frontend n'est absolument pas mis en valeur, mais le code fonctionne.</p>
+<p><code>update_profile.html</code></p>
+<div class="highlight"><pre><span></span><span class="cp">{%</span> <span class="k">extends</span> <span class="s1">&#39;core/base.html&#39;</span> <span class="cp">%}</span>
+<span class="cp">{%</span> <span class="k">load</span> <span class="nv">static</span> <span class="cp">%}</span>
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}</span>
+
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;container&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;row&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col s12  &quot;</span><span class="nt">&gt;</span>
+
+<span class="nt">&lt;form</span> <span class="na">method=</span><span class="s">&quot;post&quot;</span> <span class="na">enctype=</span><span class="s">&quot;multipart/form-data&quot;</span><span class="nt">&gt;</span>
+  <span class="cp">{%</span> <span class="k">csrf_token</span> <span class="cp">%}</span>
+  <span class="cp">{{</span> <span class="nv">profile_form.as_p</span> <span class="cp">}}</span>
+  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;submit&quot;</span> <span class="na">value=</span><span class="s">&quot;Save&quot;</span><span class="nt">&gt;</span>
+
+<span class="nt">&lt;/form&gt;</span>
+
+ <span class="nt">&lt;/div&gt;</span>
+ <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+
+
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</pre></div>
+
+
+<p><code>profile.html</code></p>
+<div class="highlight"><pre><span></span><span class="cp">{%</span> <span class="k">extends</span> <span class="s1">&#39;core/base.html&#39;</span> <span class="cp">%}</span>
+<span class="cp">{%</span> <span class="k">load</span> <span class="nv">static</span> <span class="cp">%}</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}</span>
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;container&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;row&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col s12  &quot;</span><span class="nt">&gt;</span>
+
+<span class="nt">&lt;h2&gt;</span>Profil de <span class="cp">{{</span><span class="nv">user.userprofile.username</span><span class="cp">}}</span><span class="nt">&lt;/h2&gt;</span>
+<span class="nt">&lt;h2&gt;</span>email :<span class="cp">{{</span><span class="nv">user.email</span><span class="cp">}}</span><span class="nt">&lt;/h2&gt;</span>
+<span class="nt">&lt;h4&gt;</span>Bio : <span class="cp">{{</span><span class="nv">user.userprofile.bio</span><span class="cp">}}</span><span class="nt">&lt;/h4&gt;</span>
+ <span class="cp">{%</span> <span class="k">if</span> <span class="nv">user.userprofile.avatar</span> <span class="cp">%}</span>
+  <span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">user.userprofile.avatar.url</span> <span class="cp">}}</span><span class="s">&quot;</span> <span class="nt">/&gt;</span>
+ <span class="cp">{%</span> <span class="k">else</span> <span class="cp">%}</span>
+     <span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">&quot;</span><span class="cp">{%</span> <span class="k">static</span> <span class="s1">&#39;core/img/0.jpg&#39;</span> <span class="cp">%}</span><span class="s">&quot;</span> <span class="nt">/&gt;</span>
+ <span class="cp">{%</span> <span class="k">endif</span> <span class="cp">%}</span>
+
+
+<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;</span><span class="cp">{%</span> <span class="k">url</span> <span class="s1">&#39;musicians:update_profile&#39;</span> <span class="cp">%}</span><span class="s">&quot;</span> <span class="na">class=</span><span class="s">&quot;waves-effect waves-light btn&quot;</span><span class="nt">&gt;</span>button<span class="nt">&lt;/a&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+        <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</pre></div>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="https://www.pythonclassmates.org/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

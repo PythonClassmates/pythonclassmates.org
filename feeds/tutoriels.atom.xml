@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Python I/O - Tutoriels</title><link href="https://www.pythonclassmates.org/" rel="alternate"></link><link href="https://www.pythonclassmates.org/feeds/tutoriels.atom.xml" rel="self"></link><id>https://www.pythonclassmates.org/</id><updated>2019-01-31T16:00:00+01:00</updated><subtitle>Articles et news par des Pythonistas passionnés</subtitle><entry><title>Présentation de la librairie requests</title><link href="https://www.pythonclassmates.org/presentation-requests.html" rel="alternate"></link><published>2019-01-31T16:00:00+01:00</published><updated>2019-01-31T16:00:00+01:00</updated><author><name>Cédric Migazzi</name></author><id>tag:www.pythonclassmates.org,2019-01-31:/presentation-requests.html</id><summary type="html">&lt;h3&gt;Présentation&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;requests&lt;/code&gt; est une librairie Python qui permet de gérer facilement les requêtes HTTP. Elle utilise la librairie standard &lt;code&gt;urllib3&lt;/code&gt; et en simplifie l'utilisation pour la rendre plus "humaine" (&lt;a href="http://docs.python-requests.org/en/master/"&gt;&lt;em&gt;HTTP for humans&lt;/em&gt;&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;Pour cet article, nous allons voir un usage basique de dialogue avec  l'API d'&lt;a href="https://fr.openfoodfacts.org/"&gt;OpenFoodFacts&lt;/a&gt;.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;em&gt;"OpenFoodFacts est une …&lt;/em&gt;&lt;/p&gt;&lt;/blockquote&gt;</summary><content type="html">&lt;h3&gt;Présentation&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;requests&lt;/code&gt; est une librairie Python qui permet de gérer facilement les requêtes HTTP. Elle utilise la librairie standard &lt;code&gt;urllib3&lt;/code&gt; et en simplifie l'utilisation pour la rendre plus "humaine" (&lt;a href="http://docs.python-requests.org/en/master/"&gt;&lt;em&gt;HTTP for humans&lt;/em&gt;&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;Pour cet article, nous allons voir un usage basique de dialogue avec  l'API d'&lt;a href="https://fr.openfoodfacts.org/"&gt;OpenFoodFacts&lt;/a&gt;.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;em&gt;"OpenFoodFacts est une base de données sur les produits alimentaires faite par tout le monde, pour tout le monde"&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Le site dispose d’une API dont la documentation se trouve &lt;a href="https://en.wiki.openfoodfacts.org/API"&gt;ici&lt;/a&gt;. Il est ainsi possible de faire toutes sortes de recherches, de récupérer les données avec &lt;code&gt;requests&lt;/code&gt; et de les exploiter avec Python.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3&gt;Installation&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;pipenv install requests&lt;/code&gt;&lt;/p&gt;
+&lt;h3&gt;Une simple requête&lt;/h3&gt;
+&lt;p&gt;Pour réaliser une requête:&lt;/p&gt;
+&lt;p&gt;avec &lt;code&gt;urllib3&lt;/code&gt;...&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;urllib3&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;PoolManager&lt;/span&gt;
+
+&lt;span class="n"&gt;http&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;PoolManager&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="n"&gt;res&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;http&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;request&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;GET&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;https://fr.openfoodfacts.org/&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;... et pour obtenir le même résultat avec &lt;code&gt;requests&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;requests&lt;/span&gt;
+
+&lt;span class="n"&gt;res&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;requests&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;https://fr.openfoodfacts.org/&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;C'est effectivement beaucoup plus simple, mais que se passe-t-il ?&lt;/p&gt;
+&lt;p&gt;Dans les deux cas, &lt;code&gt;res&lt;/code&gt; contient la réponse du serveur HTTP.&lt;/p&gt;
+&lt;p&gt;Avec &lt;code&gt;requests&lt;/code&gt;, l’import de &lt;code&gt;http&lt;/code&gt; et l’instanciation de &lt;code&gt;PoolManager()&lt;/code&gt; est transparent pour l’utilisateur, ce qui économise du code. Les méthodes HTTP sont des fonctions de &lt;code&gt;requests&lt;/code&gt; au lieu d'être des paramètres dans &lt;code&gt;urllib3&lt;/code&gt;. &lt;/p&gt;
+&lt;p&gt;On peut aussi faire de même avec les autres méthodes HTTP :&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;res&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;request&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;post&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="ss"&gt;&amp;quot;https://mon-url.de/post&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="k"&gt;data&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="err"&gt;{&lt;/span&gt;&lt;span class="k"&gt;key&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="n"&gt;value&lt;/span&gt;&lt;span class="err"&gt;}&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;res&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;request&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;put&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="ss"&gt;&amp;quot;https://mon-url.de/put&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="k"&gt;data&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="err"&gt;{&lt;/span&gt;&lt;span class="k"&gt;key&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="n"&gt;value&lt;/span&gt;&lt;span class="err"&gt;}&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;res&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;request&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="k"&gt;delete&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="ss"&gt;&amp;quot;https://mon-url.de/delete&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;res&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;request&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;head&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="ss"&gt;&amp;quot;https://mon-url.de/get&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;res&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;request&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;head&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="ss"&gt;&amp;quot;https://mon-url.de/get&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;strong&gt;Et qu'est-ce qu'on en fait ?&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;requests&lt;/code&gt; renvoie un objet de type &lt;code&gt;Response&lt;/code&gt; qui possède les attributs suivants:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;#&lt;/span&gt; &lt;span class="n"&gt;le&lt;/span&gt; &lt;span class="n"&gt;code&lt;/span&gt; &lt;span class="n"&gt;HTTP&lt;/span&gt; &lt;span class="n"&gt;de&lt;/span&gt; &lt;span class="n"&gt;la&lt;/span&gt; &lt;span class="n"&gt;réponse&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;res&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;status_code&lt;/span&gt;
+&lt;span class="mi"&gt;200&lt;/span&gt;
+
+&lt;span class="o"&gt;#&lt;/span&gt; &lt;span class="n"&gt;l&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;url&lt;/span&gt;
+&lt;span class="s1"&gt;&amp;gt;&amp;gt;&amp;gt; res.url&lt;/span&gt;
+&lt;span class="s1"&gt;&amp;#39;&lt;/span&gt;&lt;span class="n"&gt;https&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="o"&gt;//&lt;/span&gt;&lt;span class="n"&gt;fr&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;openfoodfacts&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;org&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;&lt;/span&gt;
+
+&lt;span class="s1"&gt;# les headers HTTP.&lt;/span&gt;
+&lt;span class="s1"&gt;&amp;gt;&amp;gt;&amp;gt; res.headers # dictionnaire&lt;/span&gt;
+
+&lt;span class="s1"&gt;#l&amp;#39;&lt;/span&gt;&lt;span class="n"&gt;encodage&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;res&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="k"&gt;encoding&lt;/span&gt;
+&lt;span class="s1"&gt;&amp;#39;UTF-8&amp;#39;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Et quelques méthodes de base:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;#&lt;/span&gt; &lt;span class="n"&gt;le&lt;/span&gt; &lt;span class="n"&gt;code&lt;/span&gt; &lt;span class="n"&gt;html&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;res&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nb"&gt;text&lt;/span&gt; &lt;span class="o"&gt;#&lt;/span&gt; &lt;span class="n"&gt;chaine&lt;/span&gt; &lt;span class="n"&gt;de&lt;/span&gt; &lt;span class="n"&gt;charactère&lt;/span&gt;
+
+&lt;span class="o"&gt;#&lt;/span&gt; &lt;span class="n"&gt;Si&lt;/span&gt; &lt;span class="n"&gt;la&lt;/span&gt; &lt;span class="n"&gt;réponse&lt;/span&gt; &lt;span class="n"&gt;est&lt;/span&gt; &lt;span class="n"&gt;au&lt;/span&gt; &lt;span class="n"&gt;format&lt;/span&gt; &lt;span class="n"&gt;json&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="k"&gt;on&lt;/span&gt; &lt;span class="n"&gt;peut&lt;/span&gt; &lt;span class="n"&gt;la&lt;/span&gt; &lt;span class="n"&gt;convertir&lt;/span&gt; &lt;span class="n"&gt;en&lt;/span&gt; &lt;span class="n"&gt;dictionnaire&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;res&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;json&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;Un premier exemple:&lt;/h3&gt;
+&lt;p&gt;Petit exemple avec du Nutella que l’on peut retrouver grâce à son code barre : 3017620425400.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt;&lt;span class="n"&gt;res&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;requests&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="k"&gt;get&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="ss"&gt;&amp;quot;https://world.openfoodfacts.org/api/v0/product/3017620425400.json&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Comme la réponse est au format json, on peut la transformer en dictionnaire:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt;&lt;span class="n"&gt;results&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;res&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;json&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+
+&lt;span class="o"&gt;#&lt;/span&gt; &lt;span class="n"&gt;voir&lt;/span&gt; &lt;span class="n"&gt;toutes&lt;/span&gt; &lt;span class="n"&gt;les&lt;/span&gt; &lt;span class="n"&gt;clés&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt;&lt;span class="n"&gt;results&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;keys&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="n"&gt;dict_keys&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;code&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;status_verbose&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;product&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;status&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;
+
+&lt;span class="o"&gt;#&lt;/span&gt; &lt;span class="n"&gt;faire&lt;/span&gt; &lt;span class="n"&gt;un&lt;/span&gt; &lt;span class="n"&gt;dictionnaire&lt;/span&gt; &lt;span class="n"&gt;contenant&lt;/span&gt; &lt;span class="n"&gt;les&lt;/span&gt; &lt;span class="n"&gt;attributs&lt;/span&gt; &lt;span class="n"&gt;du&lt;/span&gt; &lt;span class="n"&gt;produit&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;product&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;results&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="ss"&gt;&amp;quot;product&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+
+&lt;span class="o"&gt;#&lt;/span&gt; &lt;span class="n"&gt;voir&lt;/span&gt; &lt;span class="n"&gt;le&lt;/span&gt; &lt;span class="n"&gt;nombre&lt;/span&gt; &lt;span class="n"&gt;d&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;attributs du produit&lt;/span&gt;
+&lt;span class="s1"&gt;&amp;gt;&amp;gt;&amp;gt; len(prodcut)&lt;/span&gt;
+&lt;span class="s1"&gt;191&lt;/span&gt;
+
+&lt;span class="s1"&gt;# et par exemple, voir les catégories qui lui sont associé&lt;/span&gt;
+&lt;span class="s1"&gt;&amp;gt;&amp;gt;&amp;gt;product[&amp;quot;categories&amp;quot;]&lt;/span&gt;
+&lt;span class="s1"&gt;&amp;#39;&lt;/span&gt;&lt;span class="n"&gt;Petit&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;déjeuners&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;Produits&lt;/span&gt; &lt;span class="err"&gt;à&lt;/span&gt; &lt;span class="n"&gt;tartiner&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;Produits&lt;/span&gt; &lt;span class="err"&gt;à&lt;/span&gt; &lt;span class="n"&gt;tartiner&lt;/span&gt; &lt;span class="n"&gt;sucrés&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;Pâtes&lt;/span&gt; &lt;span class="err"&gt;à&lt;/span&gt; &lt;span class="n"&gt;tartiner&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;Pâtes&lt;/span&gt; &lt;span class="err"&gt;à&lt;/span&gt; &lt;span class="n"&gt;tartiner&lt;/span&gt; &lt;span class="n"&gt;au&lt;/span&gt; &lt;span class="n"&gt;chocolat&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;Pâtes&lt;/span&gt; &lt;span class="err"&gt;à&lt;/span&gt; &lt;span class="n"&gt;tartiner&lt;/span&gt; &lt;span class="n"&gt;aux&lt;/span&gt; &lt;span class="n"&gt;noisettes&lt;/span&gt; &lt;span class="n"&gt;et&lt;/span&gt; &lt;span class="n"&gt;au&lt;/span&gt; &lt;span class="n"&gt;cacao&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;Pâtes&lt;/span&gt; &lt;span class="err"&gt;à&lt;/span&gt; &lt;span class="n"&gt;tartiner&lt;/span&gt; &lt;span class="n"&gt;aux&lt;/span&gt; &lt;span class="n"&gt;noisettes&lt;/span&gt;&lt;span class="err"&gt;&amp;#39;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;Ajouter des paramètres&lt;/h3&gt;
+&lt;p&gt;Pour des requêtes plus claires, il est possible de passer une liste d'objets  clé/valeur en paramètre de la requête.&lt;/p&gt;
+&lt;p&gt;Avec l'API d'OpenFoodFacts, il est possible de le mettre en pratique grâce à son url de recherche:&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Vous trouverez toutes les options de recherche sur la &lt;a href="https://en.wiki.openfoodfacts.org/API/Read/Search#Parameters"&gt;doc officielle&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt;&lt;span class="n"&gt;payload&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="err"&gt;{&lt;/span&gt;&lt;span class="ss"&gt;&amp;quot;search_terms&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="ss"&gt;&amp;quot;Lindt, &amp;quot;&lt;/span&gt;&lt;span class="n"&gt;json&lt;/span&gt;&lt;span class="ss"&gt;&amp;quot;:1}&lt;/span&gt;
+&lt;span class="ss"&gt;&amp;gt;&amp;gt;&amp;gt;res = requests.get(&amp;quot;&lt;/span&gt;&lt;span class="n"&gt;https&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="o"&gt;//&lt;/span&gt;&lt;span class="n"&gt;fr&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;openfoodfacts&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;org&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;cgi&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="k"&gt;search&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;pl&lt;/span&gt;&lt;span class="o"&gt;?&lt;/span&gt;&lt;span class="ss"&gt;&amp;quot;, params=payload)&lt;/span&gt;
+
+&lt;span class="ss"&gt;# Pour voir l&amp;#39;url correspondante&lt;/span&gt;
+&lt;span class="ss"&gt;&amp;gt;&amp;gt;&amp;gt;res.url&lt;/span&gt;
+&lt;span class="ss"&gt;&amp;#39;https://fr.openfoodfacts.org/cgi/search.pl?search_terms=Lindt&amp;amp;json=1&amp;#39;&lt;/span&gt;
+
+&lt;span class="ss"&gt;# pour voir le nombre de résultats&lt;/span&gt;
+&lt;span class="ss"&gt;&amp;gt;&amp;gt;&amp;gt; results = res.json()&lt;/span&gt;
+&lt;span class="ss"&gt;&amp;gt;&amp;gt;&amp;gt; results[&amp;quot;&lt;/span&gt;&lt;span class="k"&gt;count&lt;/span&gt;&lt;span class="err"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;span class="mi"&gt;802&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Si on veut retrouver les 50 produits les plus populaires de la marque Lindt, on pourra faire:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt;&lt;span class="nv"&gt;payload&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; {&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="s"&gt;search_terms&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;: &lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="s"&gt;Lindt&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;,
+...           &lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="s"&gt;search_tag&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;: &lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="s"&gt;brands&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;, 
+...           &lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="s"&gt;sort_by&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;: &lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="s"&gt;unique_scans_n&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;,
+...           &lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="s"&gt;page_size&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;: &lt;span class="mi"&gt;50&lt;/span&gt;, 
+...           &lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="s"&gt;json&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;: &lt;span class="mi"&gt;1&lt;/span&gt;}
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt;&lt;span class="nv"&gt;res&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nv"&gt;requests&lt;/span&gt;.&lt;span class="nv"&gt;get&lt;/span&gt;&lt;span class="ss"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="s"&gt;https://fr.openfoodfacts.org/cgi/search.pl?&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;, &lt;span class="nb"&gt;params&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nv"&gt;payload&lt;/span&gt;&lt;span class="ss"&gt;)&lt;/span&gt;
+
+# &lt;span class="nv"&gt;l&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;&lt;/span&gt;&lt;span class="s"&gt;url correspondante&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt;&lt;span class="nv"&gt;res&lt;/span&gt;.&lt;span class="nv"&gt;url&lt;/span&gt;
+&lt;span class="s1"&gt;&amp;#39;&lt;/span&gt;&lt;span class="s"&gt;https://fr.openfoodfacts.org/cgi/search.pl?search_terms=Lindt&amp;amp;search_tag=brands&amp;amp;sort_by=unique_scans_n&amp;amp;page_size=50&amp;amp;json=1&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;&lt;/span&gt;
+
+# &lt;span class="nv"&gt;on&lt;/span&gt; &lt;span class="nv"&gt;peut&lt;/span&gt; &lt;span class="nv"&gt;ensuite&lt;/span&gt; &lt;span class="nv"&gt;r&lt;/span&gt;é&lt;span class="nv"&gt;cup&lt;/span&gt;é&lt;span class="nv"&gt;rer&lt;/span&gt; &lt;span class="nv"&gt;les&lt;/span&gt; &lt;span class="nv"&gt;produits&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt;&lt;span class="nv"&gt;results&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nv"&gt;res&lt;/span&gt;.&lt;span class="nv"&gt;json&lt;/span&gt;&lt;span class="ss"&gt;()&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt;&lt;span class="nv"&gt;products&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nv"&gt;results&lt;/span&gt;[&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="s"&gt;products&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;]
+
+# &lt;span class="nv"&gt;Et&lt;/span&gt; &lt;span class="nv"&gt;afficher&lt;/span&gt; &lt;span class="nv"&gt;leurs&lt;/span&gt; &lt;span class="nv"&gt;noms&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt;&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="nv"&gt;product&lt;/span&gt; &lt;span class="nv"&gt;in&lt;/span&gt; &lt;span class="nv"&gt;products&lt;/span&gt;:
+    &lt;span class="nv"&gt;print&lt;/span&gt;&lt;span class="ss"&gt;(&lt;/span&gt;&lt;span class="nv"&gt;product&lt;/span&gt;[&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="s"&gt;product_name&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;]&lt;span class="ss"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;Pour aller plus loin&lt;/h3&gt;
+&lt;p&gt;Nous avons vu un usage basique de &lt;code&gt;requests&lt;/code&gt;, mais il est aussi possible de:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;vérifier si la réponse HTTP est valide:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;res&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;requests&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="k"&gt;get&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;https://fr.openfoodfacts.org&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;res&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;status_code&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="n"&gt;requests&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;codes&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ok&lt;/span&gt;
+&lt;span class="k"&gt;True&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;ul&gt;
+&lt;li&gt;voir et gérer les redirections (HTTP vers HTTPS) avec l'attribut &lt;code&gt;history&lt;/code&gt;:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;res&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;requests&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="k"&gt;get&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="ss"&gt;&amp;quot;http://fr.openfoodfacts.org/&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;res&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;status_code&lt;/span&gt;
+&lt;span class="mi"&gt;200&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;res&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;history&lt;/span&gt;
+&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;Response&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;301&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+
+&lt;span class="o"&gt;#&lt;/span&gt; &lt;span class="n"&gt;Poosibilité&lt;/span&gt; &lt;span class="n"&gt;de&lt;/span&gt; &lt;span class="n"&gt;désactiver&lt;/span&gt; &lt;span class="n"&gt;les&lt;/span&gt; &lt;span class="n"&gt;redirections&lt;/span&gt;
+&lt;span class="n"&gt;res&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;requests&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="k"&gt;get&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="ss"&gt;&amp;quot;http://fr.openfoodfacts.org/&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;allow_redirects&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="k"&gt;False&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;res&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;status_code&lt;/span&gt;
+&lt;span class="mi"&gt;301&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;res&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;history&lt;/span&gt;
+&lt;span class="p"&gt;[]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;ul&gt;
+&lt;li&gt;personnaliser les headers d'une requête en passant un dictionnaire:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;url&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="ss"&gt;&amp;quot;http://fr.openfoodfacts.org/&amp;quot;&lt;/span&gt;
+&lt;span class="n"&gt;headers&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="err"&gt;{&lt;/span&gt;&lt;span class="ss"&gt;&amp;quot;user-agent&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="ss"&gt;&amp;quot;python-app/0.0.1&amp;quot;&lt;/span&gt;&lt;span class="err"&gt;}&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt;&lt;span class="n"&gt;res&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;requests&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="k"&gt;get&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;headers&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;headers&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;ul&gt;
+&lt;li&gt;retrouver facilement la valeur d'un header:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt;&lt;span class="n"&gt;res&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;headers&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="ss"&gt;&amp;quot;content-type&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;span class="s1"&gt;&amp;#39;text/html; charset=UTF-8&amp;#39;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;ul&gt;
+&lt;li&gt;Et pleins d'autres choses avec les cookies, les certificats SSL ou encore les requêtes préparées que vous retrouveregit checkz sur la &lt;a href="http://docs.python-requests.org/en/master/user/advanced/"&gt;doc officielle&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Conclusion&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;requests&lt;/code&gt;  est une librairie simple d'utilisation et très complète. Que ce soit pour un usage basique (comme on vient de voir) ou plus avancé, c'est la librairie conseillée pour effectuer des requêtes HTTP.&lt;/p&gt;</content><category term="requests"></category></entry><entry><title>Installer Pelican</title><link href="https://www.pythonclassmates.org/installer-pelican.html" rel="alternate"></link><published>2019-01-09T15:29:00+01:00</published><updated>2019-01-09T15:29:00+01:00</updated><author><name>Freezed</name></author><id>tag:www.pythonclassmates.org,2019-01-09:/installer-pelican.html</id><summary type="html">&lt;p&gt;Installation rapide de &lt;em&gt;Pelican&lt;/em&gt;&lt;/p&gt;</summary><content type="html">&lt;h1&gt;Démarrage rapide&lt;/h1&gt;
+&lt;p&gt;&lt;em&gt;C'est une traduction basique du &lt;a href="https://docs.getpelican.com/en/4.0.1/quickstart.html"&gt;démarrage rapide&lt;/a&gt; officiel&lt;/em&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2&gt;Créez le répertoire&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;mkdir&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;p&lt;/span&gt; &lt;span class="o"&gt;~/&lt;/span&gt;&lt;span class="n"&gt;projects&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;yoursite&lt;/span&gt;
+&lt;span class="n"&gt;cd&lt;/span&gt; &lt;span class="o"&gt;~/&lt;/span&gt;&lt;span class="n"&gt;projects&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;yoursite&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2&gt;Créez un environnement virtuel&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;virtualenv&lt;/span&gt; &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;venv&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;p&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;usr&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nb"&gt;bin&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;python3&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;6&lt;/span&gt;
+&lt;span class="n"&gt;source&lt;/span&gt; &lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;venv&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nb"&gt;bin&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;activate&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2&gt;Installez &lt;em&gt;Pelican&lt;/em&gt; et markdown (si besoin, optionnel)&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;pip&lt;/span&gt; &lt;span class="n"&gt;install&lt;/span&gt; &lt;span class="n"&gt;pelican&lt;/span&gt; &lt;span class="n"&gt;markdown&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2&gt;Créez le squelette de l'arborescence&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;pelican&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;quickstart&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Pour les questions avec une réponse entre crochet, appuyez sur &lt;code&gt;Entrée&lt;/code&gt; pour acceptez cette valeur. Quand il vous sera demandé le préfixe de votre URL, entrez votre nom de domaine comme indiqué (&lt;code&gt;http://example.com&lt;/code&gt;).&lt;/p&gt;
+&lt;h2&gt;Créez un article&lt;/h2&gt;
+&lt;p&gt;Vous ne pourrez lancer &lt;em&gt;Pelican&lt;/em&gt; tant qu'il n'y a pas d'article. Utilisez votre éditeur préféré pour créez votre premier article avec le contenu suivant :&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;Title&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;My&lt;/span&gt; &lt;span class="n"&gt;First&lt;/span&gt; &lt;span class="n"&gt;Review&lt;/span&gt;
+&lt;span class="n"&gt;Date&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;2010&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;12&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mo"&gt;03&lt;/span&gt; &lt;span class="mi"&gt;10&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;20&lt;/span&gt;
+&lt;span class="n"&gt;Category&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Review&lt;/span&gt;
+
+&lt;span class="n"&gt;Following&lt;/span&gt; &lt;span class="ow"&gt;is&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="n"&gt;review&lt;/span&gt; &lt;span class="n"&gt;of&lt;/span&gt; &lt;span class="n"&gt;my&lt;/span&gt; &lt;span class="n"&gt;favorite&lt;/span&gt; &lt;span class="n"&gt;mechanical&lt;/span&gt; &lt;span class="n"&gt;keyboard&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Considerant que cet article est au format Markdown, enregistrez le en tant que &lt;code&gt;~/projects/yoursite/content/keyboard-review.md.&lt;/code&gt;&lt;/p&gt;
+&lt;h2&gt;Générez le site&lt;/h2&gt;
+&lt;p&gt;Toujours depuis le répertoire, lancez la commande &lt;em&gt;Pelican&lt;/em&gt; pour générez votre site&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;pelican&lt;/span&gt; &lt;span class="n"&gt;content&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Votre site à été généré dans le répertoire &lt;code&gt;output&lt;/code&gt;. Peut-être aurez vous un message d'alerte relatif aux &lt;em&gt;flux&lt;/em&gt;, c'est normal en développement et vous pouvez l'ignorer&lt;/p&gt;
+&lt;h1&gt;Prévisualisation du site&lt;/h1&gt;
+&lt;p&gt;Ouvrez une session de terminal depuis le répertoire d'installation  et lancez la commande suivante :&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;pelican&lt;/span&gt; &lt;span class="o"&gt;--&lt;/span&gt;&lt;span class="n"&gt;listen&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Rendez vous à l'adresse &lt;a href="http://localhost:8000/"&gt;http://localhost:8000/&lt;/a&gt; à l'aide de votre navigateur, c'est parfait !&lt;/p&gt;</content><category term="web"></category><category term="python"></category><category term="pelican"></category></entry></feed>

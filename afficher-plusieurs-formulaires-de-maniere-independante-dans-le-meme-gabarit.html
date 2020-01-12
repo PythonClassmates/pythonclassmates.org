@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+        <meta charset="utf-8" />
+        <title>Afficher plusieurs formulaires de manière indépendante dans le même gabarit</title>
+        <link rel="stylesheet" href="https://www.pythonclassmates.org/theme/css/main.css" />
+        <link href="https://www.pythonclassmates.org/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Python I/O Atom Feed" />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="https://www.pythonclassmates.org/">Python I/O <strong>Articles et news par des Pythonistas passionnés</strong></a></h1>
+                <nav><ul>
+                    <li><a href="/category/news.html">News</a></li>
+                    <li><a href="/category/articles.html">Articles</a></li>
+                    <li><a href="/category/tutoriels.html">Tutoriels</a></li>
+                    <li><a href="/categories.html">Catégories</a></li>
+                    <li><a href="/tags.html">Tags</a></li>
+                    <li><a href="https://www.pythonclassmates.org/category/article.html">Article</a></li>
+                    <li class="active"><a href="https://www.pythonclassmates.org/category/articles.html">Articles</a></li>
+                    <li><a href="https://www.pythonclassmates.org/category/news.html">News</a></li>
+                    <li><a href="https://www.pythonclassmates.org/category/tutoriels.html">Tutoriels</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="https://www.pythonclassmates.org/afficher-plusieurs-formulaires-de-maniere-independante-dans-le-meme-gabarit.html" rel="bookmark"
+           title="Permalink to Afficher plusieurs formulaires de manière indépendante dans le même gabarit">Afficher plusieurs formulaires de manière indépendante dans le même gabarit</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2019-01-18T10:11:00+01:00">
+                Published: Fri 18 January 2019
+        </abbr>
+		<br />
+        <abbr class="modified" title="2019-01-17T08:00:00+01:00">
+                Updated: Thu 17 January 2019
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="https://www.pythonclassmates.org/author/aurelia-gourbere.html">Aurélia Gourbère</a>
+        </address>
+<p>In <a href="https://www.pythonclassmates.org/category/articles.html">Articles</a>.</p>
+<p>tags: <a href="https://www.pythonclassmates.org/tag/django.html">Django</a> <a href="https://www.pythonclassmates.org/tag/cbv.html">CBV</a> </p>
+</footer><!-- /.post-info -->      <h1>Afficher plusieurs formulaires de manière indépendante dans le même gabarit</h1>
+<h2>Problématique</h2>
+<p>Je souhaitais avoir une vue  : update profil qui me permettrait de mettre à jour les différents aspects du profil utilisateur de manière indépendante. Au niveau de l'affichage , je souhaitais que tous ces formulaires (qui me serviraient à changer, créer et supprimer) soient sur le même gabarit comme une sorte de tableau de bord ...</p>
+<h2>Raison</h2>
+<ul>
+<li>Pour pouvoir changer et enregistrer qu'une partie du profil de manière indépendante.</li>
+<li>Pour faciliter les tests par la suite.</li>
+<li>Pour améliorer l'expérience utilisateur.</li>
+</ul>
+<h2>Source</h2>
+<p>Je me suis énormément inspirée de cette <a href="https://krzysztofzuraw.com/blog/2016/two-forms-one-view-django.html">page</a> Merci à son auteur!</p>
+<h2>Méthode</h2>
+<p>J'ai utilisé les Vues fondées sur les classes de Django et plus spécialement <a href="https://docs.djangoproject.com/fr/2.1/ref/class-based-views/generic-editing/">les Vues génériques d’édition</a>. Ici j'ai choisi Formview mais on aurait très bien bu le faire avec UpdateView.</p>
+<p>Une vue principale me permet de faire un GET des différents formulaires, puis une autre vue me sert à faire le POST . Dans cette deuxième vue je redirige en cas de succès du POST vers le même template que la vue principale , ce qui a pour effet d'afficher les informations qui viennent d'être saisie par l'utilisateur et de lui permettre à nouveau d'ouvrir le formulaire. La validation des différents formulaires se fait de manière indépendante et redirige toujours sur la page de mise à jour du profil.</p>
+<p>views.py</p>
+<div class="highlight"><pre><span></span><span class="nv">class</span> <span class="nv">UpdateProfilView</span><span class="ss">(</span><span class="nv">TemplateView</span><span class="ss">)</span>:
+
+    <span class="nv">template_name</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="s">musicians/update_profile.html</span><span class="s1">&#39;</span>
+
+    @<span class="nv">method_decorator</span><span class="ss">(</span><span class="nv">login_required</span><span class="ss">)</span>
+    <span class="nv">def</span> <span class="nv">get</span><span class="ss">(</span><span class="nv">self</span>, <span class="nv">request</span>, <span class="o">*</span><span class="nv">args</span>, <span class="o">**</span><span class="nv">kwargs</span><span class="ss">)</span>:
+        <span class="nv">avatar_form</span> <span class="o">=</span> <span class="nv">AvatarForm</span><span class="ss">(</span><span class="nv">self</span>.<span class="nv">request</span>.<span class="nv">GET</span> <span class="nv">or</span> <span class="nv">None</span>,
+                                 <span class="nv">instance</span><span class="o">=</span><span class="nv">request</span>.<span class="nv">user</span>.<span class="nv">userprofile</span><span class="ss">)</span>
+        <span class="nv">profile_form</span> <span class="o">=</span> <span class="nv">ProfileForm</span><span class="ss">(</span><span class="nv">self</span>.<span class="nv">request</span>.<span class="nv">GET</span> <span class="nv">or</span> <span class="nv">None</span>,
+                                   <span class="nv">instance</span><span class="o">=</span><span class="nv">request</span>.<span class="nv">user</span>.<span class="nv">userprofile</span><span class="ss">)</span>
+
+        <span class="nv">context</span> <span class="o">=</span> <span class="nv">self</span>.<span class="nv">get_context_data</span><span class="ss">(</span><span class="o">**</span><span class="nv">kwargs</span><span class="ss">)</span>
+        <span class="nv">context</span>[<span class="s1">&#39;</span><span class="s">avatar_form</span><span class="s1">&#39;</span>] <span class="o">=</span> <span class="nv">avatar_form</span>
+        <span class="nv">context</span>[<span class="s1">&#39;</span><span class="s">profile_form</span><span class="s1">&#39;</span>] <span class="o">=</span> <span class="nv">profile_form</span>
+        <span class="k">return</span> <span class="nv">self</span>.<span class="nv">render_to_response</span><span class="ss">(</span><span class="nv">context</span><span class="ss">)</span>
+</pre></div>
+
+
+<p>Puis viennent les vues qui me servent à faire le POST des formulaires.</p>
+<p>views.py</p>
+<div class="highlight"><pre><span></span><span class="nv">class</span> <span class="nv">UpdateAvatarView</span><span class="ss">(</span><span class="nv">FormView</span>, <span class="nv">SuccessMessageMixin</span><span class="ss">)</span>:
+
+    <span class="nv">form_class</span> <span class="o">=</span> <span class="nv">AvatarForm</span>
+    <span class="nv">template_name</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="s">musicians/update_profile.html</span><span class="s1">&#39;</span>
+
+    @<span class="nv">method_decorator</span><span class="ss">(</span><span class="nv">login_required</span><span class="ss">)</span>
+    @<span class="nv">transaction</span>.<span class="nv">atomic</span>
+    <span class="nv">def</span> <span class="nv">post</span><span class="ss">(</span><span class="nv">self</span>, <span class="nv">request</span>, <span class="o">*</span><span class="nv">args</span>, <span class="o">**</span><span class="nv">kwargs</span><span class="ss">)</span>:
+        <span class="nv">avatar_form</span> <span class="o">=</span> <span class="nv">self</span>.<span class="nv">form_class</span><span class="ss">(</span><span class="nv">request</span>.<span class="nv">POST</span>,
+                                      <span class="nv">request</span>.<span class="nv">FILES</span> ,
+                                      <span class="nv">instance</span><span class="o">=</span><span class="nv">request</span>.<span class="nv">user</span>.<span class="nv">userprofile</span><span class="ss">)</span>
+        <span class="k">if</span> <span class="nv">avatar_form</span>.<span class="nv">is_valid</span><span class="ss">()</span>:
+            <span class="nv">avatar_form</span>.<span class="nv">save</span><span class="ss">()</span>
+            <span class="nv">messages</span>.<span class="nv">success</span><span class="ss">(</span><span class="nv">self</span>.<span class="nv">request</span>, <span class="ss">(</span><span class="s2">&quot;</span><span class="s"> Votre image a été  mise à jour!</span><span class="s2">&quot;</span><span class="ss">))</span>
+            <span class="k">return</span> <span class="nv">redirect</span><span class="ss">(</span><span class="s1">&#39;</span><span class="s">musicians:update_profile</span><span class="s1">&#39;</span><span class="ss">)</span> #, <span class="nv">self</span>.<span class="nv">get_context_data</span><span class="ss">(</span><span class="nv">success</span><span class="o">=</span><span class="nv">True</span><span class="ss">))</span>
+
+        <span class="k">else</span>:
+            <span class="nv">avatar_form</span> <span class="o">=</span> <span class="nv">self</span>.<span class="nv">form_class</span><span class="ss">(</span><span class="nv">instance</span><span class="o">=</span><span class="nv">request</span>.<span class="nv">user</span>.<span class="nv">userprofile</span><span class="ss">)</span>
+
+            <span class="k">return</span> <span class="nv">self</span>.<span class="nv">render_to_response</span><span class="ss">(</span>
+               <span class="nv">self</span>.<span class="nv">get_context_data</span><span class="ss">(</span><span class="nv">avatar_form</span> <span class="o">=</span><span class="nv">avatar_form</span><span class="ss">))</span>
+
+
+<span class="nv">class</span> <span class="nv">UpdateDataView</span><span class="ss">(</span><span class="nv">FormView</span>, <span class="nv">SuccessMessageMixin</span><span class="ss">)</span>:
+
+    <span class="nv">form_class</span> <span class="o">=</span> <span class="nv">ProfileForm</span>
+    <span class="nv">template_name</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="s">musicians/update_profile.html</span><span class="s1">&#39;</span>
+
+    @<span class="nv">method_decorator</span><span class="ss">(</span><span class="nv">login_required</span><span class="ss">)</span>
+    @<span class="nv">transaction</span>.<span class="nv">atomic</span>
+    <span class="nv">def</span> <span class="nv">post</span><span class="ss">(</span><span class="nv">self</span> , <span class="nv">request</span> , <span class="o">*</span><span class="nv">args</span> , <span class="o">**</span><span class="nv">kwargs</span><span class="ss">)</span>:
+        <span class="nv">profile_form</span> <span class="o">=</span> <span class="nv">self</span>.<span class="nv">form_class</span><span class="ss">(</span><span class="nv">request</span>.<span class="nv">POST</span>,
+                                       <span class="nv">instance</span><span class="o">=</span><span class="nv">request</span>.<span class="nv">user</span>.<span class="nv">userprofile</span><span class="ss">)</span>
+        <span class="k">if</span> <span class="nv">profile_form</span>.<span class="nv">is_valid</span><span class="ss">()</span>:
+            <span class="nv">profile_form</span>.<span class="nv">save</span><span class="ss">()</span>
+            <span class="nv">print</span><span class="ss">(</span><span class="nv">request</span>.<span class="nv">POST</span>.<span class="nv">get</span><span class="ss">(</span><span class="s2">&quot;</span><span class="s">county_name</span><span class="s2">&quot;</span><span class="ss">))</span>
+            <span class="nv">messages</span>.<span class="nv">success</span><span class="ss">(</span><span class="nv">self</span>.<span class="nv">request</span> , <span class="ss">(</span><span class="s2">&quot;</span><span class="s"> Vos données ont été mises à jour!</span><span class="s2">&quot;</span><span class="ss">))</span>
+            <span class="k">return</span> <span class="nv">redirect</span><span class="ss">(</span><span class="s1">&#39;</span><span class="s">musicians:update_profile</span><span class="s1">&#39;</span><span class="ss">)</span>
+
+        <span class="k">else</span>:
+            <span class="nv">profile_form</span> <span class="o">=</span> <span class="nv">self</span>.<span class="nv">form_class</span><span class="ss">(</span><span class="nv">instance</span><span class="o">=</span><span class="nv">request</span>.<span class="nv">user</span>.<span class="nv">userprofile</span><span class="ss">)</span>
+
+            <span class="k">return</span> <span class="nv">render</span><span class="ss">(</span>
+                <span class="nv">self</span>.<span class="nv">get_context_data</span><span class="ss">(</span><span class="nv">profile_form</span><span class="o">=</span><span class="nv">profile_form</span><span class="ss">))</span>
+</pre></div>
+
+
+<p>Ces deux vues font appel aux formulaires suivants:</p>
+<p>forms.py</p>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="n">ProfileForm</span>(<span class="n">ModelForm</span>):
+    <span class="k">class</span> <span class="n">Meta:</span>
+        <span class="n">model</span> = <span class="n">UserProfile</span>
+        <span class="n">fields</span> = [<span class="s">&#39;username&#39;</span>, <span class="s">&#39;bio&#39;</span>, <span class="s">&#39;birth_year&#39;</span>, <span class="s">&#39;gender&#39;</span>]
+
+
+<span class="k">class</span> <span class="n">AvatarForm</span>(<span class="n">ModelForm</span>):
+    <span class="k">class</span> <span class="n">Meta:</span>
+        <span class="n">model</span> = <span class="n">UserProfile</span>
+        <span class="n">fields</span> = [<span class="s">&#39;avatar&#39;</span>]  
+</pre></div>
+
+
+<p>Ils sont basés sur le même modèle: Userprofile mais ne donnent accès qu'à une partie des champs du modèle.</p>
+<p>models.py</p>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="n">UserProfile</span>(<span class="n">models</span>.<span class="n">Model</span>):
+    <span class="s">&#39;&#39;&#39;</span>
+<span class="s">    Custom User Profile</span>
+<span class="s">    &#39;&#39;&#39;</span>
+
+    <span class="n">GENDER_CHOICES</span> = (
+        (<span class="s">&#39;H&#39;</span>, <span class="s">&#39;Homme&#39;</span>),
+        (<span class="s">&#39;F&#39;</span>, <span class="s">&#39;Femme&#39;</span>),
+    )
+
+    <span class="n">user</span> = <span class="n">models</span>.<span class="n">OneToOneField</span>(<span class="n">User</span>, <span class="n">on_delete</span>=<span class="n">models</span>.<span class="n">CASCADE</span>)
+    <span class="n">username</span> = <span class="n">models</span>.<span class="n">CharField</span>(<span class="s">&quot;Nom&quot;</span>, <span class="n">max_length</span>=<span class="mi">60</span>, <span class="n">blank</span>=<span class="nb">True</span>)
+    <span class="n">bio</span> = <span class="n">models</span>.<span class="n">TextField</span>(<span class="s">&quot;Courte description&quot;</span>, <span class="n">max_length</span>=<span class="mi">500</span>, <span class="n">blank</span>=<span class="nb">True</span>)
+    <span class="n">code</span> = <span class="n">models</span>.<span class="n">CharField</span>(<span class="s">&quot;code postal&quot;</span>, <span class="n">max_length</span>=<span class="mi">5</span>, <span class="n">blank</span>=<span class="nb">True</span>)
+    <span class="n">county_name</span> = <span class="n">models</span>.<span class="n">CharField</span>(<span class="s">&quot;Nom du département&quot;</span>, <span class="n">max_length</span>=<span class="mi">60</span>, <span class="n">blank</span>=<span class="nb">True</span>)
+    <span class="n">town</span> = <span class="n">models</span>.<span class="n">CharField</span>(<span class="s">&quot;Ville&quot;</span>, <span class="n">max_length</span>=<span class="mi">60</span>, <span class="n">blank</span>=<span class="nb">True</span>)
+    <span class="n">birth_year</span> = <span class="n">YearField</span>(<span class="s">&quot;Année de naissance&quot;</span>, <span class="n">null</span>=<span class="nb">True</span>, <span class="n">blank</span>=<span class="nb">True</span>)
+    <span class="n">avatar</span> = <span class="n">models</span>.<span class="n">ImageField</span>(<span class="n">null</span>=<span class="nb">True</span>, <span class="n">blank</span>=<span class="nb">True</span>, <span class="n">upload_to</span>=<span class="s">&#39;user_avatar/&#39;</span>)
+    <span class="n">gender</span> = <span class="n">models</span>.<span class="n">CharField</span>(<span class="s">&#39;Genre&#39;</span> , <span class="n">max_length</span>=<span class="mi">1</span>, <span class="n">choices</span>=<span class="n">GENDER_CHOICES</span>)
+    <span class="n">created_at</span> = <span class="n">models</span>.<span class="n">DateTimeField</span>(<span class="n">auto_now_add</span>=<span class="nb">True</span>)
+    <span class="n">updated_at</span> = <span class="n">models</span>.<span class="n">DateTimeField</span>(<span class="n">auto_now</span>=<span class="nb">True</span>)
+</pre></div>
+
+
+<p>Au niveau des urls : </p>
+<p>urls.py</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">views</span>
+<span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">path</span>
+
+<span class="n">app_name</span> <span class="o">=</span> <span class="s1">&#39;musicians&#39;</span>
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+
+    <span class="n">path</span><span class="p">(</span><span class="s1">&#39;profile/&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">profile</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;profile&#39;</span><span class="p">),</span>
+    <span class="n">path</span><span class="p">(</span><span class="s1">&#39;update_profile/&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">UpdateProfilView</span><span class="o">.</span><span class="n">as_view</span><span class="p">(),</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;update_profile&#39;</span><span class="p">),</span>
+    <span class="n">path</span><span class="p">(</span><span class="s1">&#39;update_avatar/submit&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">UpdateAvatarView</span><span class="o">.</span><span class="n">as_view</span><span class="p">(),</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;update_avatar&#39;</span><span class="p">),</span>
+    <span class="n">path</span><span class="p">(</span><span class="s1">&#39;update_data/submit&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">UpdateDataView</span><span class="o">.</span><span class="n">as_view</span><span class="p">(),</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;update_data&#39;</span><span class="p">),</span>
+<span class="p">]</span>
+</pre></div>
+
+
+<p>Dans le gabarit : update_profile.html commun aux différentes vues, les formulaires sont appelés de manière indépendantes:</p>
+<p>update_profil.html</p>
+<div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="nv">div</span> <span class="nv">class</span><span class="o">=</span><span class="s2">&quot;</span><span class="s">row valign-wrapper</span><span class="s2">&quot;</span><span class="o">&gt;</span>
+
+
+   <span class="o">&lt;!--</span><span class="nv">avatar</span> <span class="nv">form</span><span class="o">--&gt;</span>
+   <span class="o">&lt;</span><span class="nv">div</span> <span class="nv">class</span><span class="o">=</span><span class="s2">&quot;</span><span class="s">col s5</span><span class="s2">&quot;</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="nv">form</span> <span class="nv">action</span><span class="o">=</span><span class="s1">&#39;</span><span class="s">{% url &quot;musicians:update_avatar&quot; %}</span><span class="s1">&#39;</span> <span class="nv">method</span><span class="o">=</span><span class="s2">&quot;</span><span class="s">post</span><span class="s2">&quot;</span> <span class="nv">enctype</span><span class="o">=</span><span class="s2">&quot;</span><span class="s">multipart/form-data</span><span class="s2">&quot;</span> <span class="o">&gt;</span>
+         {<span class="o">%</span> <span class="nv">csrf_token</span> <span class="o">%</span>}
+         {<span class="o">%</span> <span class="k">if</span> <span class="nv">user</span>.<span class="nv">userprofile</span>.<span class="nv">avatar</span> <span class="o">%</span>}
+         <span class="o">&lt;</span><span class="nv">img</span> <span class="nv">alt</span><span class="o">=</span><span class="s2">&quot;</span><span class="s">Avatar</span><span class="s2">&quot;</span> <span class="nv">class</span><span class="o">=</span><span class="s2">&quot;</span><span class="s">circle responsive-img</span><span class="s2">&quot;</span> <span class="nv">src</span><span class="o">=</span><span class="s2">&quot;</span><span class="s">{{ user.userprofile.avatar.url }}</span><span class="s2">&quot;</span><span class="o">/&gt;</span>
+         {<span class="o">%</span> <span class="k">else</span> <span class="o">%</span>}
+         <span class="o">&lt;</span><span class="nv">img</span> <span class="nv">alt</span><span class="o">=</span><span class="s2">&quot;</span><span class="s">Avatar</span><span class="s2">&quot;</span> <span class="nv">class</span><span class="o">=</span><span class="s2">&quot;</span><span class="s">circle responsive-img</span><span class="s2">&quot;</span> <span class="nv">src</span><span class="o">=</span><span class="s2">&quot;</span><span class="s">{% static &#39;core/img/0.jpg&#39; %}</span><span class="s2">&quot;</span> <span class="o">/&gt;</span>
+         {<span class="o">%</span> <span class="k">endif</span> <span class="o">%</span>}
+         {{ <span class="nv">avatar_form</span>.<span class="nv">as_p</span> }}
+         <span class="o">&lt;</span><span class="nv">button</span> <span class="nv">class</span><span class="o">=</span><span class="s2">&quot;</span><span class="s">btn-floating btn-large waves-effect waves-light </span><span class="s2">&quot;</span> <span class="nv">type</span><span class="o">=</span><span class="s2">&quot;</span><span class="s">submit</span><span class="s2">&quot;</span> <span class="o">&gt;</span>
+         <span class="o">&lt;</span><span class="nv">i</span> <span class="nv">class</span><span class="o">=</span><span class="s2">&quot;</span><span class="s">material-icons</span><span class="s2">&quot;</span><span class="o">&gt;</span><span class="nv">check</span><span class="o">&lt;/</span><span class="nv">i</span><span class="o">&gt;&lt;/</span><span class="nv">button</span><span class="o">&gt;</span>
+      <span class="o">&lt;/</span><span class="nv">form</span><span class="o">&gt;</span>
+   <span class="o">&lt;/</span><span class="nv">div</span><span class="o">&gt;</span>
+
+
+   <span class="o">&lt;!--</span><span class="nv">profile</span> <span class="nv">form</span><span class="o">--&gt;</span>
+   <span class="o">&lt;</span><span class="nv">div</span> <span class="nv">class</span><span class="o">=</span><span class="s2">&quot;</span><span class="s">col s7</span><span class="s2">&quot;</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="nv">form</span> <span class="nv">action</span><span class="o">=</span><span class="s1">&#39;</span><span class="s">{% url &quot;musicians:update_data&quot; %}</span><span class="s1">&#39;</span> <span class="nv">method</span><span class="o">=</span><span class="s2">&quot;</span><span class="s">post</span><span class="s2">&quot;</span>  <span class="o">&gt;</span>
+         {<span class="o">%</span> <span class="nv">csrf_token</span> <span class="o">%</span>}
+         {{ <span class="nv">profile_form</span>.<span class="nv">as_p</span> }}
+         <span class="o">&lt;</span><span class="nv">button</span> <span class="nv">class</span><span class="o">=</span><span class="s2">&quot;</span><span class="s">btn-floating btn-large waves-effect waves-light </span><span class="s2">&quot;</span> <span class="nv">type</span><span class="o">=</span><span class="s2">&quot;</span><span class="s">submit</span><span class="s2">&quot;</span> <span class="o">&gt;</span>
+         <span class="o">&lt;</span><span class="nv">i</span> <span class="nv">class</span><span class="o">=</span><span class="s2">&quot;</span><span class="s">material-icons</span><span class="s2">&quot;</span><span class="o">&gt;</span><span class="nv">check</span><span class="o">&lt;/</span><span class="nv">i</span><span class="o">&gt;&lt;/</span><span class="nv">button</span><span class="o">&gt;</span>
+      <span class="o">&lt;/</span><span class="nv">form</span><span class="o">&gt;</span>
+   <span class="o">&lt;/</span><span class="nv">div</span><span class="o">&gt;</span>
+<span class="o">&lt;/</span><span class="nv">div</span><span class="o">&gt;</span>
+</pre></div>
+
+
+<h2>Conclusion</h2>
+<p>Grâce à cette méthode le code est lisible et les tests sont simplifiés. On peut faire de simple petits formulaires portant sur une partie spécifique du profil. De plus l'utilisateur peut à sa guise mettre à jour les différentes parties de son profil et on peut même imaginer par ce biais l'informer du taux de remplissage de son profil.</p>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="https://www.pythonclassmates.org/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

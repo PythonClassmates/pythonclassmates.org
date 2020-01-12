@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+        <meta charset="utf-8" />
+        <title>GHI - GitHub Issues</title>
+        <link rel="stylesheet" href="https://www.pythonclassmates.org/theme/css/main.css" />
+        <link href="https://www.pythonclassmates.org/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Python I/O Atom Feed" />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="https://www.pythonclassmates.org/">Python I/O <strong>Articles et news par des Pythonistas passionnés</strong></a></h1>
+                <nav><ul>
+                    <li><a href="/category/news.html">News</a></li>
+                    <li><a href="/category/articles.html">Articles</a></li>
+                    <li><a href="/category/tutoriels.html">Tutoriels</a></li>
+                    <li><a href="/categories.html">Catégories</a></li>
+                    <li><a href="/tags.html">Tags</a></li>
+                    <li><a href="https://www.pythonclassmates.org/category/article.html">Article</a></li>
+                    <li class="active"><a href="https://www.pythonclassmates.org/category/articles.html">Articles</a></li>
+                    <li><a href="https://www.pythonclassmates.org/category/news.html">News</a></li>
+                    <li><a href="https://www.pythonclassmates.org/category/tutoriels.html">Tutoriels</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="https://www.pythonclassmates.org/ghi-git-hub-issues.html" rel="bookmark"
+           title="Permalink to GHI - GitHub Issues">GHI - GitHub Issues</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2018-11-29T21:21:00+01:00">
+                Published: Thu 29 November 2018
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="https://www.pythonclassmates.org/author/freezed.html">Freezed</a>
+        </address>
+<p>In <a href="https://www.pythonclassmates.org/category/articles.html">Articles</a>.</p>
+
+</footer><!-- /.post-info -->      <p><code>ghi</code> : <em>GitHub Issues on the command line. Use your <code>$EDITOR</code>, not your browser.</em></p>
+<p>CLI vs GUI, pour moi le choix est souvent vite fait. Du coup ça fait quelques temps que je gère dès que possible mes <code>issues</code> github en CLI à l'aide de <a href="https://github.com/stephencelis/ghi">ghi</a>, un client dédié aux <code>issues</code> GitHub éccrit en Ruby.</p>
+<p>La vrai feature qui me manque est l'affectation d'un <code>project</code>, dommage… Mais sinon on fait des trucs directement en console qui font <em>vraiment</em> gagner du temps :</p>
+<p>Liste les <code>issues</code> &amp; <code>pulls</code> open :</p>
+<div class="highlight"><pre><span></span>~/git/pythonclassmates.org $ ghi list
+<span class="c1"># PythonClassmates/pythonclassmates.org open issues</span>
+  <span class="m">19</span>: License proposal ↑
+  <span class="m">18</span>: License proposal ↑
+  <span class="m">16</span>: Travis CI rollback has not been runned
+  <span class="m">15</span>: Installation HowTo
+  <span class="m">14</span>: About page is missing
+  <span class="m">13</span>: Error <span class="m">404</span> on category/tutoriels.html
+  <span class="m">12</span>: Error <span class="m">404</span> on category/news.html
+</pre></div>
+
+
+<p>Seulement les <code>issues</code> :</p>
+<div class="highlight"><pre><span></span>~/git/pythonclassmates.org $ ghi list --no-pulls
+<span class="c1"># PythonClassmates/pythonclassmates.org open issues</span>
+  <span class="m">16</span>: Travis CI rollback has not been runned
+  <span class="m">15</span>: Installation HowTo
+  <span class="m">14</span>: About page is missing
+  <span class="m">13</span>: Error <span class="m">404</span> on category/tutoriels.html
+  <span class="m">12</span>: Error <span class="m">404</span> on category/news.html
+</pre></div>
+
+
+<p>Affiche l'<code>issue 14</code></p>
+<div class="highlight"><pre><span></span>~/git/pythonclassmates.org $ ghi <span class="m">14</span>
+<span class="c1">#14: About page is missing</span>
+@freezed opened this issue <span class="m">23</span> hours ago.   open
+
+    With links to :
+    - <span class="o">[</span> <span class="o">]</span> pelican
+    - <span class="o">[</span> <span class="o">]</span> template
+    - <span class="o">[</span> <span class="o">]</span> github
+</pre></div>
+
+
+<p><code>--web</code> ouvre la page dans votre navigateur : <code>ghi list --web</code>, <code>ghi 14 --web</code>, etc.</p>
+<p>Bien sûr <code>ghi edit …</code> permet d'en éditer une (!)</p>
+<p>Et <code>ghi open …</code> d'en créer. Tellement pratique quand on code et que l'on tombe sur un bug, une idée, ou autre… Fini le <em>«Je noterai ça tout à l'heure»</em> qu'on aura oublié dans 5 minutes. Là en 15s c'est plié. Et avec l'habitude on y met presque tout :</p>
+<div class="highlight"><pre><span></span>ghi open --claim --label bug --label <span class="nb">test</span> --message <span class="s2">&quot;Test de la class Adallas à améliorer</span>
+
+<span class="s2">Et là avec le double quote on laisse une ligne et on peut ajouter tous les</span>
+<span class="s2">commentaires utiles.</span>
+
+<span class="s2">Bon si comme moi vous êtes des maniaque le l&#39;historique de votre shell, arretez</span>
+<span class="s2">vous après `--message` et vous pourrez éditer votre issue dans votre éditeur,</span>
+<span class="s2">par ce que là votre historique va dérouiller…</span>
+
+<span class="s2">Les check-box du GHFMD sont aussi possible :</span>
+<span class="s2">- [ ] foo</span>
+<span class="s2">- [ ] bar</span>
+<span class="s2">- [ ] foobar</span>
+
+<span class="s2">Et quand on a fini de raconter sa vie on ferme la double quote. Hoplà!&quot;</span>
+</pre></div>
+
+
+<p>Aller pour finir un petit one-liner en shell pour créer les <code>issues</code> à partir d'un fichier texte (<code>issues.txt</code>) que l'on aura rempli avec un titre d'issue par ligne. Idéal en début de projet quand on à toute la roadmap à renseigner…</p>
+<div class="highlight"><pre><span></span>$ cat issues.txt
+<span class="nb">test</span> issue <span class="c1">#11</span>
+<span class="nb">test</span> issue <span class="c1">#22</span>
+Foobar
+</pre></div>
+
+
+<p>puis</p>
+<div class="highlight"><pre><span></span>$ <span class="nv">IFS</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">;</span><span class="k">while</span> <span class="nb">read</span> issue<span class="p">;</span> <span class="k">do</span> ghi open --claim --label <span class="nb">test</span> --message <span class="s2">&quot;</span><span class="si">${</span><span class="nv">issue</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">;</span><span class="k">done</span> &lt; issues.txt
+<span class="c1">#32: test issue #11</span>
+@freezed opened this issue <span class="m">0</span> seconds ago.   open
+@freezed is assigned.  <span class="nb">test</span>
+
+Opened on freezed/python.
+<span class="c1">#33: test issue #22</span>
+@freezed opened this issue <span class="m">0</span> seconds ago.   open
+@freezed is assigned.  <span class="nb">test</span>
+
+Opened on freezed/python.
+<span class="c1">#34: Foobar</span>
+@freezed opened this issue <span class="m">0</span> seconds ago.   open
+@freezed is assigned.  <span class="nb">test</span>
+</pre></div>
+
+
+<p>Bon code!</p>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="https://www.pythonclassmates.org/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

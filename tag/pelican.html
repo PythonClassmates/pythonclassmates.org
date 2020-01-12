@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+        <meta charset="utf-8" />
+        <title>Python I/O - pelican</title>
+        <link rel="stylesheet" href="https://www.pythonclassmates.org/theme/css/main.css" />
+        <link href="https://www.pythonclassmates.org/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Python I/O Atom Feed" />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="https://www.pythonclassmates.org/">Python I/O <strong>Articles et news par des Pythonistas passionnés</strong></a></h1>
+                <nav><ul>
+                    <li><a href="/category/news.html">News</a></li>
+                    <li><a href="/category/articles.html">Articles</a></li>
+                    <li><a href="/category/tutoriels.html">Tutoriels</a></li>
+                    <li><a href="/categories.html">Catégories</a></li>
+                    <li><a href="/tags.html">Tags</a></li>
+                    <li><a href="https://www.pythonclassmates.org/category/article.html">Article</a></li>
+                    <li><a href="https://www.pythonclassmates.org/category/articles.html">Articles</a></li>
+                    <li><a href="https://www.pythonclassmates.org/category/news.html">News</a></li>
+                    <li><a href="https://www.pythonclassmates.org/category/tutoriels.html">Tutoriels</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+
+            <aside id="featured" class="body">
+                <article>
+                    <h1 class="entry-title"><a href="https://www.pythonclassmates.org/installer-pelican.html">Installer Pelican</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2019-01-09T15:29:00+01:00">
+                Published: Wed 09 January 2019
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="https://www.pythonclassmates.org/author/freezed.html">Freezed</a>
+        </address>
+<p>In <a href="https://www.pythonclassmates.org/category/tutoriels.html">Tutoriels</a>.</p>
+<p>tags: <a href="https://www.pythonclassmates.org/tag/web.html">web</a> <a href="https://www.pythonclassmates.org/tag/python.html">python</a> <a href="https://www.pythonclassmates.org/tag/pelican.html">pelican</a> </p>
+</footer><!-- /.post-info --><h1>Démarrage rapide</h1>
+<p><em>C'est une traduction basique du <a href="https://docs.getpelican.com/en/4.0.1/quickstart.html">démarrage rapide</a> officiel</em></p>
+<hr>
+<h2>Créez le répertoire</h2>
+<div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="o">~/</span><span class="n">projects</span><span class="o">/</span><span class="n">yoursite</span>
+<span class="n">cd</span> <span class="o">~/</span><span class="n">projects</span><span class="o">/</span><span class="n">yoursite</span>
+</pre></div>
+
+
+<h2>Créez un environnement virtuel</h2>
+<div class="highlight"><pre><span></span><span class="n">virtualenv</span> <span class="o">.</span><span class="n">venv</span> <span class="o">-</span><span class="n">p</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">python3</span><span class="o">.</span><span class="mi">6</span>
+<span class="n">source</span> <span class="o">.</span><span class="n">venv</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">activate</span>
+</pre></div>
+
+
+<h2>Installez <em>Pelican</em> et markdown (si besoin, optionnel)</h2>
+<div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pelican</span> <span class="n">markdown</span>
+</pre></div>
+
+
+<h2>Créez le squelette de l'arborescence</h2>
+<div class="highlight"><pre><span></span><span class="n">pelican</span><span class="o">-</span><span class="n">quickstart</span>
+</pre></div>
+
+
+<p>Pour les questions avec une réponse entre crochet, appuyez sur <code>Entrée</code> pour acceptez cette valeur. Quand il vous sera demandé le préfixe de votre URL, entrez votre nom de domaine comme indiqué (<code>http://example.com</code>).</p>
+<h2>Créez un article</h2>
+<p>Vous ne pourrez lancer <em>Pelican</em> tant qu'il n'y a pas d'article. Utilisez votre éditeur préféré pour créez votre premier article avec le contenu suivant :</p>
+<div class="highlight"><pre><span></span><span class="n">Title</span><span class="p">:</span> <span class="n">My</span> <span class="n">First</span> <span class="n">Review</span>
+<span class="n">Date</span><span class="p">:</span> <span class="mi">2010</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mo">03</span> <span class="mi">10</span><span class="p">:</span><span class="mi">20</span>
+<span class="n">Category</span><span class="p">:</span> <span class="n">Review</span>
+
+<span class="n">Following</span> <span class="ow">is</span> <span class="n">a</span> <span class="n">review</span> <span class="n">of</span> <span class="n">my</span> <span class="n">favorite</span> <span class="n">mechanical</span> <span class="n">keyboard</span><span class="o">.</span>
+</pre></div>
+
+
+<p>Considerant que cet article est au format Markdown, enregistrez le en tant que <code>~/projects/yoursite/content/keyboard-review.md.</code></p>
+<h2>Générez le site</h2>
+<p>Toujours depuis le répertoire, lancez la commande <em>Pelican</em> pour générez votre site</p>
+<div class="highlight"><pre><span></span><span class="n">pelican</span> <span class="n">content</span>
+</pre></div>
+
+
+<p>Votre site à été généré dans le répertoire <code>output</code>. Peut-être aurez vous un message d'alerte relatif aux <em>flux</em>, c'est normal en développement et vous pouvez l'ignorer</p>
+<h1>Prévisualisation du site</h1>
+<p>Ouvrez une session de terminal depuis le répertoire d'installation  et lancez la commande suivante :</p>
+<div class="highlight"><pre><span></span><span class="n">pelican</span> <span class="o">--</span><span class="n">listen</span>
+</pre></div>
+
+
+<p>Rendez vous à l'adresse <a href="http://localhost:8000/">http://localhost:8000/</a> à l'aide de votre navigateur, c'est parfait !</p>                </article>
+            </aside><!-- /#featured -->
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="https://www.pythonclassmates.org/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

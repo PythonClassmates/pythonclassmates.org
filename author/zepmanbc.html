@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+        <meta charset="utf-8" />
+        <title>Python I/O - ZepmanBC</title>
+        <link rel="stylesheet" href="https://www.pythonclassmates.org/theme/css/main.css" />
+        <link href="https://www.pythonclassmates.org/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Python I/O Atom Feed" />
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="https://www.pythonclassmates.org/">Python I/O <strong>Articles et news par des Pythonistas passionnés</strong></a></h1>
+                <nav><ul>
+                    <li><a href="/category/news.html">News</a></li>
+                    <li><a href="/category/articles.html">Articles</a></li>
+                    <li><a href="/category/tutoriels.html">Tutoriels</a></li>
+                    <li><a href="/categories.html">Catégories</a></li>
+                    <li><a href="/tags.html">Tags</a></li>
+                    <li><a href="https://www.pythonclassmates.org/category/article.html">Article</a></li>
+                    <li><a href="https://www.pythonclassmates.org/category/articles.html">Articles</a></li>
+                    <li><a href="https://www.pythonclassmates.org/category/news.html">News</a></li>
+                    <li><a href="https://www.pythonclassmates.org/category/tutoriels.html">Tutoriels</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+
+            <aside id="featured" class="body">
+                <article>
+                    <h1 class="entry-title"><a href="https://www.pythonclassmates.org/logging-python.html">Un petit guide (non exhaustif) sur le logging en Python</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2020-01-05T12:34:00+01:00">
+                Published: Sun 05 January 2020
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="https://www.pythonclassmates.org/author/zepmanbc.html">ZepmanBC</a>
+        </address>
+<p>In <a href="https://www.pythonclassmates.org/category/article.html">Article</a>.</p>
+
+</footer><!-- /.post-info --><h2>Ce jour où le <code>print()</code> doit sortir de ta vie</h2>
+<p>Alors oui le <code>print()</code> c'est rapide et facile, mais on l'utilise parce que le logging n'est pas quelque chose qui est utilisé régulièrement donc on ne sait pas trop comment s'y prendre.</p>
+<p>Pour démarrer voici le code de survie minimum qui te permettra de passer du coté des <em>loggers</em>.</p>
+<div class="highlight"><pre><span></span><span class="c1"># A mettre au début du code</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="c1"># ICI DU CODE #</span>
+<span class="n">variable</span> <span class="o">=</span> <span class="mi">12</span>
+
+<span class="c1"># là où tu mettais un print(), maintenant tu mets ça:</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;ma variable : </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">variable</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Voici ce que cela affichera:</p>
+<div class="highlight"><pre><span></span><span class="n">DEBUG</span><span class="o">:</span><span class="n">__main__</span><span class="o">:</span><span class="n">ma</span> <span class="n">variable</span> <span class="o">:</span> <span class="mi">12</span>
+</pre></div>
+
+
+<p>Tu peux arrêter de lire ici et revenir quand tu sentiras le besoin d'approfondir, tu es un <em>logger</em>, félicitation!</p>
+<h2>Les différents niveaux et quand les utiliser</h2>
+<p>Le logging permet d'avoir 5 niveaux de granularité suivant ce que tu souhaites afficher. L'avantage est de pouvoir laisser toutes les lignes DEBUG et de remonter le niveau d'affichage pour ne plus les voir. C'est terminé le temps où tu repassait au peigne fin tout ton code pour commenter/supprimer les print()!</p>
+<p>Comme tu l'auras deviné dans le code de base, c'est cette ligne qui définit le niveau minima d'affichage, tu peux essayer de le changer et les lignes de niveau inférieur ne s'afficheront plus dans la console:</p>
+<div class="highlight"><pre><span></span><span class="n">logging</span><span class="p">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="k">level</span><span class="o">=</span><span class="n">logging</span><span class="p">.</span><span class="n">DEBUG</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Voici les 5 niveaux par ordre croissant avec une proposition d'utilisation, mais rien n'est normalisé.</p>
+<ul>
+<li><strong>DEBUG</strong>: il doit être utilisé uniquement lors du debuggage, par exemple dans une boucle pour voir tout ce qu'il se passe et pouvoir comprendre le processus, cela permet de rentrer dans le détail.</li>
+<li><strong>INFO</strong>: c'est le niveau où on peut afficher les différentes étapes pour prévenir qu'une action est lancée ou un appel est effectué. On prend un peu de recul/hauteur par rapport au DEBUG.</li>
+<li><strong>WARNING</strong>: pour prévenir d'un événement hors de l'utilisation standard mais qui n'est pas une erreur, par exemple un utilisateur qui utilise un mauvais mot de passe. Ce n'est pas une erreur de programme.</li>
+<li><strong>ERROR</strong>: quand une exception est remontée, une opération a échouée.</li>
+<li><strong>CRITICAL</strong>: à utiliser en cas extrême, pour un manque de place de mémoire, un serveur qui est HS, un problème qui est hors de notre contrôle.</li>
+</ul>
+<p>Tu définis le niveau en changent la méthode de ton logger:</p>
+<div class="highlight"><pre><span></span><span class="n">logger</span><span class="p">.</span><span class="n">debug</span><span class="p">()</span>
+<span class="n">logger</span><span class="p">.</span><span class="n">info</span><span class="p">()</span>
+<span class="n">logger</span><span class="p">.</span><span class="n">warning</span><span class="p">()</span>
+<span class="n">logger</span><span class="p">.</span><span class="n">error</span><span class="p">()</span>
+<span class="n">logger</span><span class="p">.</span><span class="n">critical</span><span class="p">()</span>
+</pre></div>
+
+
+<p>Il existe également le <code>logger.exception()</code> qui est en fait au niveau ERROR et qui va rajouter le message de l'exception automatiquement après notre message définit.</p>
+<h2>Les différentes sorties</h2>
+<p>L'affichage dans la console c'est bien mais quand on pense au logging on imagine des fichiers *.log.</p>
+<p>Effectivement il est possible de ressortir les logs de beaucoup de manières différentes. Pour comprendre comment cela se passe:</p>
+<p><img alt="logging_schema1" src="../extra/images/logging-python/logging_schema1.png"></p>
+<p>Dans chaque fichier de l'application que l'on veut suivre on créé un <em>logger</em>.</p>
+<p>L'application est dans un processus qui contient le <em>logRecord</em> qui récupère toutes les données envoyés par les <em>loggers</em>.</p>
+<p>La configuration par défaut (basicConfig) renvoie les données dans la console, mais il est possible de créér autant de <em>Handler</em> (gestionnaire) que l'on souhaite qui permettront de configurer la <strong>sortie</strong> et le <strong>niveau</strong>.</p>
+<p>Il est donc possible par exemple que le <em>Handler_A</em> écrive dans un fichier au niveau DEBUG et le <em>Handler_B</em> envoie un mail au niveau WARNING. De cette manière on est prévenu quand il y a un événement non prévu et il est possible de consulter le fichier de log pour retracer les événements.</p>
+<p>Il existe différents types de sortie comme la console, des fichiers, l'envoie de mail, le streaming vers un serveur, etc... La doc officielle pour plus d'exhaustivité: <a href="https://docs.python.org/fr/3/library/logging.handlers.html">logging.handlers</a></p>
+<h2>Le formatage</h2>
+<p>La sortie standard nous donnait quelque chose sous cette forme dans le code minimal: <code>DEBUG:__main__:ma variable : 12</code>.</p>
+<p>Cela correspond à la configuration par défaut: <code>%(levelname)s:%(name)s:%(message)s</code></p>
+<p>Il est possible de changer la nature et la forme des informations que l'on souhaite en créant des <em>Formatters</em> qui seront attribué à des <em>Handlers</em></p>
+<p>Un <em>Formatter</em> peut être attribué à plusieurs <em>Handlers</em>, mais on peut en créer un spécifique pour chaque.</p>
+<p><img alt="logging_schema2" src="../extra/images/logging-python/logging_schema2.png"></p>
+<p>Voici le code pour modifier le formatage:</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="c1"># logging.basicConfig(level=logging.DEBUG)  # ligne inutile mais pour montrer qu&#39;on n&#39;est plus sur la config par défaut</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="n">c_handler</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">()</span>  <span class="c1"># Création d&#39;un handler vers la console</span>
+<span class="n">c_handler</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>    <span class="c1"># Définition du niveau du handler</span>
+<span class="n">c_format</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%(asctime)s</span><span class="s2"> - </span><span class="si">%(name)s</span><span class="s2"> - </span><span class="si">%(levelname)s</span><span class="s2"> - </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># création/définition d&#39;un Formatter</span>
+<span class="n">c_handler</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">c_format</span><span class="p">)</span>     <span class="c1"># attribution du Formatter au Handler</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">c_handler</span><span class="p">)</span>         <span class="c1"># Connection du Handler sur le logger</span>
+
+<span class="c1"># ICI DU CODE #</span>
+<span class="n">variable</span> <span class="o">=</span> <span class="mi">12</span>
+<span class="c1"># là où tu mettais un print(), maintenant tu mets ça:</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;ma variable : </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">variable</span><span class="p">)</span>
+</pre></div>
+
+
+<p>le résultat dans la console:</p>
+<div class="highlight"><pre><span></span><span class="mi">2020</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">05</span> <span class="mi">12</span><span class="p">:</span><span class="mi">04</span><span class="p">:</span><span class="mi">38</span><span class="p">,</span><span class="mi">420</span> <span class="o">-</span> <span class="n">__main__</span> <span class="o">-</span> <span class="n">WARNING</span> <span class="o">-</span> <span class="n">ma</span> <span class="k">variable</span> <span class="p">:</span> <span class="mi">12</span>
+</pre></div>
+
+
+<p>Si tu dé-commentes la ligne de la configuration par défaut tu pourras voir qu'il y a du coup 2 Handlers vers la console. Le premier correspond à notre <em>c_handler</em> et le second est celui de <em>basicConfig</em> :</p>
+<div class="highlight"><pre><span></span><span class="mi">2020</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">05</span> <span class="mi">12</span><span class="p">:</span><span class="mi">13</span><span class="p">:</span><span class="mi">31</span><span class="p">,</span><span class="mi">913</span> <span class="o">-</span> <span class="n">__main__</span> <span class="o">-</span> <span class="n">WARNING</span> <span class="o">-</span> <span class="n">ma</span> <span class="k">variable</span> <span class="p">:</span> <span class="mi">12</span>
+<span class="n">WARNING</span><span class="p">:</span><span class="n">__main__</span><span class="p">:</span><span class="n">ma</span> <span class="k">variable</span> <span class="p">:</span> <span class="mi">12</span>
+</pre></div>
+
+
+<p>Tu trouveras la liste des arguments qu'il est possible de mettre dans la doc: <a href="https://docs.python.org/fr/3/library/logging.html#logrecord-attributes">logrecord-attributes</a></p>
+<p>Le formatage ne facilite pas seulement la lecture, cela peut être un outil très puissant en parsant les fichiers log afin d'en extraire les informations intéressantes. Il est également possible de sortir des logs sous forme de json pour simplifier l'exploitation (<a href="https://github.com/madzak/python-json-logger">Python JSON logger</a>).</p>
+<h2>La configuration</h2>
+<p>Dans la partie précédente on a vu comment créer ses <em>Handler</em> et ses <em>Formatter</em>, c'est bien pour des projets ne contenant pas beaucoup de fichiers. A partir d'une certaine taille il est indispensable de passer sur de la configuration par fichier, cela permet de centraliser des configurations complexes et de les appeler en 1 seule ligne.</p>
+<p>Cette configuration peut se faire dans un fichier <em>configParse</em> ou sous le format <em>YAML</em>, le second n'étant pas dans la librairie standard je préfère présenter la première solution.</p>
+<p>le contenu du fichier <em>logging.conf</em>:</p>
+<div class="highlight"><pre><span></span><span class="k">[loggers]</span>
+<span class="na">keys</span><span class="o">=</span><span class="s">root</span>
+
+<span class="k">[handlers]</span>
+<span class="na">keys</span><span class="o">=</span><span class="s">inFile, console</span>
+
+<span class="k">[formatters]</span>
+<span class="na">keys</span><span class="o">=</span><span class="s">monFormatter</span>
+
+<span class="k">[logger_root]</span>
+<span class="na">level</span><span class="o">=</span><span class="s">DEBUG</span>
+<span class="na">handlers</span><span class="o">=</span><span class="s">all, console</span>
+
+<span class="k">[handler_inFile]</span>
+<span class="na">class</span><span class="o">=</span><span class="s">FileHandler</span>
+<span class="na">level</span><span class="o">=</span><span class="s">DEBUG</span>
+<span class="na">formatter</span><span class="o">=</span><span class="s">monFormatter</span>
+<span class="na">args</span><span class="o">=</span><span class="s">(&quot;./log/myLog.log&quot;)</span>
+
+<span class="k">[handler_console]</span>
+<span class="na">class</span><span class="o">=</span><span class="s">logging.StreamHandler</span>
+<span class="na">level</span><span class="o">=</span><span class="s">INFO</span>
+<span class="na">formatter</span><span class="o">=</span><span class="s">monFormatter</span>
+<span class="na">stream</span><span class="o">=</span><span class="s">ext://sys.stdout</span>
+
+<span class="k">[formatter_monFormatter]</span>
+<span class="na">format</span><span class="o">=</span><span class="s">%(asctime)s | %(name)s | %(levelname)s:%(message)s</span>
+</pre></div>
+
+
+<p>Le code à ajouter dans chaque fichier pour charger la configuration et créer le logger:</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">logging.config</span>
+
+<span class="n">logging</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">fileConfig</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="s1">&#39;logging.conf&#39;</span><span class="p">,</span> <span class="n">disable_existing_loggers</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="c1"># on utilise le logger comme d&#39;habitude</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;This is a debug message&#39;</span><span class="p">)</span>
+</pre></div>
+
+
+<p><em>disable_existing_loggers</em> permet de faire cohabiter plusieurs logger dans le <em>logRecord</em></p>
+<p>Que fait cette configuration:</p>
+<ul>
+<li>création d'un Handler vers la console em mode DEBUG <strong>[handler_console]</strong></li>
+<li>création d'un Handler vers un fichier <em>myLog.log</em> dans le dossier <em>./log/</em> <strong>[handler_inFile]</strong></li>
+<li>
+<p>création du Formatter <em>monFormatter</em> <strong>[formatter_monFormatter]</strong>, qui affiche un message sous cette forme:</p>
+<p>2020-01-05 13:28:33,363 | nom.du_module | DEBUG:Mon message de debug</p>
+</li>
+</ul>
+<h3>Pourquoi mettre <code>__name__</code> lors de la création du logger?</h3>
+<p>Cela permet de mettre le nom du module en cours dans le log et donc de savoir d'où provient le message.</p>
+<p>Dans l'exemple précédent (<code>nom.du_module</code>) on peut donc en conclure que cela provient du module <em>du_module</em> qui est lui même dans le module <em>mon</em>.</p>
+<h3>Faire des fichiers log qui s'incrémentent</h3>
+<p>Avec les exemples précédent tu pourras te débrouiller pour les adapter à ton besoin. Néanmoins on a vu comment écrire dans un fichier log mais une fois qu'il est plein il faut que tu penses à aller le vider et donc te mettre un rappels dans l'agenda comme pour sortir la poubelle...</p>
+<p>Heuresement que non, il y a les <a href="https://docs.python.org/fr/3/library/logging.handlers.html#rotatingfilehandler"><em>RotatingFileHandler</em></a> et <a href="https://docs.python.org/fr/3/library/logging.handlers.html#timedrotatingfilehandler"><em>TimedRotatingFileHandler</em></a> qui permettent d'incrémenter les fichiers une fois une taille atteinte ou périodiquement à un moment donné.</p>
+<p>Un exemple de configuration de handler qui gardera 5 versions avec la création d'un nouveau fichier tous les dimanches</p>
+<div class="highlight"><pre><span></span><span class="k">[handler_weekly]</span>
+<span class="na">class</span><span class="o">=</span><span class="s">handlers.TimedRotatingFileHandler</span>
+<span class="na">level</span><span class="o">=</span><span class="s">WARNING</span>
+<span class="na">formatter</span><span class="o">=</span><span class="s">simpleFormatter</span>
+<span class="na">args</span><span class="o">=</span><span class="s">(&quot;./weekly.log&quot;, &#39;W6&#39;, 1, 5, &#39;utf-8&#39;)</span>
+</pre></div>
+
+
+<h2>Conclusion</h2>
+<p>Te voilà prêt à ne plus utiliser <code>print()</code> pour débugger et à comprendre les exemples du <a href="https://docs.python.org/fr/3.8/howto/logging-cookbook.html">logging cookbook</a> de la doc officielle si tu as des besoins plus spécifiques.</p>
+<h2>Ressources</h2>
+<p>Pour écrire cet article je me suis inspiré des parties que j'ai jugé intéressantes de ces articles anglophones:</p>
+<ul>
+<li><a href="https://realpython.com/python-logging/">https://realpython.com/python-logging/</a></li>
+<li><a href="https://fangpenlin.com/posts/2012/08/26/good-logging-practice-in-python/">https://fangpenlin.com/posts/2012/08/26/good-logging-practice-in-python/</a></li>
+</ul>
+<p>Et la documentation officielle évidemment: <a href="https://docs.python.org/">https://docs.python.org/</a></p>
+<p>Je suis tombé dessus après coup: <a href="http://sametmax.com/ecrire-des-logs-en-python/">http://sametmax.com/ecrire-des-logs-en-python/</a></p>                </article>
+            </aside><!-- /#featured -->
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="https://www.pythonclassmates.org/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>
