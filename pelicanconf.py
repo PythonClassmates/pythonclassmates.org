@@ -15,6 +15,7 @@ EXTRA_PATH_METADATA = {
     'extra/favicon-32x32.png': {'path': 'favicon-32x32.png'}}
 FAVICON = 'favicon-32x32.png'
 MAIN_MENU = True
+DISPLAY_CATEGORIES_ON_MENU = False
 DISPLAY_PAGES_ON_MENU = False
 MENUITEMS = [
     ('News', '/category/news.html'),
