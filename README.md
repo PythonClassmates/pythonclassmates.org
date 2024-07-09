@@ -6,6 +6,7 @@
 
 Ce blog propose d'offrir une plateforme de publication collaborative maintenue par les étudiants et mentors du *discord* des étudiants **Python** d'*Openclassrooms*. L'objectif de ce dernier est de fournir des news, des didacticiels, des critiques de livres, des astuces en relation avec le langage de programmation python.
 
+
 ## Contribuer via l'interface _Github_
 
 1. [Connectez-vous](https://github.com/login) à votre _Github_
