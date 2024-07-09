@@ -6,6 +6,7 @@
 
 Ce blog propose d'offrir une plateforme de publication collaborative maintenue par les étudiants et mentors du *discord* des étudiants **Python** d'*Openclassrooms*. L'objectif de ce dernier est de fournir des news, des didacticiels, des critiques de livres, des astuces en relation avec le langage de programmation python.
 
+
 ## Contribuer via l'interface _Github_
 
 1. [Connectez-vous](https://github.com/login) à votre _Github_
@@ -49,7 +50,7 @@ Une fois votre article terminé, demandez d'ajouter cette modification en soumet
 1. Installez `git`
     * Pour _Mac OS_ et _Linux_, vous avez peut-être une version déjà installée, essayez  la commande `$ git --version` dans un terminal pour vous en assurer
     * Pour _Windows_, installez [Git For Windows](https://gitforwindows.org/) et [suivre ce cours](https://openclassrooms.com/fr/courses/2342361-gerez-votre-code-avec-git-et-github) si vous avez besoin de découvrir l'outil
-
+Pourquoi
 2. Clonez votre _fork_ du projet avec de la commande `git clone <adresse-de-votre-fork>.git`
 3. Ajoutez/modifiez un article comme indiqué ci dessus.
 4. Poussez la modification sur github avec la commande `git push origin master`
